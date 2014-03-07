@@ -103,6 +103,7 @@ def configure_logging(app):
         # skip debug and test mode.
         return
     """
+    """
 
     import logging
     from logging.handlers import RotatingFileHandler
@@ -118,6 +119,7 @@ def configure_logging(app):
         '[in %(pathname)s:%(lineno)d]')
     )
     app.logger.addHandler(file_handler)
+    """
 
     # ADMINS = ['imwilsonxu@gmail.com']
     # mail_handler = SMTPHandler(app.config['MAIL_SERVER'],
