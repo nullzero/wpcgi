@@ -1,0 +1,15 @@
+# -*- coding: utf-8 -*-
+
+import os
+import sys
+from wtforms import TextField, BooleanField
+from utility import AttrObject
+
+os.environ["WPROBOT_BOT"] = "Nullzerobot"
+sys.path.append("/data/project/nullzerobot/wprobot")
+
+from dykchecker import DYKChecker
+
+class DYKCheckerForm(Form):
+    title = TextField('input_title', validators=[Required()])
+    # TODO: form validation

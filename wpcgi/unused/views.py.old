@@ -1,0 +1,27 @@
+# -*- coding: utf-8 -*-
+
+import time
+from application import app
+from flask import render_template, flash, redirect, request, session, g
+from utility import AttrObject
+import models
+import forms
+from messages import msg
+
+
+@app.route('/tools/dykchecker', methods = ['GET'])
+def access_DYKChecker():
+    form = forms.DYKCheckerForm()
+    model = models.DYKChecker()
+    model.render(request.args.get('title', None))
+    return render_template('tool_dykchecker.html',
+                           title='dykchecker',
+                           tool=True,
+                           form=form,
+                           model=model)
+
+"""
+@app.route('/tools/<toolname>', methods=['GET', 'POST'])
+def accesstool(toolname):
+    return render_template('tool_{}.html'.format(toolname))
+"""

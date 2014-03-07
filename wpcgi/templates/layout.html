@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+  <head>
+    <title>{{ msg['title-top'] }}</title>
+		<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="icon" type="image/png" href="//wikitech.wikimedia.org/w/images/c/cf/Labslogo_thumb.png">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
+		{% if tool %}
+		  <link rel="stylesheet" href="{{ url_for('static', filename='css/tools/' + title + '.css') }}">
+		{% endif %}
+  </head>
+  <body>
+	  <nav class="navbar navbar-default" role="navigation">
+	    <div class="container-fluid">
+	      <div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand " style="padding: 10px;" href="/">
+            <img width="30px" border="0" 
+                 title="{{ msg['powered-by'] }}"  
+								 src="//wikitech.wikimedia.org/w/images/c/cf/Labslogo_thumb.png">
+					</a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      <ul class="nav navbar-nav">
+		        <li class="active">
+							<a>{{ msg['title'] }}</a>
+						</li>
+	          <li><a href="{{ url_for('frontend.index') }}">
+	              <i class="glyphicon glyphicon-home"></i>&nbsp;&nbsp;{{ msg['home'] }}
+	          </a></li>
+	          <li><a href="{{ url_for('frontend.alltools') }}">
+	              <i class="glyphicon glyphicon-wrench"></i>&nbsp;&nbsp;{{ msg['tools'] }}
+	          </a></li>
+	          <li><a href="/?status">
+	            <i class="glyphicon glyphicon-eye-open"></i>&nbsp;&nbsp;{{ msg['status-of-bot'] }}
+	          </a></li>
+	          <li><a href="//th.wikipedia.org/wiki/User_talk:Nullzero">
+	            <i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;{{ msg['contact'] }}
+	          </a></li>
+	        </ul>
+	        <ul class="nav navbar-nav navbar-right">
+	          <li class="dropdown">
+	            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	              <i class="glyphicon glyphicon-globe"></i>&nbsp;&nbsp;Language<b class="caret"></b>
+	            </a>
+	            <ul class="dropdown-menu">
+							{% for lang in languages %}
+								<li><a href="?uselang={{ lang }}">{{ languages[lang] }}</a></li>
+							{% endfor %}
+	            </ul>
+	          </li>
+	        </ul>
+	      </div>
+	    </div>
+	  </nav>
+		{% with messages = get_flashed_messages() %}
+		  {% if messages %}
+				<div class="alert alert-warning alert-dismissable">
+					{% for message in messages %}
+					  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					  <strong>Warning!</strong> {{ message }}
+					{% endfor %}
+				</div>
+		  {% endif %}
+		{% endwith %}
+	  <div class="container">
+			{% block content %}
+			{% endblock %}
+	  </div>
+	  <hr>
+	  <center>
+	  <span style="font-size:14">
+			{{ msg['encounter-error'] }}
+	    <a href="//th.wikipedia.org/wiki/User_talk:Nullzero">
+				{{ msg['owner-of-tool'] }}
+	    </a>
+	  </span>
+	  </center>
+	  <br />
+		<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+		{% if tool %}
+	    <script src="{{ url_for('static', filename='js/tools/' + title + '.js') }}"></script>
+		{% endif %}
+		<div id="exetime">
+			{{ msg['page-generated-in'].format(g.request_time()) }}
+		</div>
+	</body>
+</html>

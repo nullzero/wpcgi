@@ -1,0 +1,1 @@
+from wpcgi.models.dykchecker import DYKChecker

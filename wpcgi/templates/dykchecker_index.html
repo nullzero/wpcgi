@@ -1,0 +1,43 @@
+{% from "macros/_helpers.html" import render_field %}
+{% extends "layout.html" %}
+
+{% block content %}
+	<h1>{{ msg['dykchecker-name'] }}</h1>
+	<br />
+	<form action="{{ url_for('dykchecker.submit') }}" method="post">
+		<div class="row">
+			<div class="col-lg-offset-1 col-lg-4 form-horizontal">
+		    {{ render_field(form.title,
+										    placeholder=msg['input-title-here'])
+				}}
+		    {{ render_field(form.oldid,
+										    placeholder=msg['input-oldid-here'])
+				}}
+			</div>
+			<div class="col-lg-3 vbarl vbarr form-horizontal">
+		    {{ render_field(form.minlen,
+							          placeholder=msg['input-minlen-here'],
+												input_group=True,
+									      after='อักขระ') 
+				}}
+		    {{ render_field(form.rate,
+										    placeholder=msg['input-rate-here'],
+												input_group=True,
+												after='เท่า')
+				}}
+		    {{ render_field(form.maxday,
+										    placeholder=msg['input-maxday-here'],
+												input_group=True,
+												after='วัน')
+				}}
+				</div>
+			<div class="col-lg-1">
+		    <input type="submit" value="{{ msg['check'] }}" class="btn btn-info btn-small" style="width: 100px"/>
+		    <input type="button" value="{{ msg['open-page'] }}" id="btn-openwiki" class="btn btn-primary btn-small" 
+							 style="margin-top: 10px; width: 100px"/>
+			</div>
+		</div>
+	</form>
+	{% block subcontent %}
+	{% endblock %}
+{% endblock %}

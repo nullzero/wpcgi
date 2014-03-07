@@ -1,0 +1,23 @@
+.failed {
+    color: red;
+}
+
+.passed {
+    color: green;
+}
+
+.normal {
+    opacity: 0;
+}
+
+#newtext {
+    border: 1px dotted blue;
+    padding: 12px;
+    font-size: 12px;
+    background-color: lightblue;
+    color: black;
+}
+
+.eqtext {
+    color: silver;
+}
