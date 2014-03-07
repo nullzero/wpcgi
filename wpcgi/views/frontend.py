@@ -1,4 +1,4 @@
-#!/data/project/nullzero/python/bin/python
+#!/data/project/nullzerobot/python/bin/python
 
 from p_flask import (Blueprint, render_template, current_app, request,
                    flash, url_for, redirect, session, g, abort)

@@ -1,6 +1,6 @@
-#!/data/project/nullzero/python/bin/python
+#!/data/project/nullzerobot/python/bin/python
 import site
-site.addsitedir("/data/project/nullzero/python/lib/python2.7/site-packages")
+site.addsitedir("/data/project/nullzerobot/python/lib/python2.7/site-packages")
 
 from wsgiref.handlers import CGIHandler
 from wpcgi import create_app

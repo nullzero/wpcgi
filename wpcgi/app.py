@@ -1,4 +1,4 @@
-#!/data/project/nullzero/python/bin/python
+#!/data/project/nullzerobot/python/bin/python
 
 import time
 from p_flask import Flask, request, render_template, g, Blueprint
@@ -96,6 +96,7 @@ def configure_template_filters(app):
 
 
 def configure_logging(app):
+    pass
     """Configure file(info) and email(error) logging."""
     
     """

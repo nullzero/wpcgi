@@ -1,4 +1,4 @@
-#!/data/project/nullzero/python/bin/python
+#!/data/project/nullzerobot/python/bin/python
 
 from flask.ext.wtf import *
 from p_flask import request

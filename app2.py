@@ -1,4 +1,4 @@
-#!/data/project/nullzero/python/bin/python
+#!/data/project/nullzerobot/python/bin/python
 
 from flask import Flask
 app = Flask(__name__)

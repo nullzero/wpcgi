@@ -1,4 +1,4 @@
-#!/data/project/nullzero/python/bin/python
+#!/data/project/nullzerobot/python/bin/python
 
 from p_flask import Blueprint, render_template, g, redirect, url_for, request, current_app
 from decorators import langswitch

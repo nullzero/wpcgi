@@ -1,4 +1,4 @@
-#!/data/project/nullzero/python/bin/python
+#!/data/project/nullzerobot/python/bin/python
 
 from wtforms.validators import *
 from wtforms.validators import ValidationError

@@ -1,3 +1,3 @@
-#!/data/project/nullzero/python/bin/python
+#!/data/project/nullzerobot/python/bin/python
 
 REQUEST = 307

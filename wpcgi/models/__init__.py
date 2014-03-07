@@ -1,2 +1,2 @@
-#!/data/project/nullzero/python/bin/python
+#!/data/project/nullzerobot/python/bin/python
 from wpcgi.models.dykchecker import DYKChecker
