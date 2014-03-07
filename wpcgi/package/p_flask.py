@@ -1,3 +1,5 @@
+#!/data/project/nullzero/python/bin/python
+
 from flask import *
 from functools import wraps
 from messages import msg

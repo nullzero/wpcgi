@@ -1,3 +1,4 @@
+#!/data/project/nullzero/python/bin/python
 # -*- coding: utf-8 -*-
 
 import config

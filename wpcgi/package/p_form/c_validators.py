@@ -1,3 +1,5 @@
+#!/data/project/nullzero/python/bin/python
+
 from wtforms.validators import *
 from wtforms.validators import ValidationError
 from messages import msg

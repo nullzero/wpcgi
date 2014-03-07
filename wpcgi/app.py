@@ -1,3 +1,5 @@
+#!/data/project/nullzero/python/bin/python
+
 import time
 from p_flask import Flask, request, render_template, g, Blueprint
 import utils
@@ -22,7 +24,7 @@ def create_app(config=None, app_name=None, blueprints=None):
     configure_hook(app)
     configure_blueprints(app, blueprints)
     # configure_extensions(app)
-    #configure_logging(app)
+    configure_logging(app)
     configure_template_filters(app)
     # configure_error_handlers(app)
     
