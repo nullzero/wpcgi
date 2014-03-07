@@ -95,13 +95,15 @@ def configure_template_filters(app):
 
 def configure_logging(app):
     """Configure file(info) and email(error) logging."""
-
+    
+    """
     if app.debug or app.testing:
         # skip debug and test mode.
         return
+    """
 
     import logging
-    from logging.handlers import RotatingFileHandler, SMTPHandler
+    from logging.handlers import RotatingFileHandler
 
     # Set info level on logger, which might be overwritten by handers.
     app.logger.setLevel(logging.INFO)
