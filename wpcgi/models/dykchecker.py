@@ -8,7 +8,7 @@ import pyrobot
 import pywikibot
 from wp import lre
 
-class RemoveEngine(object):
+class TextEngine(object):
     def __init__(self):
         self.subst = lre.Subst()
         self.op = "~~~OPENSESAME~~~"
@@ -52,13 +52,14 @@ class RemoveEngine(object):
         self.subst.append(pat, self.op + r"\1" + self.ed)
         
     
-    def process(self, text):
+    def remove(self, text):
         return self.subst.process(text)
     
     def convert(self, text):
         return (cgi.escape(text).replace("\n", "<br/>")
                                 .replace(self.op, '<span class="eqtext">')
-                                .replace(self.ed, '</span>'))
+                                .replace(self.ed, '</span>')
+                                .replace('</span><span class="eqtext">', ''))
     
     def length(self, text):
         text = (text.replace("(", "[")
@@ -117,7 +118,7 @@ class DYKChecker(object):
         if not self.is_validate:
             raise Exception('Must validate first')
             
-        self.removeEngine = RemoveEngine()
+        self.textEngine = TextEngine()
         self.text = self.page.get()
         
         self.check_info()
@@ -152,6 +153,8 @@ class DYKChecker(object):
         return "normal"
     
     def check_info(self):
+        # p = pywikibot.Page(self.site, u"วิกิพีเดีย:ทดลองเขียน")
+        # p.put('asdasdsad', 'test')
         self.results.append(
             AttrObject(cl=self.neutral(),
                        value=msg['dykchecker-revision-info-value'].format(
@@ -176,8 +179,8 @@ class DYKChecker(object):
         )
     
     def check_length(self):
-        self.text = self.removeEngine.process(self.text)
-        self.length = self.removeEngine.length(self.text)
+        self.text = self.textEngine.remove(self.text)
+        self.length = self.textEngine.length(self.text)
         self.results.append(
             AttrObject(cl=self.evaluate(self.length > 2000),
                        value=msg['dykchecker-length-value'].format(self.length),
@@ -185,7 +188,7 @@ class DYKChecker(object):
                        desc=msg["dykchecker-length-desc"],
             )
         )
-        self.text = self.removeEngine.convert(self.text)
+        self.text = self.textEngine.convert(self.text)
     
     def check_old(self):
         now = self.site.getcurrenttime()
@@ -229,8 +232,8 @@ class DYKChecker(object):
             result.value = msg['dykchecker-old-revision-not-exist']
         else:
             text = self.page.getOldVersion(oldestRev[0], get_redirect=True)
-            text = self.removeEngine.process(text)
-            length = self.removeEngine.length(text)
+            text = self.textEngine.remove(text)
+            length = self.textEngine.length(text)
             ratio = float(self.length) / float(length)
             result.cl = self.evaluate(ratio > 3.0)
             result.value = msg['dykchecker-old-revision-value'].format(

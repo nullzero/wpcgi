@@ -22,17 +22,14 @@ def index(**kwargs):
     if form.validate(data):
         data.render()
         return render_template('dykchecker_page.html',
-                               tool=True,
-                               title='dykchecker',
+                               tool=__name__,
                                form=form,
                                data=data)
         
     else:
         return render_template('dykchecker_index.html',
-                               tool=True,
-                               title='dykchecker',
-                               form=form,
-                               data=None)
+                               tool=__name__,
+                               form=form)
 
 @dykchecker.route('/submit')
 def submit():

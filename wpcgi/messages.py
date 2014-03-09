@@ -1,12 +1,12 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-import config
+from p_flask import current_app
 
 class Message(object):
     def __init__(self):
         self.messages = {}
-        self.lang = config.Config.LANG
+        self.lang = 'msg'
     
     def switch_language(self, lang):
         if lang in self.messages:
