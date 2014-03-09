@@ -5,7 +5,6 @@ import os
 from p_flask import Flask, request, render_template, g, Blueprint
 import utils
 from views import frontend, dykchecker
-from config import TestProductionConfig as Config
 from messages import msg
 import inject
 
@@ -19,12 +18,10 @@ DEFAULT_BLUEPRINTS = (
 def create_app(config=None, app_name=None, blueprints=None):
     """Create a Flask app."""
     
-    if app_name is None:
-        app_name = Config.APP_NAME
     if blueprints is None:
         blueprints = DEFAULT_BLUEPRINTS
         
-    app = Flask(app_name)
+    app = Flask(config.APP_NAME)
     configure_app(app, config)
     configure_logging(app)
     configure_blueprints(app, blueprints)
@@ -36,9 +33,7 @@ def create_app(config=None, app_name=None, blueprints=None):
     return app
 
 def configure_app(app, config):
-    app.config.from_object(Config)
-    if config:
-        app.config.from_object(config)
+    app.config.from_object(config)
 
 def configure_blueprints(app, blueprints):
     """Configure blueprints in views."""
@@ -47,7 +42,7 @@ def configure_blueprints(app, blueprints):
         app.register_blueprint(blueprint)
         
 def configure_logging(app):
-    """Configure file(info) and email(error) logging."""
+    """Configure file logging."""
     
     if app.debug or app.testing:
         # skip debug and test mode.

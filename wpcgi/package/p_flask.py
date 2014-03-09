@@ -35,3 +35,8 @@ class _Blueprint(Blueprint):
 
 Blueprint = _Blueprint
 
+def render(*args, **kwargs):
+    tool = kwargs.pop('tool', None)
+    if tool:
+        tool = tool.split('.')[-1]
+    return render_template(*args, tool=tool, **kwargs)

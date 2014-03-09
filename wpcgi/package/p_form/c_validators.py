@@ -22,6 +22,12 @@ def Number(negative=False, decimal=False):
         
     def _Number(form, field):
         if not field.data or not re.match('[' + charset + ']+', field.data):
-            raise ValidationError(msg['validator-not-integer'])
+            raise ValidationError(msg['validator-not-number'])
             
     return _Number
+
+class _NumberRange(NumberRange):
+    def __init__(self, *args, **kwargs):
+        if 'message' not in kwargs:
+            kwargs['message'] = msg['validator-mustbe-in-min-max']
+        super(_NumberRange, self).__init__(*args, **kwargs)

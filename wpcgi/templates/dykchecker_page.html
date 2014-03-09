@@ -5,7 +5,7 @@
 	<div id='statpanel'>
     {% for result in data.results %}
       <h4><span class={{ result.cl }}>█</span>&nbsp;&nbsp;{{ result.text|safe }}</h4>
-			<div>{{ result.value|safe }}<br /><br /><i>{{ result.desc }}</i></div>
+			<div>{{ result.value|safe }}<br /><br /><i>{{ result.desc|safe }}</i></div>
     {% endfor %}
 	</div>
 	<br>

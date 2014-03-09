@@ -1,6 +1,6 @@
 #!/data/project/nullzerobot/python/bin/python
 
-from p_flask import Blueprint, render_template, g, redirect, url_for, request, current_app
+from p_flask import Blueprint, render, g, redirect, url_for, request, current_app
 from decorators import langswitch
 from forms import DYKCheckerForm
 from models import DYKChecker
@@ -21,13 +21,13 @@ def index(**kwargs):
     data = DYKChecker(form)
     if form.validate(data):
         data.render()
-        return render_template('dykchecker_page.html',
+        return render('dykchecker_page.html',
                                tool=__name__,
                                form=form,
                                data=data)
         
     else:
-        return render_template('dykchecker_index.html',
+        return render('dykchecker_index.html',
                                tool=__name__,
                                form=form)
 

@@ -5,7 +5,7 @@ class BaseConfig(object):
     APP_NAME = 'wpcgi'
     CSRF_ENABLED = False
     DEBUG_LOG = '../error.log'
-    LANG = "en"
+    LANG = "th"
     # os.urandom(24)
     SECRET_KEY = 'you-will-never-guess'
     
@@ -22,7 +22,7 @@ class TestProductionConfig(BaseConfig):
     
     SCRIPT_NAME = '/~nullzero'
 
-class ProductionConfig(object):
+class ProductionConfig(BaseConfig):
     DEBUG = False
     TESTING = False
     

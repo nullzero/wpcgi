@@ -2,7 +2,7 @@
 <html lang="en">
 <html>
   <head>
-    <title>{{ msg['title-top'] }}</title>
+    <title>{% if tool %}{{ tool.split('.')[-1] }} - {% endif %}{{ msg['general-name'] }}</title>
 		<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="icon" type="image/png" href="//wikitech.wikimedia.org/w/images/c/cf/Labslogo_thumb.png">
@@ -32,19 +32,19 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 		      <ul class="nav navbar-nav">
 		        <li class="active">
-							<a>{{ msg['title'] }}</a>
+							<a>{% if tool %}{{ msg[tool] }}{% endif %}</a>
 						</li>
 	          <li><a href="{{ url_for('frontend.index') }}">
-	              <i class="glyphicon glyphicon-home"></i>&nbsp;&nbsp;{{ msg['home'] }}
+	              <i class="glyphicon glyphicon-home"></i>&nbsp;&nbsp;{{ msg['toolbar-home'] }}
 	          </a></li>
 	          <li><a href="{{ url_for('frontend.alltools') }}">
-	              <i class="glyphicon glyphicon-wrench"></i>&nbsp;&nbsp;{{ msg['tools'] }}
+	              <i class="glyphicon glyphicon-wrench"></i>&nbsp;&nbsp;{{ msg['toolbar-tools'] }}
 	          </a></li>
 	          <li><a href="/?status">
-	            <i class="glyphicon glyphicon-eye-open"></i>&nbsp;&nbsp;{{ msg['status-of-bot'] }}
+	            <i class="glyphicon glyphicon-eye-open"></i>&nbsp;&nbsp;{{ msg['toolbar-status-of-bot'] }}
 	          </a></li>
 	          <li><a href="//th.wikipedia.org/wiki/User_talk:Nullzero">
-	            <i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;{{ msg['contact'] }}
+	            <i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;{{ msg['toolbar-contact'] }}
 	          </a></li>
 	        </ul>
 	        <ul class="nav navbar-nav navbar-right">
@@ -94,7 +94,7 @@
 	    <script src="{{ url_for('static', filename='js/tools/' + tool.split('.')[-1] + '.js') }}"></script>
 		{% endif %}
 		<div id="exetime">
-			{{ msg['page-generated-in'].format(g.request_time()) }}
+			{{ msg['general-page-generated'].format(g.request_time()) }}
 		</div>
 	</body>
 </html>

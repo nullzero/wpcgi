@@ -2,8 +2,9 @@
 
 from flask.ext.script import Manager
 from wpcgi import create_app
+from config import TestConfig as Config
 
-app = create_app()
+app = create_app(Config)
 manager = Manager(app)
 
 @manager.command

@@ -15,7 +15,11 @@ class DYKCheckerForm(Form):
                       validators=[c_validators.Number(), c_validators.Optional()])
     minlen = TextField(msg['dykchecker-label-minlen'],
                        validators=[c_validators.Number(), c_validators.Optional()])
-    rate = TextField(msg['dykchecker-label-rate'],
-                        validators=[c_validators.Number(), c_validators.Optional()])
+    ratio = TextField(msg['dykchecker-label-ratio'],
+                      validators=[c_validators.Number(decimal=True),
+                                  c_validators.NumberRange(min=1.0),
+                                  c_validators.Optional()])
     maxday = TextField(msg['dykchecker-label-maxday'],
-                        validators=[c_validators.Number(), c_validators.Optional()])
+                       validators=[c_validators.Number(),
+                                   c_validators.Optional(),
+                                   c_validators.NumberRange(min=1, max=30)])

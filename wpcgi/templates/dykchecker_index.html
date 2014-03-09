@@ -18,17 +18,17 @@
 		    {{ render_field(form.minlen,
 							          placeholder=msg['input-minlen-here'],
 												input_group=True,
-									      after='อักขระ') 
+									      after=msg['dykchecker-minlen-suffix']) 
 				}}
-		    {{ render_field(form.rate,
-										    placeholder=msg['input-rate-here'],
+		    {{ render_field(form.ratio,
+										    placeholder=msg['input-ratio-here'],
 												input_group=True,
-												after='เท่า')
+												after='dykchecker-ratio-suffix')
 				}}
 		    {{ render_field(form.maxday,
 										    placeholder=msg['input-maxday-here'],
 												input_group=True,
-												after='วัน')
+												after='dykchecker-maxday-suffix')
 				}}
 				</div>
 			<div class="col-lg-1">

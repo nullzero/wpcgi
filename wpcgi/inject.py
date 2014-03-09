@@ -41,4 +41,4 @@ def inject_hooks(app):
     @app.before_request
     def before_request():
         g.request_start_time = time.time()
-        g.request_time = lambda: "%.5fs" % (time.time() - g.request_start_time)
+        g.request_time = lambda: "%.5f" % (time.time() - g.request_start_time)
