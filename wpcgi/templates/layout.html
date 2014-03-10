@@ -2,7 +2,7 @@
 <html lang="en">
 <html>
   <head>
-    <title>{% if tool %}{{ tool.split('.')[-1] }} - {% endif %}{{ msg['general-name'] }}</title>
+    <title>{% if tool %}{{ tool }} - {% endif %}{{ msg['general-name'] }}</title>
 		<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="icon" type="image/png" href="//wikitech.wikimedia.org/w/images/c/cf/Labslogo_thumb.png">
@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
 		<link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
 		{% if tool %}
-		  <link rel="stylesheet" href="{{ url_for('static', filename='css/tools/' + tool.split('.')[-1] + '.css') }}">
+		  <link rel="stylesheet" href="{{ url_for('static', filename='css/tools/' + tool + '.css') }}">
 		{% endif %}
   </head>
   <body>
@@ -91,7 +91,7 @@
 		<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 		{% if tool %}
-	    <script src="{{ url_for('static', filename='js/tools/' + tool.split('.')[-1] + '.js') }}"></script>
+	    <script src="{{ url_for('static', filename='js/tools/' + tool + '.js') }}"></script>
 		{% endif %}
 		<div id="exetime">
 			{{ msg['general-page-generated'].format(g.request_time()) }}
