@@ -1,0 +1,70 @@
+{% from "macros/_helpers.html" import render_field %}
+{% extends "layout.html" %}
+
+{% block content %}
+	<h1>เครื่องมือแปลลิงก์วิกิพีเดีย | WikiTranslator</h1>
+	<h5><span style="color: red">(โปรดทราบว่าวิกิพีเดียภาษาไทยไม่รับบทความภาษาต่างประเทศ
+	บทความที่แปลผ่านเครื่องมือนี้และไม่มีการแปลเพิ่มเติมจนเป็นภาษาไทยทั้งหมดจะถูกลบอย่างแน่นอนหากส่งเข้าเนมสเปซหลัก)
+	</span></h5>
+	<br />
+	<form action="{{ url_for('wikitranslator.submit') }}" method="post">
+		<div class="row">
+			<div class="col-lg-2 form-horizontal">
+				<div class="col-lg-12 form">
+			    {{ render_field(form.siteDest,
+											    placeholder=msg['wikitranslator-siteDest-placeholder'],
+													labelsize=5,
+													fieldsize=7)
+					}}
+				</div>
+				<div class="col-lg-12 form">
+		    {{ render_field(form.siteSource,
+										    placeholder=msg['wikitranslator-siteSource-placeholder'],
+												labelsize=5,
+												fieldsize=7)
+				}}
+				</div>
+			</div>
+			
+	    <div class="col-lg-8 form vbarr vbarl">
+	        <div class="tabbable">
+	            <ul class="nav nav-tabs">
+	                <li class="active"> <!-- "ACTIVE" / "" -->
+	                    <a id="ausepage" href="#usepage" data-toggle="tab">ใช้ชื่อหน้า</a>
+	                </li>
+	                <li class="">
+	                    <a id="ausecontent" href="#usecontent" data-toggle="tab">ใช้ข้อความ</a>
+	                </li>
+	            </ul>
+	            <div class="tab-content">
+	                <div class="tab-pane active col-lg-offset-2" id="usepage">
+							 		    {{ render_field(form.title,
+							 										    placeholder=msg['wikitranslator-title-placeholder'],
+																			labelsize=3,
+							 												fieldsize=7)
+							 				}}
+	                </div>
+	                <div class="tab-pane" id="usecontent">
+										  {{ render_field(form.content, 
+																			labelsize=12,
+																			fieldsize=12,
+																			rows=10,
+																			placeholder=msg['wikitranslator-content-placeholder'])
+											}}
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+			
+	    <div class="col-lg-1">
+	        <input id="btnSubmit" type="submit" value="&nbsp;&nbsp;แปล!&nbsp;&nbsp;" 
+	               class="btn btn-info" style="height: 50px;"/>
+	        <input style="margin-top: 5px" type="button" id="btnClear" class="btn" 
+	               value="เริ่มใหม่"/>
+	    </div>
+			
+		</div>
+	</form>
+	{% block subcontent %}
+	{% endblock %}
+{% endblock %}

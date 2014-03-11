@@ -1,25 +1,22 @@
-{% macro render_field(field, input_group=False, before='', after='') %}
+{% macro render_field(field, input_group=False, before='', after='', labelsize=4, fieldsize=8) %}
 <div class="form-group {% if field.errors %}has-error{% endif %}">
-    {{ field.label(class="col-lg-4 control-label") }}
-		<div class="col-lg-8">
-			{% if input_group %}
-				<div class="input-group">
-					{% if before %}<span class="input-group-addon">{{ before|safe }}</span>{% endif %}
-			{% else %}
-				{{ before|safe }}
-			{% endif %}
-			
-			{{ render_helper(field,
-											 errors=field.errors,
-											 **kwargs)
-			}}
-			
-			{% if input_group %}
-					{% if after %}<span class="input-group-addon">{{ after|safe }}</span>{% endif %}
-					</div>
-			{% else %}
-				{{ after|safe }}
-			{% endif %}
-		</div>
+	{% if field.label %}
+	  {{ field.label(class="col-lg-{} control-label".format(labelsize)) }}
+	{% endif %}
+	<div class="col-lg-{% if field.label %}{{ fieldsize }}{% else %}12{% endif %}">
+		{% if input_group %}
+			<div class="input-group">
+				{% if before %}<span class="input-group-addon">{{ before|safe }}</span>{% endif %}
+		{% else %}
+			{{ before|safe }}
+		{% endif %}
+		{{ render_helper(field, errors=field.errors, **kwargs)}}
+		{% if input_group %}
+				{% if after %}<span class="input-group-addon">{{ after|safe }}</span>{% endif %}
+				</div>
+		{% else %}
+			{{ after|safe }}
+		{% endif %}
+	</div>
 </div>
 {% endmacro %}

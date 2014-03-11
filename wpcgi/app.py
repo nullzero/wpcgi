@@ -4,7 +4,7 @@
 import os
 from p_flask import Flask, request, render_template, g, Blueprint
 import utils
-from views import frontend, dykchecker
+from views import frontend, dykchecker, wikitranslator
 from messages import msg
 import inject
 
@@ -12,7 +12,8 @@ __all__ = ['create_app']
 
 DEFAULT_BLUEPRINTS = (
     frontend,
-    dykchecker
+    dykchecker,
+    wikitranslator,
 )
 
 def create_app(config=None, app_name=None, blueprints=None):
