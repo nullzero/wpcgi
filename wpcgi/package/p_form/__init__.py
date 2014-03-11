@@ -10,11 +10,10 @@ from werkzeug.datastructures import MultiDict
 class _Form(Form):
     def __init__(self, *args, **kwargs):
         args = list(args)
-        kwargs['csrf_enabled'] = False
         if args:
             args[0] = MultiDict(args[0])
             args[0].update(kwargs)
-        super(_Form, self).__init__(*args)
+        super(_Form, self).__init__(*args, csrf_enabled=False)
         for field in self.data:
             field = getattr(self, field)
             for validator in field.validators:
