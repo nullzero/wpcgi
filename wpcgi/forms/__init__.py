@@ -1,3 +1,3 @@
 #!/data/project/nullzerobot/python/bin/python
 
-from wpcgi.forms.dykchecker import DYKCheckerForm
+from wpcgi.forms.dykchecker import DYKCheckerFormCreator

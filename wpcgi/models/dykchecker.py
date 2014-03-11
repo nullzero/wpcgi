@@ -12,27 +12,27 @@ import wp
 class DYKChecker(object):
     def __init__(self, form):
         self.is_validate = False
-        
+
         self.errors = {}
-        
+
         self.failed = False
         self.results = []
-        
+
         self.path = []
-        
+
         self.form = form
         self.title = form.title.data
         self.oldid = form.oldid.data
         self.minlen = int(form.minlen.data or 2000)
         self.ratio = float(form.ratio.data or 2.0)
         self.maxday = int(form.maxday.data or 14)
-        
+
     def validate(self):
         self.is_validate = True
-        
+
         self.site = pywikibot.Site()
         self.page = pywikibot.Page(self.site, self.title)
-    
+
         while self.page.exists():
             if self.page.isRedirectPage():
                 self.page = self.page.getRedirectTarget()
@@ -41,53 +41,53 @@ class DYKChecker(object):
                 break
         else:
             self.error('title', msg['dykchecker-page-not-found'])
-            
+
         if self.oldid:
             try:
                 self.oldid = self.site.loadrevid(self.oldid)
             except:
                 self.error('oldid', msg['dykchecker-oldid-not-found'])
-    
+
         return self.errors
-    
+
     def render(self):
         if not self.is_validate:
             raise Exception('Must validate first')
-            
+
         self.textEngine = TextEngine()
         self.text = self.page.get()
-        
+
         self.check_info()
         self.check_ref()
         self.check_length()
         self.check_old()
-        
+
         result = AttrObject(cl=self.evaluate(not self.failed),
                             text=msg['dykchecker-summary'],
                             desc='')
-        
+
         if self.failed:
             result.value = msg['dykchecker-summary-fail']
         else:
             result.value = msg['dykchecker-summary-pass']
-        
-        self.results.insert(0, result)    
-        
+
+        self.results.insert(0, result)
+
     def error(self, field, m):
         if field not in self.errors:
             self.errors[field] = []
         self.errors[field].append(m)
-    
+
     def evaluate(self, val):
         if val:
             return "passed"
         else:
             self.failed = True
             return "failed"
-    
+
     def neutral(self):
         return "normal"
-    
+
     def check_info(self):
         self.results.append(
             AttrObject(cl=self.neutral(),
@@ -101,7 +101,7 @@ class DYKChecker(object):
                        desc="",
             )
         )
-        
+
     def check_ref(self):
         allrefs = self.text.count("<ref")
         self.results.append(
@@ -111,7 +111,7 @@ class DYKChecker(object):
                        desc=msg["dykchecker-inlineref-desc"]
             )
         )
-    
+
     def check_length(self):
         self.text = self.textEngine.remove(self.text)
         self.length = self.textEngine.length(self.text)
@@ -123,7 +123,7 @@ class DYKChecker(object):
             )
         )
         self.text = self.textEngine.convert(self.text)
-    
+
     def check_old(self):
         now = self.site.getcurrenttime()
         oldestRev = None
@@ -138,17 +138,17 @@ class DYKChecker(object):
             else:
                 createRev = oldestRev
                 newArt = True
-        
+
             if not newArt:
                 createRev = self.page.getVersionHistory(reverseOrder=True, total=1)[0]
-        
+
             if newArt:
                 article_creation_desc = msg["dykchecker-creation-new-desc"].format(self.maxday)
                 article_creation_eval = self.evaluate(True)
             else:
                 article_creation_desc = msg["dykchecker-creation-desc"]
                 article_creation_eval = self.neutral()
-        
+
             self.results.append(
                 AttrObject(text=msg["dykchecker-creation"],
                            desc=msg[article_creation_desc],
@@ -158,13 +158,13 @@ class DYKChecker(object):
                            )
                 )
             )
-        
+
             if newArt:
                 return
-        
+
         result = AttrObject(text=msg["dykchecker-old-revision"],
                             desc=msg["dykchecker-old-revision-desc"].format(self.ratio, self.maxday))
-        
+
         if oldestRev is None:
             result.cl = self.evaluate(False)
             result.value = msg['dykchecker-old-revision-not-exist'].format(self.maxday)
@@ -187,22 +187,22 @@ class TextEngine(object):
         self.subst = lre.Subst()
         self.op = "~~~OPENSESAME~~~"
         self.ed = "~~~CLOSESESAME~~~"
-        
+
         self.subst.append(r"[ \t]+", " ")
-        
+
         self.removePair("<!--", "-->")
         self.removePair("{|", "|}")
         self.removePair("{{", "}}")
         self.removePair("<gallery>", "</gallery>")
         self.removePair("<div", "</div>")
         self.removePair("<math>", "</math>")
-        
+
         self.subst.append(
             r"(\[\[[^\]\|\[]*\|)(.*?)(\]\])", r"{}\1{}\2{}\3{}".format(
                 self.op, self.ed, self.op, self.ed
             )
         )
-        
+
         self.removePart(r"(< ?/? ?(br|center|sup|sub) ?/? ?>)")
         self.removePart(r"(<br ?/? ?>)")
         self.removePart(r"(<ref[^>]*?/ ?>)")
@@ -214,27 +214,26 @@ class TextEngine(object):
         self.removePart(ur"(?ms)^(== ?(อ้างอิง|ดูเพิ่ม|แหล่งข้อมูลอื่น|เชิงอรรถ) ?== ?$.*)$")
         self.removePart(r"(?m)(^=+ ?|=+ ?$)")
         self.removePart(r"(?m)^([\:\*\#]+)")
-        
+
         self.removePair("[", "[")
         self.removePair("]", "]")
-        
+
     def removePair(self, begin, end):
         self.subst.append(lre.escape(begin), self.op + begin)
         self.subst.append(lre.escape(end), end + self.ed)
-    
+
     def removePart(self, pat):
         self.subst.append(pat, self.op + r"\1" + self.ed)
-        
-    
+
     def remove(self, text):
         return self.subst.process(text)
-    
+
     def convert(self, text):
         return (cgi.escape(text).replace("\n", "<br/>")
                                 .replace(self.op, '<span class="eqtext">')
                                 .replace(self.ed, '</span>')
                                 .replace('</span><span class="eqtext">', ''))
-    
+
     def length(self, text):
         text = (text.replace("(", "[")
                     .replace(")", "]")
@@ -250,7 +249,7 @@ class TextEngine(object):
             elif level == 0 and self.valid(i):
                 ans += 1
         return ans
-    
+
     def valid(self, ch):
         blacklist = [" ", "\n"]
         return ch not in blacklist

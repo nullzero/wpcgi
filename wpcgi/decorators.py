@@ -11,11 +11,9 @@ def langswitch(fn):
     @wraps(fn)
     def new_fn(*in_arg, **in_kwargs):
         lang = request.args.get('uselang', None)
-        if not lang:
-            lang = request.cookies.get('uselang', None)
-        succeed = msg.switch_language(lang)
+        setcookie = (lang and msg.switch_language(lang))
         response = make_response(fn(*in_arg, **in_kwargs))
-        if succeed:
+        if setcookie:
             response.set_cookie('uselang', lang)
         return response
     return new_fn

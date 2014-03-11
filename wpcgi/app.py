@@ -17,18 +17,16 @@ DEFAULT_BLUEPRINTS = (
 
 def create_app(config=None, app_name=None, blueprints=None):
     """Create a Flask app."""
-    
+
     if blueprints is None:
         blueprints = DEFAULT_BLUEPRINTS
-        
+
     app = Flask(config.APP_NAME)
     configure_app(app, config)
     configure_logging(app)
     configure_blueprints(app, blueprints)
     # configure_error_handlers(app)
     inject.inject(app)
-    
-    msg.switch_language(app.config['LANG'])
     os.environ['SCRIPT_NAME'] = app.config['SCRIPT_NAME']
     return app
 
@@ -40,10 +38,10 @@ def configure_blueprints(app, blueprints):
 
     for blueprint in blueprints:
         app.register_blueprint(blueprint)
-        
+
 def configure_logging(app):
     """Configure file logging."""
-    
+
     if app.debug or app.testing:
         # skip debug and test mode.
         return

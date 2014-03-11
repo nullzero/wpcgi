@@ -13,6 +13,8 @@ $(document).ready(function(){
     });
     * */
 	$(function(){
-	    $("[data-toogle='tooltip']").tooltip();
+	    $("[data-toogle='tooltip']").tooltip({
+	    	placement: 'right',
+	    });
 	});
 });

@@ -7,7 +7,7 @@ import re
 
 class _Required(Required):
     def __init__(self, *args, **kwargs):
-        if kwargs.get('message', False):
+        if not kwargs.get('message', False):
             kwargs['message'] = msg['validator-require']
         super(_Required, self).__init__(*args, **kwargs)
 
@@ -19,11 +19,11 @@ def Number(negative=False, decimal=False):
         charset += '-'
     if decimal:
         charset += r'\.'
-        
+
     def _Number(form, field):
-        if not field.data or not re.match('[' + charset + ']+', field.data):
+        if not field.data or not re.match('^[' + charset + ']+$', field.data):
             raise ValidationError(msg['validator-not-number'])
-            
+
     return _Number
 
 class _NumberRange(NumberRange):

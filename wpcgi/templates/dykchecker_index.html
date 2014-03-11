@@ -8,32 +8,32 @@
 		<div class="row">
 			<div class="col-lg-offset-1 col-lg-4 form-horizontal">
 		    {{ render_field(form.title,
-										    placeholder=msg['input-title-here'])
+										    placeholder=msg['dykchecker-title-placeholder'])
 				}}
 		    {{ render_field(form.oldid,
-										    placeholder=msg['input-oldid-here'])
+										    placeholder=msg['dykchecker-oldid-placeholder'])
 				}}
 			</div>
 			<div class="col-lg-3 vbarl vbarr form-horizontal">
 		    {{ render_field(form.minlen,
-							          placeholder=msg['input-minlen-here'],
+							          placeholder=msg['dykchecker-minlen-placeholder'],
 												input_group=True,
-									      after=msg['dykchecker-minlen-suffix']) 
+									      after=msg['dykchecker-minlen-suffix'])
 				}}
 		    {{ render_field(form.ratio,
-										    placeholder=msg['input-ratio-here'],
+										    placeholder=msg['dykchecker-ratio-placeholder'],
 												input_group=True,
-												after='dykchecker-ratio-suffix')
+												after=msg['dykchecker-ratio-suffix'])
 				}}
 		    {{ render_field(form.maxday,
-										    placeholder=msg['input-maxday-here'],
+										    placeholder=msg['dykchecker-maxday-placeholder'],
 												input_group=True,
-												after='dykchecker-maxday-suffix')
+												after=msg['dykchecker-maxday-suffix'])
 				}}
 				</div>
 			<div class="col-lg-1">
-		    <input type="submit" value="{{ msg['check'] }}" class="btn btn-info btn-small" style="width: 100px"/>
-		    <input type="button" value="{{ msg['open-page'] }}" id="btn-openwiki" class="btn btn-primary btn-small" 
+		    <input type="submit" value="{{ msg['dykchecker-button-check'] }}" class="btn btn-info btn-small" style="width: 100px"/>
+		    <input type="button" value="{{ msg['dykchecker-button-open-page'] }}" id="btn-openwiki" class="btn btn-primary btn-small"
 							 style="margin-top: 10px; width: 100px"/>
 			</div>
 		</div>

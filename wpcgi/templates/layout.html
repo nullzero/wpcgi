@@ -2,7 +2,7 @@
 <html lang="en">
 <html>
   <head>
-    <title>{% if tool %}{{ tool }} - {% endif %}{{ msg['general-name'] }}</title>
+    <title>{% if tool %}{{ tool }} - {% endif %}{{ msg['core-name'] }}</title>
 		<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="icon" type="image/png" href="//wikitech.wikimedia.org/w/images/c/cf/Labslogo_thumb.png">
@@ -24,8 +24,8 @@
 		        <span class="icon-bar"></span>
 					</button>
 					<a class="navbar-brand " style="padding: 10px;" href="/">
-            <img width="30px" border="0" 
-                 title="{{ msg['powered-by'] }}"  
+            <img width="30px" border="0"
+                 title="{{ msg['powered-by'] }}"
 								 src="//wikitech.wikimedia.org/w/images/c/cf/Labslogo_thumb.png">
 					</a>
 				</div>
@@ -79,10 +79,7 @@
 	  <hr>
 	  <center>
 	  <span style="font-size:14">
-			{{ msg['encounter-error'] }}
-	    <a href="//th.wikipedia.org/wiki/User_talk:Nullzero">
-				{{ msg['owner-of-tool'] }}
-	    </a>
+			{{ msg['core-encounter-error']|safe }}
 	  </span>
 	  </center>
 	  <br />
@@ -94,7 +91,7 @@
 	    <script src="{{ url_for('static', filename='js/tools/' + tool + '.js') }}"></script>
 		{% endif %}
 		<div id="exetime">
-			{{ msg['general-page-generated'].format(g.request_time()) }}
+			{{ msg['core-page-generated'].format(g.request_time()) }}
 		</div>
 	</body>
 </html>

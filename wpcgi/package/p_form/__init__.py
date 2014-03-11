@@ -1,13 +1,27 @@
 #!/data/project/nullzerobot/python/bin/python
+# -*- coding: utf-8 -*-
 
 from flask.ext.wtf import *
+from p_form import c_validators as v
 from p_flask import request
+from messages import msg
+from werkzeug.datastructures import MultiDict
 
 class _Form(Form):
     def __init__(self, *args, **kwargs):
+        args = list(args)
         kwargs['csrf_enabled'] = False
-        super(_Form, self).__init__(*args, **kwargs)
-    
+        if args:
+            args[0] = MultiDict(args[0])
+            args[0].update(kwargs)
+        super(_Form, self).__init__(*args)
+        for field in self.data:
+            field = getattr(self, field)
+            for validator in field.validators:
+                if isinstance(validator, v.Required):
+                    field.label.text = (u'{0}<span class="required">{1}</span>').format(
+                        field.label.text, msg['core-required-symbol'])
+
     def validate(self, data=None):
         if not request.form and not any(self.data.values()):
             return False
