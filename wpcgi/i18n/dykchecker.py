@@ -41,11 +41,11 @@ msg.messages['th'].update({
                                u'href="//th.wikipedia.org/wiki/วิกิพีเดีย:รู้ไหมว่า/หัวข้อที่ถูกเสนอ">'
                                u'ดำเนินการเสนอ</a>บทความได้',
 
-    'dykchecker-label-title': u'ชื่อหน้า<span></span>',
-    'dykchecker-label-oldid': u'รุ่นเก่า',
-    'dykchecker-label-minlen': u'ความยาวขั้นต่ำ',
-    'dykchecker-label-ratio': u'อัตราการขยายบทความ',
-    'dykchecker-label-maxday': u'จำนวนวันในการตรวจสอบ',
+    'dykchecker-title-label': u'ชื่อหน้า',
+    'dykchecker-oldid-label': u'รุ่นเก่า',
+    'dykchecker-minlen-label': u'ความยาวขั้นต่ำ',
+    'dykchecker-ratio-label': u'อัตราการขยายบทความ',
+    'dykchecker-maxday-label': u'จำนวนวันในการตรวจสอบ',
     
     'dykchecker-title-placeholder': u'เช่น "A" (จำเป็นต้องกรอก)',
     'dykchecker-oldid-placeholder': u'เช่น "12345"',
@@ -57,6 +57,6 @@ msg.messages['th'].update({
     'dykchecker-ratio-suffix': u'เท่า',
     'dykchecker-maxday-suffix': u'วัน',
     
-    'dykchecker-button-check': u'ตรวจสอบ',
+    'dykchecker-button-submit': u'ตรวจสอบ',
     'dykchecker-button-open-page': u'เปิดหน้า',
 })

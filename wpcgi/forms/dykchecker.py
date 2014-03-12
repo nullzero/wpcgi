@@ -11,21 +11,21 @@ class DYKCheckerForm(Form):
 
 def DYKCheckerFormCreator():
     FormCl = DYKCheckerForm
-    FormCl.title = TextField(msg['dykchecker-label-title'],
+    FormCl.title = TextField(msg['dykchecker-title-label'],
                                  id='txt-title',
                                  validators=[v.Required()])
-    FormCl.oldid = TextField(msg['dykchecker-label-oldid'],
+    FormCl.oldid = TextField(msg['dykchecker-oldid-label'],
                              id='txt-oldid',
                              validators=[v.Number(),
                                          v.Optional()])
-    FormCl.minlen = TextField(msg['dykchecker-label-minlen'],
+    FormCl.minlen = TextField(msg['dykchecker-minlen-label'],
                               validators=[v.Number(),
                                           v.Optional()])
-    FormCl.ratio = TextField(msg['dykchecker-label-ratio'],
+    FormCl.ratio = TextField(msg['dykchecker-ratio-label'],
                              validators=[v.Number(decimal=True),
                                          v.NumberRange(min=1.0),
                                          v.Optional()])
-    FormCl.maxday = TextField(msg['dykchecker-label-maxday'],
+    FormCl.maxday = TextField(msg['dykchecker-maxday-label'],
                               validators=[v.Number(),
                                           v.Optional(),
                                           v.NumberRange(min=1, max=30)])

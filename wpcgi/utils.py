@@ -7,6 +7,10 @@ class AttrObject(dict):
     def __init__(self, *args, **kwargs):
         super(AttrObject, self).__init__(*args, **kwargs)
         self.__dict__ = self
+        
+class DefaultDict(dict):
+    def __missing__(self, key):
+        return key
 
 def get_params(L):
     dic = {}

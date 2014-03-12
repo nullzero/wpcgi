@@ -15,3 +15,8 @@ def index():
 @langswitch
 def alltools():
     return render('alltools.html')
+
+@frontend.route('/about/')
+@langswitch
+def about():
+    return render('about.html')

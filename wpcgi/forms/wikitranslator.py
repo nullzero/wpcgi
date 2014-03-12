@@ -11,12 +11,14 @@ class WikiTranslatorForm(Form):
 
 def WikiTranslatorFormCreator():
     FormCl = WikiTranslatorForm
-    FormCl.title = TextField(msg['wikitranslator-label-title'],
+    FormCl.title = TextField(msg['wikitranslator-title-label'],
                                  id='txt-title')
-    FormCl.siteDest = TextField(msg['wikitranslator-label-siteDest'],
+    FormCl.siteDest = TextField(msg['wikitranslator-siteDest-label'],
+                                id='txt-siteDest',
                                 validators=[v.Required()])
-    FormCl.siteSource = TextField(msg['wikitranslator-label-siteSource'],
+    FormCl.siteSource = TextField(msg['wikitranslator-siteSource-label'],
+                                  id='txt-siteSource',
                                   validators=[v.Required()])
-    FormCl.content = TextAreaField(msg['wikitranslator-label-content'],
+    FormCl.content = TextAreaField(msg['wikitranslator-content-label'],
                                    id="txt-content")
     return WikiTranslatorForm

@@ -19,6 +19,7 @@ msg.messages['th'] = {
     'toolbar-tools': u'เครื่องมือทั้งหมด',
     'toolbar-status-of-bot': u'สถานะของบอต',
     'toolbar-contact': u'ติดต่อ',
+    'toolbar-about': u'เกี่ยวกับ',
     
     'validator-require': u'ต้องกรอกช่องนี้',
     'validator-not-number': u'ต้องเป็นตัวเลข',

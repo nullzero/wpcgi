@@ -1,4 +1,4 @@
-#!/data/project/nullzerobot/bin/python
+#!/data/project/nullzerobot/python/bin/python
 
 from flup.server.fcgi import WSGIServer
 import site

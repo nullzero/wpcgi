@@ -17,19 +17,14 @@ wikitranslator = Blueprint('wikitranslator', __name__, url_prefix='/tools/wikitr
 def index(**kwargs):
     normalize(['title'], kwargs)
     form = WikiTranslatorFormCreator()(request.form, **kwargs)
-    data = WikiTranslator(form)
+    data = WikiTranslator(form, tabactive=request.form.get('tab-active', None))
     if form.validate(data):
         data.render()
-        return render('wikitranslator_page.html',
-                      tool=__name__,
-                      form=form,
-                      data=data)
-
-    else:
-        return render('wikitranslator_index.html',
-                      tool=__name__,
-                      form=form)
-
+    return render('wikitranslator_index.html',
+                  tool=__name__,
+                  form=form,
+                  data=data)
+                  
 @wikitranslator.route('/submit')
 def submit():
     return redirect(url_for('.index', **get_params(['siteDest', 'siteSource', 'title'])), code=c.REQUEST)

@@ -46,6 +46,9 @@
 	          <li><a href="//th.wikipedia.org/wiki/User_talk:Nullzero">
 	            <i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;{{ msg['toolbar-contact'] }}
 	          </a></li>
+	          <li><a href="{{ url_for('frontend.about') }}">
+	            <i class="glyphicon glyphicon-font"></i>&nbsp;&nbsp;{{ msg['toolbar-about'] }}
+	          </a></li>
 	        </ul>
 	        <ul class="nav navbar-nav navbar-right">
 	          <li class="dropdown">
@@ -95,3 +98,6 @@
 		</div>
 	</body>
 </html>
+{% if data and data.debug %}
+	{{ data.debugtext|safe }}
+{% endif %}

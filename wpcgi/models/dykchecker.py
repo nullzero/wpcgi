@@ -8,38 +8,25 @@ import pyrobot
 import pywikibot
 from wp import lre
 import wp
+from model import Model
 
-class DYKChecker(object):
-    def __init__(self, form):
-        self.is_validate = False
-
-        self.errors = {}
-
+class DYKChecker(Model):
+    def doinit(self):
         self.failed = False
         self.results = []
 
-        self.path = []
+        self.title = self.form.title.data
+        self.oldid = self.form.oldid.data
+        self.minlen = int(self.form.minlen.data or 2000)
+        self.ratio = float(self.form.ratio.data or 2.0)
+        self.maxday = int(self.form.maxday.data or 14)
 
-        self.form = form
-        self.title = form.title.data
-        self.oldid = form.oldid.data
-        self.minlen = int(form.minlen.data or 2000)
-        self.ratio = float(form.ratio.data or 2.0)
-        self.maxday = int(form.maxday.data or 14)
-
-    def validate(self):
-        self.is_validate = True
-
+    def dovalidate(self):
         self.site = pywikibot.Site()
         self.page = pywikibot.Page(self.site, self.title)
 
-        while self.page.exists():
-            if self.page.isRedirectPage():
-                self.page = self.page.getRedirectTarget()
-                self.path.append(self.page.title())
-            else:
-                break
-        else:
+        path = self.exists(self.page)
+        if path is None:
             self.error('title', msg['dykchecker-page-not-found'])
 
         if self.oldid:
@@ -48,12 +35,7 @@ class DYKChecker(object):
             except:
                 self.error('oldid', msg['dykchecker-oldid-not-found'])
 
-        return self.errors
-
-    def render(self):
-        if not self.is_validate:
-            raise Exception('Must validate first')
-
+    def dorender(self):
         self.textEngine = TextEngine()
         self.text = self.page.get()
 
@@ -72,11 +54,6 @@ class DYKChecker(object):
             result.value = msg['dykchecker-summary-pass']
 
         self.results.insert(0, result)
-
-    def error(self, field, m):
-        if field not in self.errors:
-            self.errors[field] = []
-        self.errors[field].append(m)
 
     def evaluate(self, val):
         if val:
