@@ -11,6 +11,7 @@ from wp import lre
 import wp
 from model import Model
 from utils import DefaultDict
+from p_flask import g
 
 class WikiTranslator(Model):
     def doinit(self, tabactive=None):
@@ -30,28 +31,33 @@ class WikiTranslator(Model):
         try:
             self.siteDest = pywikibot.Site(self.siteDest)
         except:
-            error('siteDest', msg['wikitranslator-siteDest-not-found'])
+            self.error('siteDest', msg['wikitranslator-siteDest-not-found'])
         
         try:
             self.siteSource = pywikibot.Site(self.siteSource)
         except:
-            error('siteSource', msg['wikitranslator-siteSource-not-found'])
+            self.error('siteSource', msg['wikitranslator-siteSource-not-found'])
         
-        if self.title:
-            self.page = pywikibot.Page(self.siteSource, self.title)
-            path = self.exists(self.page)
+        if self.tabactive == 'page':
+            if self.title:
+                self.page = pywikibot.Page(self.siteSource, self.title)
+                path = self.exists(self.page)
         
-            if path is None:
-                error('title', msg['wikitranslator-page-not-found'])
+                if path is None:
+                    self.error('title', msg['wikitranslator-page-not-found'])
+            else:
+                self.error('title', msg['validator-require'])
+        else:
+            if not self.content:
+                self.error('content', msg['validator-require'])
 
     def dorender(self):
-        if self.title:
+        if self.tabactive == 'page':
             self.content = self.page.get()
         
         self.pat = lre.lre(r'~~~#!AmarkerZ@\d+@ZmarkerA!#~~~')
-        self.begin = lre.lre(r'~~~#!AahrefZ@\d+@ZahrefA!#~~~')
-        self.begintransform = lre.lre(r'~~~#!AahrefZ@(.*?)@ZahrefA!#~~~')
-        self.end = lre.lre(r'~~~#!AendaZ@\d+@ZendaA!#~~~')
+        self.begin = lre.lre(r'~~~#!AahrefZ@(.*?)@ZahrefA!#~~~')
+        self.end = r'~~~#!AendaZ@@ZendaA!#~~~'
         self.leadlink = lre.lre(r'^[\[\{]+')
         self.traillink = lre.lre(r'#.*$')
         
@@ -90,7 +96,6 @@ class WikiTranslator(Model):
             if link.startswith('['):
                 link = self.leadlink.sub('', link)
                 link = self.traillink.sub('', link)
-                #if link.lower().startswith('category:') or ':' not in link:
                 totranslate[i] = link
             elif link.startswith('{'):
                 link = self.leadlink.sub('', link)
@@ -114,56 +119,55 @@ class WikiTranslator(Model):
         """
         medium = self.apiquery(links.values())
         for i in links:
-            link = pywikibot.Link(links[i], self.siteSource)
-            if link in medium:
-                links[i] = self.begin.pattern.replace(r'\d+', links[i]) + medium[link] + self.end.pattern
+            if links[i] in medium:
+                links[i] = self.begin.pattern.replace('(.*?)', links[i]) + medium[links[i]] + self.end
         return links
     
     def apiquery(self, alllinks):
-        results = {}
+        output = {}
         for links in itergroup(alllinks, 50):
-            query = self.siteSource._generator(
-                api.PropertyGenerator,
-                type_arg="langlinks",
-                titles=links,
-                redirects='',
-                lllang=self.siteDest.code
-            )
-            firsttime = True
+            query = api.Request(site=self.siteSource, action='query', prop='langlinks', titles=links, 
+                                redirects='', lllang=self.siteDest.code, lllimit=500)
+            results = query.submit()
+            if 'query-continue' in results:
+                raise Exception('should not get query-continue')
+            if 'query' not in results:
+                continue
+            results = results['query']
             redirects = DefaultDict()
             normalized = DefaultDict()
-            for pageitem in query:
-                if firsttime:
-                    # a hack to deal with normalization
-                    firsttime = False
-                    if 'redirects' in query.data['query']:
-                        redirects = DefaultDict((item['to'], item['from'])
-                                    for item in
-                                    query.data['query']['redirects'])
-                    normalized = DefaultDict(query.normalized)
-                    
-                if 'langlinks' not in pageitem:
+            if 'pages' not in results:
+                continue
+            if 'redirects' in results:
+                redirects = DefaultDict((item['to'], item['from'])
+                                        for item in results['redirects'])
+            if 'normalized' in results:
+                normalized = DefaultDict((item['to'], item['from'])
+                                         for item in results['normalized'])
+            results = results['pages']
+            for pageid in results:
+                if int(pageid) < 0:
                     continue
-                for linkdata in pageitem['langlinks']:
-                    results[pywikibot.Link(normalized[redirects[pageitem['title']]], self.siteSource)] = (
-                        linkdata['*']
-                    )
-        return results
+                pagedata = results[pageid]
+                if 'langlinks' not in pagedata:
+                    continue
+                output[normalized[redirects[pagedata['title']]]] = pagedata['langlinks'][0]['*']
+        return output
     
     def finalize(self):
         self.text = cgi.escape(self.clean())
-        self.text = self.begintransform.sub("<a href='" + '//en.wikipedia.org/wiki/' + r"\1 ' title='\1'>", self.text)
-        self.text = self.text.replace(self.end.pattern, '</a>')
+        self.text = self.begin.sub("<a href='" + '//en.wikipedia.org/wiki/' + r"\1 ' title='\1'>", self.text)
+        self.text = self.text.replace(self.end, '</a>')
     
     def clean(self):
         self.text = self.pat.sub('', self.text).replace('\r', '') # first order
-        self.text = lre.sub(r'(?i)\{\{(|' + self.begintransform.pattern + ur')?แม่แบบ:', r'{{\1', self.text)
-        self.text = lre.sub(r'(?i)\{\{(|' + self.begintransform.pattern + ur')?Template:', r'{{\1', self.text)
-        self.text = lre.sub(r'(?i)\{\{(|' + self.begintransform.pattern + ur')?((?:บทความคัดสรร|บทความคุณภาพ).*?\}\})', 
+        self.text = lre.sub(r'(?i)\{\{(|' + self.begin.pattern + ur')?แม่แบบ:', r'{{\1', self.text)
+        self.text = lre.sub(r'(?i)\{\{(|' + self.begin.pattern + ur')?Template:', r'{{\1', self.text)
+        self.text = lre.sub(r'(?i)\{\{(|' + self.begin.pattern + ur')?((?:บทความคัดสรร|บทความคุณภาพ).*?\}\})', 
                             ur'<!-- {{\1\3 หมายเหตุ: นี่คือแม่แบบบทความคัดสรร/คุณภาพที่แปลมาวิกิพีเดียภาษาอื่น โปรดลบทิ้ง -->', self.text)
-                            # use \3 because (|' + self.begintransform.pattern + ur') has hidden parentheses.
-        self.text = lre.sub(r'(?i)\[\[(|' + self.begintransform.pattern + ur')?Category:', ur'[[\1หมวดหมู่:', self.text)
-        self.text = lre.sub(r'(?i)\[\[(|' + self.begintransform.pattern + ur')?(?:Image|File):', ur'[[\1ไฟล์:', self.text)
+                            # use \3 because (|' + self.begin.pattern + ur') has hidden parentheses.
+        self.text = lre.sub(r'(?i)\[\[(|' + self.begin.pattern + ur')?Category:', ur'[[\1หมวดหมู่:', self.text)
+        self.text = lre.sub(r'(?i)\[\[(|' + self.begin.pattern + ur')?(?:Image|File):', ur'[[\1ไฟล์:', self.text)
         self.text = lre.sub(r'(?mi)^== *See also *== *$', u'== ดูเพิ่ม ==', self.text)
         self.text = lre.sub(r'(?mi)^== *External links *== *$', u'== แหล่งข้อมูลอื่น ==', self.text)
         self.text = lre.sub(r'(?mi)^== *References *== *$', u'== อ้างอิง ==', self.text)
