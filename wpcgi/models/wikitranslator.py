@@ -56,7 +56,7 @@ class WikiTranslator(Model):
             self.content = self.page.get()
         
         self.pat = lre.lre(r'~~~#!AmarkerZ@\d+@ZmarkerA!#~~~')
-        self.begin = lre.lre(r'~~~#!AahrefZ@(.*?)@ZahrefA!#~~~')
+        self.begin = r'~~~#!AahrefZ@(.*?)@ZahrefA!#~~~'
         self.end = r'~~~#!AendaZ@@ZendaA!#~~~'
         self.leadlink = lre.lre(r'^[\[\{]+')
         self.traillink = lre.lre(r'#.*$')
@@ -120,7 +120,7 @@ class WikiTranslator(Model):
         medium = self.apiquery(links.values())
         for i in links:
             if links[i] in medium:
-                links[i] = self.begin.pattern.replace('(.*?)', links[i]) + medium[links[i]] + self.end
+                links[i] = self.begin.replace('(.*?)', links[i]) + medium[links[i]] + self.end
         return links
     
     def apiquery(self, alllinks):
@@ -156,18 +156,18 @@ class WikiTranslator(Model):
     
     def finalize(self):
         self.text = cgi.escape(self.clean())
-        self.text = self.begin.sub("<a href='" + '//en.wikipedia.org/wiki/' + r"\1 ' title='\1'>", self.text)
+        self.text = lre.sub(r'(?is)' + self.begin, "<a href='" + '//en.wikipedia.org/wiki/' + r"\1 ' title='\1'>", self.text)
         self.text = self.text.replace(self.end, '</a>')
     
     def clean(self):
         self.text = self.pat.sub('', self.text).replace('\r', '') # first order
-        self.text = lre.sub(r'(?i)\{\{(|' + self.begin.pattern + ur')?แม่แบบ:', r'{{\1', self.text)
-        self.text = lre.sub(r'(?i)\{\{(|' + self.begin.pattern + ur')?Template:', r'{{\1', self.text)
-        self.text = lre.sub(r'(?i)\{\{(|' + self.begin.pattern + ur')?((?:บทความคัดสรร|บทความคุณภาพ).*?\}\})', 
+        self.text = lre.sub(r'(?is)\{\{(|' + self.begin + ur')?แม่แบบ:', r'{{\1', self.text)
+        self.text = lre.sub(r'(?is)\{\{(|' + self.begin + ur')?Template:', r'{{\1', self.text)
+        self.text = lre.sub(r'(?is)\{\{(|' + self.begin + ur')?((?:บทความคัดสรร|บทความคุณภาพ).*?\}\})', 
                             ur'<!-- {{\1\3 หมายเหตุ: นี่คือแม่แบบบทความคัดสรร/คุณภาพที่แปลมาวิกิพีเดียภาษาอื่น โปรดลบทิ้ง -->', self.text)
                             # use \3 because (|' + self.begin.pattern + ur') has hidden parentheses.
-        self.text = lre.sub(r'(?i)\[\[(|' + self.begin.pattern + ur')?Category:', ur'[[\1หมวดหมู่:', self.text)
-        self.text = lre.sub(r'(?i)\[\[(|' + self.begin.pattern + ur')?(?:Image|File):', ur'[[\1ไฟล์:', self.text)
+        self.text = lre.sub(r'(?is)\[\[(|' + self.begin + ur')?Category:', ur'[[\1หมวดหมู่:', self.text)
+        self.text = lre.sub(r'(?is)\[\[(|' + self.begin + ur')?(?:Image|File):', ur'[[\1ไฟล์:', self.text)
         self.text = lre.sub(r'(?mi)^== *See also *== *$', u'== ดูเพิ่ม ==', self.text)
         self.text = lre.sub(r'(?mi)^== *External links *== *$', u'== แหล่งข้อมูลอื่น ==', self.text)
         self.text = lre.sub(r'(?mi)^== *References *== *$', u'== อ้างอิง ==', self.text)

@@ -23,3 +23,4 @@ class Message(object):
 msg = Message()
 
 from i18n import core, dykchecker, wikitranslator
+print msg.messages.keys()
