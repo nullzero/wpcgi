@@ -12,8 +12,8 @@ $(document).ready(function(){
         header: "ui-icon-triangle-1-e",
         activeHeader: "ui-icon-triangle-1-s"
     };
-    $('#statpanel').accordion({heightStyle: "content", 
-                               icons: icons, 
+    $('#statpanel').accordion({heightStyle: "content",
+                               icons: icons,
                                active: 0,
                                collapsible: true});
    	$(document).scrollTop( $("#statpanel").offset().top ); // will make error

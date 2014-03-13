@@ -2,8 +2,8 @@ $(document).ready(function(){
 	/*
     bootstrap_alert = function() {};
     bootstrap_alert.warning = function(message){
-        $('#alertBar').html('<div class="alert">' + 
-        '<a class="close" data-dismiss="alert">×</a><span>' + 
+        $('#alertBar').html('<div class="alert">' +
+        '<a class="close" data-dismiss="alert">×</a><span>' +
         message + '</span></div>');
     };
 	*/
@@ -40,8 +40,8 @@ function autocompleteTitle(site, title){
                 }
             });
         },
-		open: function() { 
-			$(title).autocomplete("widget").width(300) 
-		} 
+		open: function() {
+			$(title).autocomplete("widget").width(300)
+		}
 	});
 }

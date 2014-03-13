@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Note: LANG can't be overwritten, as the value is used in message.py 
+Note: LANG can't be overwritten, as the value is used in message.py
 directly from the class BaseConfig
 """
 
@@ -13,22 +13,21 @@ class BaseConfig(object):
     LANG = 'th'
     # os.urandom(24)
     SECRET_KEY = 'you-will-never-guess'
-    
 
 class TestConfig(BaseConfig):
     DEBUG = True
     TESTING = True
-    
+
     SCRIPT_NAME = '/~nullzero'
 
 class TestProductionConfig(BaseConfig):
     DEBUG = False
     TESTING = False
-    
+
     SCRIPT_NAME = '/~nullzero'
 
 class ProductionConfig(BaseConfig):
     DEBUG = False
     TESTING = False
-    
+
     SCRIPT_NAME = '/nullzerobot'

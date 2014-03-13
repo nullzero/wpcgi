@@ -1,9 +1,9 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-from messages import msg
+messages = {}
 
-msg.messages['th'].update({
+messages['th'] = {
     'dykchecker': u'DYKChecker',
     'dykchecker-title': u'เครื่องมือตรวจสอบบทความรู้ไหมว่า',
     'dykchecker-description': u'เครื่องมือตรวจสอบว่าบทความผ่านเกณฑ์ขั้นต่ำของ "บทความรู้ไหมว่า" หรือไม่',
@@ -46,17 +46,17 @@ msg.messages['th'].update({
     'dykchecker-minlen-label': u'ความยาวขั้นต่ำ',
     'dykchecker-ratio-label': u'อัตราการขยายบทความ',
     'dykchecker-maxday-label': u'จำนวนวันในการตรวจสอบ',
-    
+
     'dykchecker-title-placeholder': u'เช่น "A" (จำเป็นต้องกรอก)',
     'dykchecker-oldid-placeholder': u'เช่น "12345"',
     'dykchecker-minlen-placeholder': u'เช่น "2000"',
     'dykchecker-ratio-placeholder': u'เช่น "3"',
     'dykchecker-maxday-placeholder': u'เช่น "14"',
-    
+
     'dykchecker-minlen-suffix': u'อักขระ',
     'dykchecker-ratio-suffix': u'เท่า',
     'dykchecker-maxday-suffix': u'วัน',
-    
+
     'dykchecker-button-submit': u'ตรวจสอบ',
     'dykchecker-button-open-page': u'เปิดหน้า',
-})
+}

@@ -24,7 +24,7 @@ def index(**kwargs):
                   tool=__name__,
                   form=form,
                   data=data)
-                  
+
 @wikitranslator.route('/submit')
 def submit():
     return redirect(url_for('.index', **get_params(['siteDest', 'siteSource', 'title'])), code=c.REQUEST)

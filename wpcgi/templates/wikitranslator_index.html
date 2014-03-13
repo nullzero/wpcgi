@@ -30,22 +30,22 @@
 	        <div class="tabbable">
 	            <ul class="nav nav-tabs">
 	                <li class="{{ data.isActivePage }}">
-	                    <a id="ausepage" href="#usepage" data-toggle="tab">ใช้ชื่อหน้า</a>
+	                    <a id="tab-link-page" href="#tab-page" data-toggle="tab">{{ msg['wikitranslator-tab-page'] }}</a>
 	                </li>
 	                <li class="{{ data.isActiveContent }}">
-	                    <a id="ausecontent" href="#usecontent" data-toggle="tab">ใช้ข้อความ</a>
+	                    <a id="tab-link-content" href="#tab-content" data-toggle="tab">{{ msg['wikitranslator-tab-content'] }}</a>
 	                </li>
 	            </ul>
 	            <div class="tab-content">
-	                <div class="tab-pane col-lg-offset-3 {{ data.isActivePage }}" id="usepage">
+	                <div class="tab-pane col-lg-offset-3 {{ data.isActivePage }}" id="tab-page">
 							 		    {{ render_field(form.title,
 							 										    placeholder=msg['wikitranslator-title-placeholder'],
 																			labelsize=2,
 							 												fieldsize=6)
 							 				}}
 	                </div>
-	                <div class="tab-pane {{ data.isActiveContent }}" id="usecontent">
-										  {{ render_field(form.content, 
+	                <div class="tab-pane {{ data.isActiveContent }}" id="tab-content">
+										  {{ render_field(form.content,
 																			labelsize=12,
 																			fieldsize=12,
 																			rows=10,

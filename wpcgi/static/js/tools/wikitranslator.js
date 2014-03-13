@@ -7,7 +7,7 @@ $(document).ready(function(){
 		        range.moveToElementText(text);
 		        range.select();
 		    } else if (window.getSelection) {
-		        var selection = window.getSelection();        
+		        var selection = window.getSelection();
 		        var range = document.createRange();
 		        range.selectNodeContents(text);
 		        selection.removeAllRanges();
@@ -21,10 +21,10 @@ $(document).ready(function(){
         $('#txt-siteDest').val("");
         $('#txt-content').val("");
     });
-    $("#ausepage").click(function(){
+    $("#tab-link-page").click(function(){
         $("#tab-active").val("page");
     });
-    $("#ausecontent").click(function(){
+    $("#tab-link-content").click(function(){
         $("#tab-active").val("content");
     });
 	$("#txt-siteSource").change(function(){

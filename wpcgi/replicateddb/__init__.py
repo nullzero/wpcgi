@@ -16,20 +16,20 @@ class Database(object):
         finally:
             self.db.close()
     """
-    
+
     def __init__(self):
         class Something(object):
             def execute(self, o):
                 print 'execute: ', o
-            
+
             def fetchall(self):
                 return [(0, 1, 2), (2, 3, 4)]
-        
+
         self.cur = Something()
-    
+
     def pagesids(self, pages):
-        
-    
+        pass
+
     def langlinks(self, frompages=[], tolangs=[], mode='AND'):
         query = 'SELECT * FROM langlinks WHERE '
         conditions = []
@@ -38,9 +38,9 @@ class Database(object):
             conditions.append('ll_from IN ' + self.totuple(pageids.values()))
         if tolangs:
             conditions.append('ll_lang IN ' + self.totuple(tolangs))
-        
+
         query += (' {} '.format(mode)).join(conditions)
-        
+
         self.cur.execute(query)
         data = cur.fetchall()
         map_pageid_data = {}
@@ -51,7 +51,7 @@ class Database(object):
             if page in pagesids and pagesids[page] in map_pageid_data:
                 output[page] = map_pageid_data[pagesids[page]]
         return output
-    
+
     """"
     def disconnect(self):
         self.db.close()
@@ -63,18 +63,17 @@ if __name__ == "__main__":
 """
         pages_from_links = {}
         links_from_pages = {}
-        
+
         ids_from_links = {}
-        
+
         for id in links_from_ids:
             link = links_from_ids[id]
             ids_from_links[link] = id
             pages_from_links[link] = pywikibot.Page(pywikibot.Link(link)) # exception on empty string
             links_from_pages[pages_from_links[link]] = link
-            
+
         for (page, link) in db.langlinks(pages):
-            links_from_pages[page] 
-            
+            links_from_pages[page]
+
         medium = self.apiquery()
 """
-    

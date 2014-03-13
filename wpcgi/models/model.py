@@ -1,8 +1,6 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-from p_flask import g
-
 class Model(object):
     def __init__(self, form, *args, **kwargs):
         self.is_validate = False
@@ -25,7 +23,7 @@ class Model(object):
         if field not in self.errors:
             self.errors[field] = []
         self.errors[field].append(m)
-    
+
     def exists(self, page):
         path = []
         while page.exists():
@@ -37,9 +35,9 @@ class Model(object):
         else:
             return None
         return path
-    
+
     def debug(self, *args):
-        self.debugtext += g.request_time() + ': '
+        self.debugtext += g.request_time() + ': ['
         for arg in args:
             self.debugtext += repr(arg) + ', '
-        self.debugtext += '<br/>'
+        self.debugtext += ']<br/>\n'

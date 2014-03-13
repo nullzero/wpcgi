@@ -1,9 +1,9 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-from messages import msg
+messages = {}
 
-msg.messages['th'].update({
+messages['th'] = {
     'wikitranslator-title': u'เครื่องมือแปลลิงก์วิกิพีเดีย',
     'wikitranslator-description': u'เครื่องมือแปลลิงก์ในหน้าวิกิพีเดียรวมไปถึงแม่แบบและหมวดหมู่ โดยนำข้อมูลมาจากลิงก์ข้ามภาษา',
     'wikitranslator-siteDest-label': u'ไซต์ปลายทาง',
@@ -17,7 +17,10 @@ msg.messages['th'].update({
     'wikitranslator-title-placeholder': u'เช่น "A"',
     'wikitranslator-content-label': u'ข้อความ',
     'wikitranslator-content-placeholder': u'เช่น "[[C++]] is a [[programming language]]{{cn}}."',
-    
+
     'wikitranslator-button-submit': u'แปล!',
     'wikitranslator-button-reset': u'เรื่มใหม่',
-})
+
+    'wikitranslator-tab-page': u'ใช้ชื่อหน้า',
+    'wikitranslator-tab-content': u'ใช้ข้อความ',
+}
