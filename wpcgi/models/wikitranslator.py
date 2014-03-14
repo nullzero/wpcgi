@@ -55,43 +55,71 @@ class WikiTranslator(Model):
         if self.tabactive == 'page':
             self.content = self.page.get()
 
-        self.pat_before = '~~~#!AmarkerZ@'
+        self.pat_before = '~~~#m!@'
         self.pat_after = self.pat_before[::-1]
         self.pat = self.pat_before + r'\d+' + self.pat_after
-        self.begin = r'~~~#!AahrefZ@([^~]*?)@ZahrefA!#~~~'
-        self.end = r'~~~#!AendaZ@@ZendaA!#~~~'
+        
+        self.begin = r'~~~#h!@'
+        self.begin = self.begin + '([^~]*?)' + self.begin[::-1]
+        
+        self.end = r'~~~#e!@'
+        
         self.leadlink = lre.lre(r'^[\[\{]+')
         self.traillink = lre.lre(r'#.*$')
 
         self.cnt = 0
         self.text = []
-        i = 0
-        while i + 1 < len(self.content):
-            if (self.content[i] == '{' or self.content[i] == '[') and (self.content[i] == self.content[i + 1]):
-                self.text.append(self.content[i])
+        ptr = 0
+        self.debug('before replace')
+        while ptr + 1 < len(self.content):
+            if self.content[ptr:ptr+2] == '{{' or self.content[ptr:ptr+2] == '[[':
+                self.text.append(self.content[ptr])
                 self.text.append(self.pat_before)
                 self.text.append(str(self.cnt))
                 self.cnt += 1
                 self.text.append(self.pat_after)
-                self.text.append(self.content[i + 1])
-                i += 2
+                self.text.append(self.content[ptr + 1])
+                ptr += 2
             else:
-                self.text.append(self.content[i])
-                i += 1
+                self.text.append(self.content[ptr])
+                ptr += 1
             
         self.text = ''.join(self.text)
+        self.debug('after replace')
         self.content = self.text
         self.rmtag('pre')
         self.rmtag('nowiki')
         self.rmtag('source')
         self.content = lre.sub('(?s)<!--.*?-->', '', self.content)
-        matches = list(lre.finditer('(?s)(' + self.pat + r')(.*?)(?=[|}\]\n])', self.content))
+        matches = dict(enumerate(list(lre.finditer('(?s)(' + self.pat + r')(.*?)(?=[|}\]\n])', self.content))))
         links = []
         for match in matches:
-            links.append(match.group(2))
+            links.append(matches[match].group(2))
+        self.debug('before translate')
         translatedLinks = self.translate(links)
+        self.debug('after translate')
+        self.debug('before replace translate')
+        ptr = 0
+        self.content = []
+
+        while ptr < len(self.text):
+            for i in matches:
+                match = matches[i]
+                strlen = len(match.group())
+                if self.text[ptr:ptr+strlen] == match.group():
+                    ptr += strlen
+                    self.content.append(translatedLinks[i])
+                    del matches[i]
+                    break
+            else:
+                self.content.append(self.text[ptr])
+                ptr += 1
+        self.text = ''.join(self.content)
+        """
         for i, match in enumerate(matches):
-            self.text = self.text.replace(match.group(), translatedLinks[i])
+            self.text = self.text.replace(match.group(), translatedLinks[i], 1)
+        """
+        self.debug('after replace translate')
         self.finalize()
 
     def rmtag(self, tag):
@@ -144,6 +172,7 @@ class WikiTranslator(Model):
                 raise
         else:
             medium = self.apiquery(links.values())
+        
         for i in links:
             if links[i] in medium:
                 links[i] = self.begin.replace('([^~]*?)', links[i]) + medium[links[i]] + self.end
@@ -182,7 +211,7 @@ class WikiTranslator(Model):
 
     def finalize(self):
         self.text = cgi.escape(self.clean())
-        self.text = lre.sub(r'(?is)' + self.begin, "<a href='" + '//en.wikipedia.org/wiki/' + r"\1 ' title='\1'>", self.text)
+        self.text = lre.sub(r'(?is)' + self.begin, "<a href='" + '//' + self.siteSource.code + '.wikipedia.org/wiki/' + r"\1 ' title='\1'>", self.text)
         self.text = self.text.replace(self.end, '</a>')
 
     def clean(self):
@@ -190,8 +219,8 @@ class WikiTranslator(Model):
         self.text = lre.sub(r'(?is)\{\{(|' + self.begin + ur')?(?:{}):'.format('|'.join(self.siteDest.namespaces()[10])), r'{{\1', self.text)
         before = self.text
         self.text = lre.sub(r'(?is)\{\{(|' + self.begin + ur')?((?:บทความคัดสรร|บทความคุณภาพ).*?\}\})',
-                            ur'<!-- {{\1\3 หมายเหตุ: นี่คือแม่แบบบทความคัดสรร/คุณภาพที่แปลมาวิกิพีเดียภาษาอื่น โปรดลบทิ้ง -->', self.text)
-                            # use \3 because (|' + self.begin.pattern + ur') has hidden parentheses.
+                            r'<!-- {{\1\3 ' + msg['wikitranslator-fa/ga-tag'] + ' -->', self.text)
+                            # use \3 because self.begin has a hidden parenthesis.
         self.text = lre.sub(r'(?is)\[\[(|' + self.begin + ur')?Category:', ur'[[\1หมวดหมู่:', self.text)
         self.text = lre.sub(r'(?is)\[\[(|' + self.begin + ur')?(?:Image|File):', ur'[[\1ไฟล์:', self.text)
         self.text = lre.sub(r'(?mi)^== *See also *== *$', u'== ดูเพิ่ม ==', self.text)

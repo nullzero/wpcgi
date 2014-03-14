@@ -23,4 +23,6 @@ messages['th'] = {
 
     'wikitranslator-tab-page': u'ใช้ชื่อหน้า',
     'wikitranslator-tab-content': u'ใช้ข้อความ',
+    
+    'wikitranslator-fa/ga-tag': u'หมายเหตุ: นี่คือแม่แบบบทความคัดสรร/คุณภาพที่แปลมาวิกิพีเดียภาษาอื่น โปรดลบทิ้ง'
 }
