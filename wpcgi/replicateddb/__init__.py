@@ -16,7 +16,7 @@ except ImportError:
     import wp
     import pywikibot
 else:
-    test = current_app.config['TESTING']:
+    test = current_app.config['TESTING']
 
 class Database(object):
     def connect(self, site=None):
@@ -38,7 +38,7 @@ class Database(object):
     def pagesids(self, pages):
         ids_from_pages = {}
         for page in pages:
-            query = 'SELECT `page_id` FROM `page` WHERE `page`.`page_namespace`={ns} AND `page`.`page_title`="{title}"'.format(
+            query = u'SELECT `page_id` FROM `page` WHERE `page`.`page_namespace`={ns} AND `page`.`page_title`="{title}"'.format(
                 ns=page.namespace(), title=page.title(underscore=True, withNamespace=False)
             )
             self.cur.execute(query)

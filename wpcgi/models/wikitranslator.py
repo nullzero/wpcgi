@@ -130,6 +130,7 @@ class WikiTranslator(Model):
                     medium[pages[page_lang[0]]] = results[page_lang]
                 db.disconnect()
             except:
+                wp.error()
                 db.disconnect()
                 raise Exception('Cannot connect database')
         else:
