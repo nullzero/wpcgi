@@ -39,7 +39,8 @@ class Database(object):
         ids_from_pages = {}
         for page in pages:
             query = 'SELECT `page_id` FROM `page` WHERE `page`.`page_namespace`={ns} AND `page`.`page_title`="{title}"'.format(
-                ns=page.namespace(), title=page.title(underscore=True, withNamespace=False).encode('utf-8')
+                ns=page.namespace(),
+                title=self.db.escape_string(page.title(underscore=True, withNamespace=False).encode('utf-8'))
             )
             self.cur.execute(query)
             for row in self.cur.fetchall():
