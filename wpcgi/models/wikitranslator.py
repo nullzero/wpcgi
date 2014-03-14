@@ -130,6 +130,7 @@ class WikiTranslator(Model):
                 db.disconnect()
             except:
                 db.disconnect()
+                raise
         else:
             medium = self.apiquery(links.values())
         for i in links:

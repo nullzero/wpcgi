@@ -33,6 +33,7 @@ class Database(object):
             self.cur = self.db.cursor()
         except:
             self.db.close()
+            raise
 
     def pagesids(self, pages):
         ids_from_pages = {}
