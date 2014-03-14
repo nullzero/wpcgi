@@ -1,6 +1,8 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
+from p_flask import g
+
 class Model(object):
     def __init__(self, form, *args, **kwargs):
         self.is_validate = False
@@ -36,8 +38,12 @@ class Model(object):
             return None
         return path
 
-    def debug(self, *args):
+    def debug(self, *args, **kwargs):
         self.debugtext += g.request_time() + ': ['
+        with_repr = kwargs.get('with_repr', True)
         for arg in args:
-            self.debugtext += repr(arg) + ', '
+            if with_repr:
+                self.debugtext += repr(arg) + ', '
+            else:
+                self.debugtext += arg + ', '
         self.debugtext += ']<br/>\n'

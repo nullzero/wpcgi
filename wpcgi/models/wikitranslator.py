@@ -11,7 +11,7 @@ from wp import lre
 import wp
 from model import Model
 from utils import DefaultDict
-from p_flask import g
+from p_flask import g, current_app
 
 class WikiTranslator(Model):
     def doinit(self, tabactive=None):
@@ -56,27 +56,25 @@ class WikiTranslator(Model):
             self.content = self.page.get()
 
         self.pat = lre.lre(r'~~~#!AmarkerZ@\d+@ZmarkerA!#~~~')
-        self.begin = r'~~~#!AahrefZ@(.*?)@ZahrefA!#~~~'
+        self.begin = r'~~~#!AahrefZ@([^~]*?)@ZahrefA!#~~~'
         self.end = r'~~~#!AendaZ@@ZendaA!#~~~'
         self.leadlink = lre.lre(r'^[\[\{]+')
         self.traillink = lre.lre(r'#.*$')
 
         self.cnt = 0
         oldcontent = None
-        self.debug('before replace')
         for tag in ["{{", "[["]:
             while oldcontent != self.content:
                 oldcontent = self.content
                 self.content = self.content.replace(tag, tag[0] + self.pat.pattern.replace(r'\d+', str(self.cnt)) + tag[1:], 1)
                 self.cnt += 1
             oldcontent = None
-        self.debug('after replace')
         self.text = self.content
         self.rmtag('pre')
         self.rmtag('nowiki')
         self.rmtag('source')
         self.content = lre.sub('(?s)<!--.*?-->', '', self.content)
-        matches = list(lre.finditer('(?s)(' + self.pat.pattern + r')(.*?)(?=[|}\]])', self.content))
+        matches = list(lre.finditer('(?s)(' + self.pat.pattern + r')(.*?)(?=[|}\]\n])', self.content))
         links = []
         for match in matches:
             links.append(match.group(2))
@@ -119,10 +117,26 @@ class WikiTranslator(Model):
         """
         Translate links by inserting <a> tag
         """
-        medium = self.apiquery(links.values())
+        if current_app.config['SQL']:
+            from replicateddb import Database
+            pages = {pywikibot.Page(self.siteSource, links[i]): links[i] for i in links}
+            db = Database()
+            try:
+                db.connect(site=self.siteSource)
+                results = db.langlinks(frompages=pages, tolangs=[self.siteDest.code])
+                medium = {}
+                print results
+                for page_lang in results:
+                    medium[pages[page_lang[0]]] = results[page_lang]
+                db.disconnect()
+            except:
+                db.disconnect()
+                raise Exception('Cannot connect database')
+        else:
+            medium = self.apiquery(links.values())
         for i in links:
             if links[i] in medium:
-                links[i] = self.begin.replace('(.*?)', links[i]) + medium[links[i]] + self.end
+                links[i] = self.begin.replace('([^~]*?)', links[i]) + medium[links[i]] + self.end
         return links
 
     def apiquery(self, alllinks):
@@ -163,8 +177,8 @@ class WikiTranslator(Model):
 
     def clean(self):
         self.text = self.pat.sub('', self.text).replace('\r', '') # first order
-        self.text = lre.sub(r'(?is)\{\{(|' + self.begin + ur')?แม่แบบ:', r'{{\1', self.text)
-        self.text = lre.sub(r'(?is)\{\{(|' + self.begin + ur')?Template:', r'{{\1', self.text)
+        self.text = lre.sub(r'(?is)\{\{(|' + self.begin + ur')?(?:{}):'.format('|'.join(self.siteDest.namespaces()[10])), r'{{\1', self.text)
+        before = self.text
         self.text = lre.sub(r'(?is)\{\{(|' + self.begin + ur')?((?:บทความคัดสรร|บทความคุณภาพ).*?\}\})',
                             ur'<!-- {{\1\3 หมายเหตุ: นี่คือแม่แบบบทความคัดสรร/คุณภาพที่แปลมาวิกิพีเดียภาษาอื่น โปรดลบทิ้ง -->', self.text)
                             # use \3 because (|' + self.begin.pattern + ur') has hidden parentheses.

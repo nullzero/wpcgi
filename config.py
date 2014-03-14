@@ -11,12 +11,14 @@ class BaseConfig(object):
     CSRF_ENABLED = False
     DEBUG_LOG = '../error.log'
     LANG = 'th'
+    SQL = False
     # os.urandom(24)
     SECRET_KEY = 'you-will-never-guess'
 
 class TestConfig(BaseConfig):
     DEBUG = True
     TESTING = True
+    SQL = True
 
     SCRIPT_NAME = '/~nullzero'
 
@@ -27,6 +29,7 @@ class TestProductionConfig(BaseConfig):
     SCRIPT_NAME = '/~nullzero'
 
 class ProductionConfig(BaseConfig):
+    SQL = True
     DEBUG = False
     TESTING = False
 

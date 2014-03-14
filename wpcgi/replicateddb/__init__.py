@@ -1,64 +1,76 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-#import MySQLdb
+import MySQLdb
+try:
+    from p_flask import current_app
+except ImportError:
+    test = True
+    import os
+    import sys
+
+    os.environ["WPROBOT_BOT"] = "Nullzerobot"
+    sys.path.append("/data/project/nullzerobot/wprobot")
+
+    import wprobot
+    import wp
+    import pywikibot
+else:
+    test = current_app.config['TESTING']:
 
 class Database(object):
-    """
-    def connect(self, site):
+    def connect(self, site=None):
         try:
-            self.db = MySQLdb.connect(host=site.dbName() + '.labsdb',
-                                      db=site.dbName() + '_p',
-                                      read_default_file="~/replica.my.cnf")
+            if test:
+                self.db = MySQLdb.connect(host='localhost',
+                                          db='wikidb',
+                                          user='wikiuser',
+                                          passwd='wiki_password')
+            else:
+                self.db = MySQLdb.connect(host=site.dbName() + '.labsdb',
+                                          db=site.dbName() + '_p',
+                                          read_default_file="~/replica.my.cnf")
             self.cur = self.db.cursor()
         except:
-            pass
-        finally:
             self.db.close()
-    """
-
-    def __init__(self):
-        class Something(object):
-            def execute(self, o):
-                print 'execute: ', o
-
-            def fetchall(self):
-                return [(0, 1, 2), (2, 3, 4)]
-
-        self.cur = Something()
+            raise Exception('Cannot connect SQL')
 
     def pagesids(self, pages):
-        pass
+        ids_from_pages = {}
+        for page in pages:
+            query = 'SELECT `page_id` FROM `page` WHERE `page`.`page_namespace`={ns} AND `page`.`page_title`="{title}"'.format(
+                ns=page.namespace(), title=page.title(underscore=True, withNamespace=False)
+            )
+            self.cur.execute(query)
+            for row in self.cur.fetchall():
+                ids_from_pages[page] = row[0]
+        return ids_from_pages
 
     def langlinks(self, frompages=[], tolangs=[], mode='AND'):
-        query = 'SELECT * FROM langlinks WHERE '
-        conditions = []
-        pageids = self.pageids(frompages)
-        if pageids:
-            conditions.append('ll_from IN ' + self.totuple(pageids.values()))
-        if tolangs:
-            conditions.append('ll_lang IN ' + self.totuple(tolangs))
-
-        query += (' {} '.format(mode)).join(conditions)
-
-        self.cur.execute(query)
-        data = cur.fetchall()
-        map_pageid_data = {}
-        for row in data:
-            map_pageid_data[row[0]] = (row[1], row[2])
         output = {}
-        for i, page in enumerate(frompages):
-            if page in pagesids and pagesids[page] in map_pageid_data:
-                output[page] = map_pageid_data[pagesids[page]]
+        for page in frompages:
+            id_ = self.pagesids([page])
+            if not id_:
+                continue
+            id_ = id_[page]
+            query = 'SELECT * FROM langlinks WHERE ll_from={pageid} {mode} ll_lang IN ({langs})'.format(
+                pageid=id_, mode=mode, langs=','.join(map(lambda x: "'{}'".format(x), tolangs))
+            )
+            print query
+            self.cur.execute(query)
+            for row in self.cur.fetchall():
+                output[(page, row[1])] = row[2]
+
         return output
 
-    """"
     def disconnect(self):
         self.db.close()
-    """
+
 if __name__ == "__main__":
     test = Database()
-    test.langlinks()
+    test.connect()
+    print test.langlinks(frompages=[wp.Page("ABBB"), wp.Page('TeSt Yep')], tolangs=['th'])
+    test.disconnect()
 
 """
         pages_from_links = {}
