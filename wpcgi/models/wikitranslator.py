@@ -45,6 +45,8 @@ class WikiTranslator(Model):
 
                 if path is None:
                     self.error('title', msg['wikitranslator-page-not-found'])
+                elif path:
+                    self.page = path[-1]
             else:
                 self.error('title', msg['validator-require'])
         else:
@@ -70,7 +72,6 @@ class WikiTranslator(Model):
         self.cnt = 0
         self.text = []
         ptr = 0
-        self.debug('before replace')
         while ptr + 1 < len(self.content):
             if self.content[ptr:ptr+2] == '{{' or self.content[ptr:ptr+2] == '[[':
                 self.text.append(self.content[ptr])
@@ -85,7 +86,6 @@ class WikiTranslator(Model):
                 ptr += 1
             
         self.text = ''.join(self.text)
-        self.debug('after replace')
         self.content = self.text
         self.rmtag('pre')
         self.rmtag('nowiki')
@@ -95,30 +95,9 @@ class WikiTranslator(Model):
         links = []
         for match in matches:
             links.append(match.group(2))
-        self.debug('before translate')
         translatedLinks = self.translate(links)
-        self.debug('after translate')
-        self.debug('before replace translate')
-        """
-        ptr = 0
-        self.content = []
-        while ptr < len(self.text):
-            for i in matches:
-                match = matches[i]
-                strlen = len(match.group())
-                if self.text[ptr:ptr+strlen] == match.group():
-                    ptr += strlen
-                    self.content.append(translatedLinks[i])
-                    del matches[i]
-                    break
-            else:
-                self.content.append(self.text[ptr])
-                ptr += 1
-        self.text = ''.join(self.content)
-        """
         for i, match in enumerate(matches):
             self.text = self.text.replace(match.group(), translatedLinks[i], 1)
-        self.debug('after replace translate')
         self.finalize()
 
     def rmtag(self, tag):
@@ -229,3 +208,23 @@ class WikiTranslator(Model):
 
     def linkvalue(self, link):
         return u"{}:{}".format(self.siteSource.namespace(link.namespace), link.title)
+
+"""
+Ineffective code?: translate links
+
+ptr = 0
+self.content = []
+while ptr < len(self.text):
+    for i in matches:
+        match = matches[i]
+        strlen = len(match.group())
+        if self.text[ptr:ptr+strlen] == match.group():
+            ptr += strlen
+            self.content.append(translatedLinks[i])
+            del matches[i]
+            break
+    else:
+        self.content.append(self.text[ptr])
+        ptr += 1
+self.text = ''.join(self.content)
+"""

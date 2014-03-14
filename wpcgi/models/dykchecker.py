@@ -28,6 +28,8 @@ class DYKChecker(Model):
         path = self.exists(self.page)
         if path is None:
             self.error('title', msg['dykchecker-page-not-found'])
+        elif path:
+            self.page = path[-1]
 
         if self.oldid:
             try:
