@@ -33,7 +33,6 @@ class Database(object):
             self.cur = self.db.cursor()
         except:
             self.db.close()
-            raise Exception('Cannot connect SQL')
 
     def pagesids(self, pages):
         ids_from_pages = {}
@@ -58,7 +57,7 @@ class Database(object):
             )
             self.cur.execute(query)
             for row in self.cur.fetchall():
-                output[(page, row[1])] = row[2]
+                output[(page, row[1])] = row[2].decode('utf-8')
 
         return output
 

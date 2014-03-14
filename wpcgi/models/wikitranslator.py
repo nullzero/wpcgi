@@ -129,14 +129,12 @@ class WikiTranslator(Model):
                     medium[pages[page_lang[0]]] = results[page_lang]
                 db.disconnect()
             except:
-                wp.error()
                 db.disconnect()
-                raise Exception('Cannot connect database')
         else:
             medium = self.apiquery(links.values())
         for i in links:
             if links[i] in medium:
-                links[i] = self.begin.replace('([^~]*?)', links[i]) + medium[links[i]].decode('utf-8') + self.end
+                links[i] = self.begin.replace('([^~]*?)', links[i]) + medium[links[i]] + self.end
         return links
 
     def apiquery(self, alllinks):
