@@ -55,29 +55,37 @@ class WikiTranslator(Model):
         if self.tabactive == 'page':
             self.content = self.page.get()
 
-        self.pat = lre.lre(r'~~~#!AmarkerZ@\d+@ZmarkerA!#~~~')
+        self.pat_before = '~~~#!AmarkerZ@'
+        self.pat_after = self.pat_before[::-1]
+        self.pat = self.pat_before + r'\d+' + self.pat_after
         self.begin = r'~~~#!AahrefZ@([^~]*?)@ZahrefA!#~~~'
         self.end = r'~~~#!AendaZ@@ZendaA!#~~~'
         self.leadlink = lre.lre(r'^[\[\{]+')
         self.traillink = lre.lre(r'#.*$')
 
         self.cnt = 0
-        oldcontent = None
-        
-        def callback(match):
-            self.cnt += 1
-            return match.group(0)[0] + self.pat.pattern.replace(r'\d+', str(self.cnt)) + match.group(0)[1:]
-        
-        for tag in ["{{", "[["]:
-            self.content = lre.sub(lre.escape(tag), callback, self.content)
-            self.cnt += 1
+        self.text = []
+        i = 0
+        while i + 1 < len(self.content):
+            if (self.content[i] == '{' or self.content[i] == '[') and (self.content[i] == self.content[i + 1]):
+                self.text.append(self.content[i])
+                self.text.append(self.pat_before)
+                self.text.append(str(self.cnt))
+                self.cnt += 1
+                self.text.append(self.pat_after)
+                self.text.append(self.content[i + 1])
+                i += 2
+            else:
+                self.text.append(self.content[i])
+                i += 1
             
-        self.text = self.content
+        self.text = ''.join(self.text)
+        self.content = self.text
         self.rmtag('pre')
         self.rmtag('nowiki')
         self.rmtag('source')
         self.content = lre.sub('(?s)<!--.*?-->', '', self.content)
-        matches = list(lre.finditer('(?s)(' + self.pat.pattern + r')(.*?)(?=[|}\]\n])', self.content))
+        matches = list(lre.finditer('(?s)(' + self.pat + r')(.*?)(?=[|}\]\n])', self.content))
         links = []
         for match in matches:
             links.append(match.group(2))
@@ -178,7 +186,7 @@ class WikiTranslator(Model):
         self.text = self.text.replace(self.end, '</a>')
 
     def clean(self):
-        self.text = self.pat.sub('', self.text).replace('\r', '') # first order
+        self.text = lre.sub(self.pat, '', self.text).replace('\r', '') # first order
         self.text = lre.sub(r'(?is)\{\{(|' + self.begin + ur')?(?:{}):'.format('|'.join(self.siteDest.namespaces()[10])), r'{{\1', self.text)
         before = self.text
         self.text = lre.sub(r'(?is)\{\{(|' + self.begin + ur')?((?:บทความคัดสรร|บทความคุณภาพ).*?\}\})',
