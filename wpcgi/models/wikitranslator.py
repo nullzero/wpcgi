@@ -91,17 +91,17 @@ class WikiTranslator(Model):
         self.rmtag('nowiki')
         self.rmtag('source')
         self.content = lre.sub('(?s)<!--.*?-->', '', self.content)
-        matches = dict(enumerate(list(lre.finditer('(?s)(' + self.pat + r')(.*?)(?=[|}\]\n])', self.content))))
+        matches = list(lre.finditer('(?s)(' + self.pat + r')(.*?)(?=[|}\]\n])', self.content))
         links = []
         for match in matches:
-            links.append(matches[match].group(2))
+            links.append(match.group(2))
         self.debug('before translate')
         translatedLinks = self.translate(links)
         self.debug('after translate')
         self.debug('before replace translate')
+        """
         ptr = 0
         self.content = []
-
         while ptr < len(self.text):
             for i in matches:
                 match = matches[i]
@@ -118,7 +118,6 @@ class WikiTranslator(Model):
         """
         for i, match in enumerate(matches):
             self.text = self.text.replace(match.group(), translatedLinks[i], 1)
-        """
         self.debug('after replace translate')
         self.finalize()
 
