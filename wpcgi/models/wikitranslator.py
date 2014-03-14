@@ -52,10 +52,9 @@ class WikiTranslator(Model):
                 self.error('content', msg['validator-require'])
 
     def dorender(self):
-        self.debug('before get')
         if self.tabactive == 'page':
             self.content = self.page.get()
-        self.debug('after get')
+
         self.pat = lre.lre(r'~~~#!AmarkerZ@\d+@ZmarkerA!#~~~')
         self.begin = r'~~~#!AahrefZ@([^~]*?)@ZahrefA!#~~~'
         self.end = r'~~~#!AendaZ@@ZendaA!#~~~'
@@ -64,14 +63,15 @@ class WikiTranslator(Model):
 
         self.cnt = 0
         oldcontent = None
-        self.debug('before replace')
+        
+        def callback(match):
+            self.cnt += 1
+            return match.group(0)[0] + self.pat.pattern.replace(r'\d+', str(self.cnt)) + match.group(0)[1:]
+        
         for tag in ["{{", "[["]:
-            while oldcontent != self.content:
-                oldcontent = self.content
-                self.content = self.content.replace(tag, tag[0] + self.pat.pattern.replace(r'\d+', str(self.cnt)) + tag[1:], 1)
-                self.cnt += 1
-            oldcontent = None
-        self.debug('after replace')
+            self.content = lre.sub(lre.escape(tag), callback, self.content)
+            self.cnt += 1
+            
         self.text = self.content
         self.rmtag('pre')
         self.rmtag('nowiki')
@@ -81,9 +81,7 @@ class WikiTranslator(Model):
         links = []
         for match in matches:
             links.append(match.group(2))
-        self.debug('before translate')
         translatedLinks = self.translate(links)
-        self.debug('after translate')
         for i, match in enumerate(matches):
             self.text = self.text.replace(match.group(), translatedLinks[i])
         self.finalize()
