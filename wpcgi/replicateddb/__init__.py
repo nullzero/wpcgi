@@ -38,8 +38,8 @@ class Database(object):
     def pagesids(self, pages):
         ids_from_pages = {}
         for page in pages:
-            query = u'SELECT `page_id` FROM `page` WHERE `page`.`page_namespace`={ns} AND `page`.`page_title`="{title}"'.format(
-                ns=page.namespace(), title=page.title(underscore=True, withNamespace=False)
+            query = 'SELECT `page_id` FROM `page` WHERE `page`.`page_namespace`={ns} AND `page`.`page_title`="{title}"'.format(
+                ns=page.namespace(), title=page.title(underscore=True, withNamespace=False).encode('utf-8')
             )
             self.cur.execute(query)
             for row in self.cur.fetchall():
