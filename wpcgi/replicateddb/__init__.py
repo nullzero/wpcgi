@@ -56,7 +56,6 @@ class Database(object):
             query = 'SELECT * FROM langlinks WHERE ll_from={pageid} {mode} ll_lang IN ({langs})'.format(
                 pageid=id_, mode=mode, langs=','.join(map(lambda x: "'{}'".format(x), tolangs))
             )
-            print query
             self.cur.execute(query)
             for row in self.cur.fetchall():
                 output[(page, row[1])] = row[2]

@@ -125,7 +125,6 @@ class WikiTranslator(Model):
                 db.connect(site=self.siteSource)
                 results = db.langlinks(frompages=pages, tolangs=[self.siteDest.code])
                 medium = {}
-                print results
                 for page_lang in results:
                     medium[pages[page_lang[0]]] = results[page_lang]
                 db.disconnect()
@@ -137,7 +136,7 @@ class WikiTranslator(Model):
             medium = self.apiquery(links.values())
         for i in links:
             if links[i] in medium:
-                links[i] = self.begin.replace('([^~]*?)', links[i]) + medium[links[i]] + self.end
+                links[i] = self.begin.replace('([^~]*?)', links[i]) + medium[links[i]].decode('utf-8') + self.end
         return links
 
     def apiquery(self, alllinks):
