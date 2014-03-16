@@ -3,8 +3,7 @@
 
 {% block content %}
 	<h1>{{ msg['wikitranslator-title'] }}</h1>
-	<h5><span style="color: red">{{ msg['wikitranslator-disclaimer']}}
-	</span></h5>
+	<h5><span style="color: red">{{ msg['wikitranslator-disclaimer']}}</span></h5>
 	<br />
 	<form action="{{ url_for('wikitranslator.submit') }}" method="post">
 		<input type="hidden" id="tab-active" name="tab-active" value="{{ data.tabactive }}" />
@@ -25,7 +24,7 @@
 				}}
 				</div>
 			</div>
-			
+
 	    <div class="col-lg-8 form vbarr vbarl">
 	        <div class="tabbable">
 	            <ul class="nav nav-tabs">
@@ -55,12 +54,12 @@
 	            </div>
 	        </div>
 	    </div>
-			
+
 	    <div class="col-lg-1">
 	        <input type="submit" value="{{ msg['wikitranslator-button-submit'] }}" class="btn btn-info" style="height: 50px; width: 100px"/>
 	        <input style="margin-top: 5px; width: 100px" type="button" id="btn-clear" class="btn" value="{{ msg['wikitranslator-button-reset'] }}"/>
 	    </div>
-			
+
 		</div>
 	</form>
 	{% if data.text %}

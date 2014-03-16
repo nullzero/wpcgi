@@ -11,6 +11,7 @@ class _Form(Form):
     def __init__(self, *args, **kwargs):
         args = list(args)
         if args:
+            self.request = args[0]
             args[0] = MultiDict(args[0])
             args[0].update(kwargs)
         super(_Form, self).__init__(*args, csrf_enabled=False)

@@ -1,0 +1,37 @@
+{% from "macros/_helpers.html" import render_field %}
+{% extends "layout.html" %}
+
+{% block content %}
+	<h1>{{ msg['categorymover-title'] }}</h1>
+	<br />
+	<ul class="nav nav-pills">
+	  <li id='link-queue'><a href="{{ url_for('category.queue') }}">{{ msg['categorymover-link-queue'] }}</a></li>
+	  <li id='link-new'><a href="#">msg['categorymover-link-new']</a></li>
+	  <li id='link-archive'><a href="#">msg['categorymover-link-archive']</a></li>
+		<li id='link-archive'><a href="#">msg['categorymover-link-archive']</a></li>
+	</ul>
+
+	<a href="{{ url_for('categorymover.new') }}">{{ msg['categorymover-new-link'] }}</a>
+	<br /><br />
+	{% if data.result %}
+		<table class="table">
+			<th>{{ msg['categorymover-table-id'] }}</th>
+			<th>{{ msg['categorymover-table-from'] }}</th>
+			<th>{{ msg['categorymover-table-to'] }}</th>
+			<th>{{ msg['categorymover-table-date'] }}</th>
+			<th>{{ msg['categorymover-table-user'] }}</th>
+			{% for row in data.result %}
+				<tr>
+					<td>{{ row.catid }}</td>
+					<td>{{ row.catfrom }}</td>
+					<td>{{ row.catto }}</td>
+					<td>{{ row.date }}</td>
+					<td>{{ row.user }}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	{% else %}
+		<center><i>{{ msg['categorymover-no-item'] }}</i></center>
+	{% endif %}
+	<br />
+{% endblock %}

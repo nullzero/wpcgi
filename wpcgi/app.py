@@ -4,7 +4,7 @@
 import os
 from p_flask import Flask, request, render_template, g, Blueprint
 import utils
-from views import frontend, dykchecker, wikitranslator
+from views import frontend, dykchecker, wikitranslator, categorymover
 from messages import msg
 import inject
 
@@ -14,6 +14,7 @@ DEFAULT_BLUEPRINTS = (
     frontend,
     dykchecker,
     wikitranslator,
+    categorymover,
 )
 
 def create_app(config=None, app_name=None, blueprints=None):

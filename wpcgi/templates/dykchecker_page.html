@@ -2,10 +2,20 @@
 
 {% block subcontent %}
 	<hr>
-	<div id='statpanel'>
-    {% for result in data.results %}
-      <h4><span class={{ result.cl }}>█</span>&nbsp;&nbsp;{{ result.text|safe }}</h4>
-			<div>{{ result.value|safe }}<br /><br /><i>{{ result.desc|safe }}</i></div>
+	<div class="panel-group" id="statpanel">
+		{% for i, result in data.results %}
+			<div class="panel panel-default">
+			  <div class="panel-heading">
+			    <h4 class="panel-title" data-toggle="collapse" data-parent="#statpanel" data-target="#collapse{{ i }}">
+						<span class={{ result.cl }}>█</span>&nbsp;&nbsp;{{ result.text|safe }}
+					</h4>
+				</div>
+				<div id="collapse{{ i }}" class="panel-collapse collapse {% if i == 0 %}in{% endif %}">
+					<div style="padding: 10px;">
+						{{ result.value|safe }}<br /><br /><i>{{ result.desc|safe }}</i>
+					</div>
+				</div>
+			</div>
     {% endfor %}
 	</div>
 	<br>

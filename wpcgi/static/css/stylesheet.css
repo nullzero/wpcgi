@@ -37,6 +37,10 @@ body {
     max-width: 500px;
 }
 
+.panel-heading {
+	cursor: pointer;
+}
+
 /*
 body {
     background: #fff;

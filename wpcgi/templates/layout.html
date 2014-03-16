@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="icon" type="image/png" href="//wikitech.wikimedia.org/w/images/c/cf/Labslogo_thumb.png">
 		<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-		<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+		<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}"> -->
 		<link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
 		{% if tool %}
 		  <link rel="stylesheet" href="{{ url_for('static', filename='css/tools/' + tool + '.css') }}">
@@ -17,6 +17,7 @@
 	  <nav class="navbar navbar-default" role="navigation">
 	    <div class="container-fluid">
 	      <div class="navbar-header">
+					<!-- TODO: What is it!? -->
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 		        <span class="sr-only">Toggle navigation</span>
 		        <span class="icon-bar"></span>

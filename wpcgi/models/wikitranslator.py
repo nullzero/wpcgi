@@ -14,7 +14,7 @@ from utils import DefaultDict
 from p_flask import g, current_app
 
 class WikiTranslator(Model):
-    def doinit(self, tabactive=None):
+    def doinit(self, tabactive):
         self.tabactive = tabactive or 'page'
         self.isActivePage = 'active'
         self.isActiveContent = ''
@@ -57,22 +57,23 @@ class WikiTranslator(Model):
         if self.tabactive == 'page':
             self.content = self.page.get()
 
-        self.pat_before = '~~~#m!@'
+        self.pat_before = '~~~#m!'
         self.pat_after = self.pat_before[::-1]
         self.pat = self.pat_before + r'\d+' + self.pat_after
-        
-        self.begin = r'~~~#h!@'
-        self.begin = self.begin + '([^~]*?)' + self.begin[::-1]
-        
-        self.end = r'~~~#e!@'
-        
+
+        self.begin_assert = '((?:(?!~~~).)*?)'
+        self.begin = '~~~#h!'
+        self.begin = self.begin + self.begin_assert + self.begin[::-1]
+
+        self.end = '~~~#e!'
+
         self.leadlink = lre.lre(r'^[\[\{]+')
         self.traillink = lre.lre(r'#.*$')
 
         self.cnt = 0
         self.text = []
         ptr = 0
-        while ptr + 1 < len(self.content):
+        while ptr < len(self.content):
             if self.content[ptr:ptr+2] == '{{' or self.content[ptr:ptr+2] == '[[':
                 self.text.append(self.content[ptr])
                 self.text.append(self.pat_before)
@@ -84,7 +85,7 @@ class WikiTranslator(Model):
             else:
                 self.text.append(self.content[ptr])
                 ptr += 1
-            
+
         self.text = ''.join(self.text)
         self.content = self.text
         self.rmtag('pre')
@@ -150,10 +151,18 @@ class WikiTranslator(Model):
                 raise
         else:
             medium = self.apiquery(links.values())
-        
+
         for i in links:
             if links[i] in medium:
-                links[i] = self.begin.replace('([^~]*?)', links[i]) + medium[links[i]] + self.end
+                old = links[i]
+                new = medium[links[i]]
+                if (pywikibot.Page(self.siteDest, old).title().lower() ==
+                    pywikibot.Page(self.siteDest, new).title().lower()):
+                    if old.lower() == old:
+                        new = new.lower()
+                    elif old.upper() == old:
+                        new = new.upper()
+                links[i] = self.begin.replace(self.begin_assert, old) + new + self.end
         return links
 
     def apiquery(self, alllinks):
@@ -195,9 +204,8 @@ class WikiTranslator(Model):
     def clean(self):
         self.text = lre.sub(self.pat, '', self.text).replace('\r', '') # first order
         self.text = lre.sub(r'(?is)\{\{(|' + self.begin + ur')?(?:{}):'.format('|'.join(self.siteDest.namespaces()[10])), r'{{\1', self.text)
-        before = self.text
-        self.text = lre.sub(r'(?is)\{\{(|' + self.begin + ur')?((?:บทความคัดสรร|บทความคุณภาพ).*?\}\})',
-                            r'<!-- {{\1\3 ' + msg['wikitranslator-fa/ga-tag'] + ' -->', self.text)
+        pat = r'(?is)\{\{(|' + self.begin + ')?((?:' + msg['wikitranslator-fa/ga-tag'] + r').*?\}\})'
+        self.text = lre.sub(pat, r'<!-- {{\1\3 ' + msg['wikitranslator-fa/ga-notice'] + ' -->', self.text)
                             # use \3 because self.begin has a hidden parenthesis.
         self.text = lre.sub(r'(?is)\[\[(|' + self.begin + ur')?Category:', ur'[[\1หมวดหมู่:', self.text)
         self.text = lre.sub(r'(?is)\[\[(|' + self.begin + ur')?(?:Image|File):', ur'[[\1ไฟล์:', self.text)
@@ -206,11 +214,12 @@ class WikiTranslator(Model):
         self.text = lre.sub(r'(?mi)^== *References *== *$', u'== อ้างอิง ==', self.text)
         return self.text
 
-    def linkvalue(self, link):
-        return u"{}:{}".format(self.siteSource.namespace(link.namespace), link.title)
-
 """
 Ineffective code?: translate links
+
+len(self.text) <= 1000000
+len(matches) <= 1000
+
 
 ptr = 0
 self.content = []
@@ -218,7 +227,8 @@ while ptr < len(self.text):
     for i in matches:
         match = matches[i]
         strlen = len(match.group())
-        if self.text[ptr:ptr+strlen] == match.group():
+        text = self.text[ptr:ptr+strlen]
+        if text == match.group():
             ptr += strlen
             self.content.append(translatedLinks[i])
             del matches[i]

@@ -57,6 +57,8 @@ class DYKChecker(Model):
 
         self.results.insert(0, result)
 
+        self.results = enumerate(self.results)
+
     def evaluate(self, val):
         if val:
             return "passed"
@@ -164,8 +166,8 @@ class DYKChecker(Model):
 class TextEngine(object):
     def __init__(self):
         self.subst = lre.Subst()
-        self.op = "~~~OPENSESAME~~~"
-        self.ed = "~~~CLOSESESAME~~~"
+        self.op = "~~~#o!"
+        self.ed = "~~~#c!"
 
         self.subst.append(r"[ \t]+", " ")
 
@@ -197,6 +199,8 @@ class TextEngine(object):
         self.removePair("[", "[")
         self.removePair("]", "]")
 
+        self.subst.append(self.ed + self.op, '')
+
     def removePair(self, begin, end):
         self.subst.append(lre.escape(begin), self.op + begin)
         self.subst.append(lre.escape(end), end + self.ed)
@@ -210,8 +214,7 @@ class TextEngine(object):
     def convert(self, text):
         return (cgi.escape(text).replace("\n", "<br/>")
                                 .replace(self.op, '<span class="eqtext">')
-                                .replace(self.ed, '</span>')
-                                .replace('</span><span class="eqtext">', ''))
+                                .replace(self.ed, '</span>'))
 
     def length(self, text):
         text = (text.replace("(", "[")

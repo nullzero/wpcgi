@@ -3,3 +3,4 @@
 from wpcgi.views.frontend import frontend
 from wpcgi.views.dykchecker import dykchecker
 from wpcgi.views.wikitranslator import wikitranslator
+from wpcgi.views.categorymover import categorymover

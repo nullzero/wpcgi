@@ -4,7 +4,7 @@
 from p_flask import g
 
 class Model(object):
-    def __init__(self, form, *args, **kwargs):
+    def __init__(self, form=None, *args, **kwargs):
         self.is_validate = False
         self.errors = {}
         self.form = form
