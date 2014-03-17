@@ -8,6 +8,7 @@ app.config.from_object(Config)
 
 from wpcgi.setup import setup
 setup(app)
+
 manager = Manager(app)
 
 @manager.command
