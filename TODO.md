@@ -1,6 +1,3 @@
-# Core
-- localize everything
-
 # DYKChecker
 - hide advanced options
 
@@ -16,3 +13,6 @@
 
 # PageUpdater
 - soon! (integrate with bot, database)
+
+# Other
+- getopt

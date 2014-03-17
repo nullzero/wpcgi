@@ -8,7 +8,7 @@ from views import frontend, dykchecker, wikitranslator, categorymover
 from messages import msg
 import inject
 
-__all__ = ['create_app']
+__all__ = ['setup']
 
 DEFAULT_BLUEPRINTS = (
     frontend,
@@ -17,23 +17,15 @@ DEFAULT_BLUEPRINTS = (
     categorymover,
 )
 
-def create_app(config=None, app_name=None, blueprints=None):
-    """Create a Flask app."""
-
+def setup(app, blueprints=None):
     if blueprints is None:
         blueprints = DEFAULT_BLUEPRINTS
 
-    app = Flask(config.APP_NAME)
-    configure_app(app, config)
     configure_logging(app)
     configure_blueprints(app, blueprints)
     # configure_error_handlers(app)
     inject.inject(app)
     os.environ['SCRIPT_NAME'] = app.config['SCRIPT_NAME']
-    return app
-
-def configure_app(app, config):
-    app.config.from_object(config)
 
 def configure_blueprints(app, blueprints):
     """Configure blueprints in views."""

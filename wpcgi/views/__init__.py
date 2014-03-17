@@ -1,6 +1,6 @@
 #!/data/project/nullzerobot/python/bin/python
 
-from wpcgi.views.frontend import frontend
-from wpcgi.views.dykchecker import dykchecker
-from wpcgi.views.wikitranslator import wikitranslator
-from wpcgi.views.categorymover import categorymover
+from views.frontend import frontend
+from views.dykchecker import dykchecker
+from views.wikitranslator import wikitranslator
+from views.categorymover import categorymover

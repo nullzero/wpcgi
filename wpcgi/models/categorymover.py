@@ -11,7 +11,6 @@ from wp import lre
 import wp
 from model import Model
 from utils import AttrObject
-from p_flask import g, current_app
 
 class CategoryMover(Model):
     def doinit(self):

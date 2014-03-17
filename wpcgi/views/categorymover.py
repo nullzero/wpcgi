@@ -1,6 +1,6 @@
 #!/data/project/nullzerobot/python/bin/python
 
-from p_flask import Blueprint, render, g, redirect, url_for, request, current_app
+from p_flask import Blueprint, render, g, redirect, url_for, request
 from decorators import langswitch
 from models import CategoryMover
 from utils import get_params

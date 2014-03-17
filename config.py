@@ -18,7 +18,7 @@ class BaseConfig(object):
 class TestConfig(BaseConfig):
     DEBUG = True
     TESTING = True
-    #SQL = True
+    SQL = True
 
     SCRIPT_NAME = '/~nullzero'
 

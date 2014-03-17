@@ -11,7 +11,10 @@ from wp import lre
 import wp
 from model import Model
 from utils import DefaultDict
-from p_flask import g, current_app
+from wpcgi import app
+
+if app.config['SQL']:
+    from database.replicateddb import ReplicatedDatabase
 
 class WikiTranslator(Model):
     def doinit(self, tabactive):
@@ -135,7 +138,8 @@ class WikiTranslator(Model):
         """
         Translate links by inserting <a> tag
         """
-        if current_app.config['SQL']:
+        if app.config['SQL']:
+            '''
             from replicateddb import Database
             pages = {pywikibot.Page(self.siteSource, links[i]): links[i] for i in links}
             db = Database()
@@ -149,6 +153,16 @@ class WikiTranslator(Model):
             except:
                 db.disconnect()
                 raise
+            '''
+            pages = {pywikibot.Page(self.siteSource, links[i]): links[i] for i in links}
+            db = ReplicatedDatabase()
+            db.connect(self.siteSource)
+            medium = {}
+            for i in links:
+                result = db.getlanglinks(pywikibot.Page(self.siteSource, links[i]), tolangs=[self.siteDest.code])
+                if result:
+                    medium[links[i]] = result[self.siteDest.code]
+            db.disconnect()
         else:
             medium = self.apiquery(links.values())
 

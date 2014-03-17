@@ -1,10 +1,11 @@
+'''
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
 import MySQLdb
 
 try:
-    from p_flask import current_app
+    from wpcgi import app
 except ImportError:
     test = True
     import os
@@ -18,7 +19,8 @@ except ImportError:
     import pywikibot
 else:
     import pywikibot
-    test = current_app.config['TESTING']
+    test = app.config['TESTING']        
+            
 
 class Database(object):
     def connect(self, site=None):
@@ -40,7 +42,7 @@ class Database(object):
 
     def pagesids(self, pages, single=False):
         """
-        @type frompages: list of pywikibot.Page
+        @type pages: list of pywikibot.Page
         """
         ids_from_pages = {}
         for page in pages:
@@ -155,3 +157,15 @@ if __name__ == "__main__":
     test.connect()
     print test.langlinks(frompages=[wp.Page("ABBB"), wp.Page('TeSt Yep')], tolangs=['th'])
     test.disconnect()
+    
+    
+    
+
+        else:
+            if test:
+                url = URL(drivername='mysql', host='localhost', database='test', 
+                          username='root', password='password')
+            else:
+                url = URL(drivername='mysql', host=site.dbName() + '.labsdb', database=site.dbName() + '_p',
+                          query={'read_default_file': '~/replica.my.cnf'})
+'''
