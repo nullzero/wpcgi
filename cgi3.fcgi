@@ -8,7 +8,7 @@ from config import ProductionConfig as Config
 app.config.from_object(Config)
 
 from wpcgi.setup import setup
-setup(app, Config)
+setup(app)
 
 from flup.server.fcgi import WSGIServer
 if __name__ == '__main__':

@@ -8,7 +8,7 @@ from config import TestProductionConfig as Config
 app.config.from_object(Config)
 
 from wpcgi.setup import setup 
-setup(app, Config)
+setup(app)
 #from app2 import app
 
 from wsgiref.handlers import CGIHandler
