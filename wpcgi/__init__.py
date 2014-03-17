@@ -8,5 +8,5 @@ sys.path.append(os.path.abspath(os.path.join(os.path.split(__file__)[0], "..")))
 os.environ['WPCGI_PATH'] = os.path.abspath(os.path.join(os.path.split(__file__)[0], ".."))
 sys.path.append(os.path.abspath(os.path.join(os.path.split(__file__)[0], "package")))
 
-from p_flask import Flask
+from flask import Flask
 app = Flask(__name__)
