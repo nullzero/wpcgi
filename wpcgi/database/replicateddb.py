@@ -69,7 +69,7 @@ class ReplicatedDatabase(Database):
             args.append(table.c.ll_lang.in_(tolangs))
         result = self.session.query(table).filter(*args).all()
         if result:
-            return {row.ll_lang: row.ll_title for row in result}
+            return {row.ll_lang: row.ll_title.decode('utf-8') for row in result}
         else:
             return {}
 
