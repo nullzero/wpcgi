@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, MetaData
+from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -33,11 +33,13 @@ class Database(object):
     def __init__(self):
         self.test = test
         
-    def connect(self, url, schema=None):
+    def connect(self, url):
         self.engine = create_engine(name_or_url=url, convert_unicode=True)
-        self.metadata = MetaData()
-        self.metadata.reflect(bind=self.engine, schema=schema)
+        self.metadata = MetaData(bind=self.engine)
         self.session = scoped_session(sessionmaker(bind=self.engine))
+    
+    def get_model(self, table):
+        return Table(table, self.metadata, autoload=True)
         
     @app.teardown_appcontext
     def disconnect(self, exception=None):

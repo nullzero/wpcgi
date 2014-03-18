@@ -19,14 +19,13 @@ class ReplicatedDatabase(Database):
         if self.test:
             url = URL(drivername='mysql', host='localhost', database='wikidb', 
                       username='wikiuser', password='wiki_password')
-            super(ReplicatedDatabase, self).connect(url)
         else:
             url = URL(drivername='mysql', host=site.dbName() + '.labsdb', database=site.dbName() + '_p',
                       query={'read_default_file': '~/replica.my.cnf'})
-            super(ReplicatedDatabase, self).connect(url, schema='enwiki')
+        super(ReplicatedDatabase, self).connect(url)
     
     def getpageid(self, page):
-        result = self.session.query(self.metadata.tables['page']).filter_by(
+        result = self.session.query(self.get_model('page')).filter_by(
                                     page_namespace=page.namespace(),
                                     page_title=page.title(underscore=True, withNamespace=False).encode('utf-8')).first()
         if result:
@@ -42,7 +41,7 @@ class ReplicatedDatabase(Database):
     def getredirect(self, page):
         idpage = self.toid(page)
         if idpage:
-            return self.session.query(self.metadata.tables['redirect']).filter_by(rd_from=idpage).first()
+            return self.session.query(self.get_model('redirect')).filter_by(rd_from=idpage).first()
         else:
             return None
     
@@ -60,7 +59,7 @@ class ReplicatedDatabase(Database):
                 return idpage
     
     def getlanglinks(self, frompage, tolangs=[]):
-        table = self.metadata.tables['langlinks']
+        table = self.get_model('langlinks')
         langlinks = {}
         idpage = self.getfinalid(frompage)
         if not idpage:
