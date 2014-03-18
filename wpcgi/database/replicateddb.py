@@ -19,10 +19,11 @@ class ReplicatedDatabase(Database):
         if self.test:
             url = URL(drivername='mysql', host='localhost', database='wikidb', 
                       username='wikiuser', password='wiki_password')
+            super(ReplicatedDatabase, self).connect(url)
         else:
             url = URL(drivername='mysql', host=site.dbName() + '.labsdb', database=site.dbName() + '_p',
                       query={'read_default_file': '~/replica.my.cnf'})
-        super(ReplicatedDatabase, self).connect(url)   
+            super(ReplicatedDatabase, self).connect(url, schema='enwiki')
     
     def getpageid(self, page):
         result = self.session.query(self.metadata.tables['page']).filter_by(

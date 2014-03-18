@@ -33,10 +33,10 @@ class Database(object):
     def __init__(self):
         self.test = test
         
-    def connect(self, url):                  
+    def connect(self, url, schema=None):
         self.engine = create_engine(name_or_url=url, convert_unicode=True)
         self.metadata = MetaData()
-        self.metadata.reflect(bind=self.engine)
+        self.metadata.reflect(bind=self.engine, schema=schema)
         self.session = scoped_session(sessionmaker(bind=self.engine))
         
     @app.teardown_appcontext
