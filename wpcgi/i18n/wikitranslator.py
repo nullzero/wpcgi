@@ -24,7 +24,7 @@ messages['th'] = {
     'wikitranslator-tab-page': u'ใช้ชื่อหน้า',
     'wikitranslator-tab-content': u'ใช้ข้อความ',
 
-    'wikitranslator-wikitranslator-exempt-tag': u'บทความคัดสรร|บทความคุณภาพ|ล็อก|กึ่งล็อก',
-    'wikitranslator-wikitranslator-exempt-notice': (u'หมายเหตุ: นี่คือแม่แบบที่ใช้ติดแสดงสถานะของหน้าในวิกิพีเดียที่แปลมาวิกิพีเดียภาษาอื่น '
+    'wikitranslator-exempt-tag': u'บทความคัดสรร|บทความคุณภาพ|ล็อก|กึ่งล็อก',
+    'wikitranslator-exempt-notice': (u'หมายเหตุ: นี่คือแม่แบบที่ใช้ติดแสดงสถานะของหน้าในวิกิพีเดียที่แปลมาวิกิพีเดียภาษาอื่น '
                                                         u'ซึ่งหน้าในวิกิพีเดียปลายทางอาจจะไม่ได้มีสถานะเช่นนั้น'),
 }
