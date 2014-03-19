@@ -227,8 +227,8 @@ class WikiTranslator(Model):
     def clean(self):
         self.text = lre.sub(self.pat, '', self.text).replace('\r', '') # first order
         self.text = lre.sub(r'(?is)\{\{(|' + self.begin + ur')?(?:{}):'.format('|'.join(self.siteDest.namespaces()[10])), r'{{\1', self.text)
-        pat = r'(?is)\{\{(|' + self.begin + ')?((?:' + msg['wikitranslator-fa/ga-tag'] + r').*?\}\})'
-        self.text = lre.sub(pat, r'<!-- {{\1\3 ' + msg['wikitranslator-fa/ga-notice'] + ' -->', self.text)
+        pat = r'(?is)\{\{(|' + self.begin + ')?((?:' + msg['wikitranslator-exempt-tag'] + r').*?\}\})'
+        self.text = lre.sub(pat, r'<!-- {{\1\3 ' + msg['wikitranslator-exempt-notice'] + ' -->', self.text)
                             # use \3 because self.begin has a hidden parenthesis.
         self.text = lre.sub(r'(?is)\[\[(|' + self.begin + ur')?Category:', ur'[[\1หมวดหมู่:', self.text)
         self.text = lre.sub(r'(?is)\[\[(|' + self.begin + ur')?(?:Image|File):', ur'[[\1ไฟล์:', self.text)
