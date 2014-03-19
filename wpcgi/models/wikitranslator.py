@@ -57,6 +57,7 @@ class WikiTranslator(Model):
                 self.error('content', msg['validator-require'])
 
     def dorender(self):
+        self.debug('init')
         if self.tabactive == 'page':
             self.content = self.page.get()
 
@@ -76,6 +77,7 @@ class WikiTranslator(Model):
         self.cnt = 0
         self.text = []
         ptr = 0
+        self.debug('before replace')
         while ptr < len(self.content):
             if self.content[ptr:ptr+2] == '{{' or self.content[ptr:ptr+2] == '[[':
                 self.text.append(self.content[ptr])
@@ -88,7 +90,7 @@ class WikiTranslator(Model):
             else:
                 self.text.append(self.content[ptr])
                 ptr += 1
-
+        self.debug('after replace')
         self.text = ''.join(self.text)
         self.content = self.text
         self.rmtag('pre')
@@ -99,9 +101,12 @@ class WikiTranslator(Model):
         links = []
         for match in matches:
             links.append(match.group(2))
+        self.debug('before translate')
         translatedLinks = self.translate(links)
+        self.debug('after replace / before match')
         for i, match in enumerate(matches):
             self.text = self.text.replace(match.group(), translatedLinks[i], 1)
+        self.debug('after match')
         self.finalize()
 
     def rmtag(self, tag):
