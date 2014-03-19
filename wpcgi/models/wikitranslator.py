@@ -134,7 +134,7 @@ class WikiTranslator(Model):
                     totranslate[i] = link
             else:
                 raise Exception('wait what?')
-                
+
         processed.append(link)
         processed.pop(0)
 
@@ -172,7 +172,6 @@ class WikiTranslator(Model):
                 result = db.getlanglinks(pywikibot.Page(self.siteSource, links[i]), tolangs=[self.siteDest.code])
                 if result:
                     medium[links[i]] = result[self.siteDest.code]
-            db.disconnect()
         else:
             medium = self.apiquery(links.values())
 

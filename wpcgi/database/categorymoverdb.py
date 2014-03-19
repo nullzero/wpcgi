@@ -31,22 +31,22 @@ STATUSES = {
 class CategoryMoverDatabase(Database):
     def init_db(self):
         self.Queue = self.get_model('category_mover')
-        
+
         self.session.add(self.Queue(date=datetime.now(), cat_from='a', cat_to='b', user='Nullzero', status='qa'))
         self.session.commit()
-    
+
     def connect(self):
         if self.test:
-            url = URL(drivername='mysql', host='localhost', database='test', 
+            url = URL(drivername='mysql', host='localhost', database='test',
                       username='root', password='password')
         else:
             url = URL(drivername='mysql', host='___.labsdb', database='___',
                       query={'read_default_file': '~/replica.my.cnf'})
         super(CategoryMoverDatabase, self).connect(url)
-    
+
     def getQueue(self):
         return self.Queue.query.all()
-    
+
     def reject(self, rid):
         data = self.Queue.query.filter_by(rid=rid).first()
         if not data:
@@ -61,6 +61,5 @@ if __name__ == "__main__":
     cm.connect()
     cm.init_db()
     print cm.getQueue()
-    
+
     cm.reject(1)
-        

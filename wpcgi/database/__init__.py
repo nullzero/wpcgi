@@ -19,8 +19,8 @@ except ImportError:
     import pywikibot
 else:
     import pywikibot
-    test = app.config['TESTING']        
-            
+    test = app.config['TESTING']
+
 
 class Database(object):
     def connect(self, site=None):
@@ -157,13 +157,13 @@ if __name__ == "__main__":
     test.connect()
     print test.langlinks(frompages=[wp.Page("ABBB"), wp.Page('TeSt Yep')], tolangs=['th'])
     test.disconnect()
-    
-    
-    
+
+
+
 
         else:
             if test:
-                url = URL(drivername='mysql', host='localhost', database='test', 
+                url = URL(drivername='mysql', host='localhost', database='test',
                           username='root', password='password')
             else:
                 url = URL(drivername='mysql', host=site.dbName() + '.labsdb', database=site.dbName() + '_p',

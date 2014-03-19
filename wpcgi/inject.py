@@ -41,7 +41,7 @@ def inject_methods(app):
         return field(class_=clss, **kwargs)
 
     app.jinja_env.globals.update(render_helper=render_helper, msg=msg)
-    
+
 
 def inject_hooks(app):
     @app.before_request

@@ -11,7 +11,7 @@ import i18n.core
 class Message(object):
     def __init__(self):
         self.messages = defaultdict(dict)
-        self.lang = app.config['LANG']    
+        self.lang = app.config['LANG']
         for file in os.listdir(os.path.dirname(i18n.core.__file__)):
             if file.endswith('__init__.py') or not file.endswith('.py'):
                 continue

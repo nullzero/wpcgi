@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-url = URL(drivername='mysql', host='localhost', database='test', 
+url = URL(drivername='mysql', host='localhost', database='test',
           username='root', password='password')
 
 engine = create_engine(name_or_url=url, convert_unicode=True)

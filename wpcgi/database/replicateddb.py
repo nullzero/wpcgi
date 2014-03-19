@@ -14,39 +14,43 @@ from database import Database
 from sqlalchemy.engine.url import URL
 
 class ReplicatedDatabase(Database):
-    def connect(self, site):      
+    def connect(self, site):
         self.site = site
         if self.test:
-            url = URL(drivername='mysql', host='localhost', database='wikidb', 
+            url = URL(drivername='mysql', host='localhost', database='wikidb',
                       username='wikiuser', password='wiki_password')
         else:
             url = URL(drivername='mysql', host=site.dbName() + '.labsdb', database=site.dbName() + '_p',
                       query={'read_default_file': '~/replica.my.cnf'})
         super(ReplicatedDatabase, self).connect(url)
-    
+
+        self.Page = self.get_model('page', primaries=['page_id'])
+        self.Redirect = self.get_model('redirect', primaries=['rd_from'])
+        self.Langlinks = self.get_model('langlinks', primaries=['ll_from'])
+
     def getpageid(self, page):
-        result = self.get_model('page').query.filter_by(
+        result = self.Page.query.filter_by(
             page_namespace=page.namespace(),
             page_title=page.title(underscore=True, withNamespace=False).encode('utf-8')
         ).first()
-        
+
         if result:
             return result.page_id
         else:
             return None
-    
+
     def toid(self, idpage):
         if isinstance(idpage, pywikibot.Page):
             idpage = self.getpageid(idpage)
         return idpage
-    
+
     def getredirect(self, page):
         idpage = self.toid(page)
         if idpage:
-            return self.get_model('redirect').query.filter_by(rd_from=idpage).first()
+            return self.Redirect.query.filter_by(rd_from=idpage).first()
         else:
             return None
-    
+
     def getfinalid(self, page):
         seen = set()
         while True:
@@ -59,17 +63,16 @@ class ReplicatedDatabase(Database):
                 page = pywikibot.Page(self.site, redirect.rd_title, ns=redirect.rd_namespace)
             else:
                 return idpage
-    
+
     def getlanglinks(self, frompage, tolangs=[]):
-        table = self.get_model('langlinks', primaries=['ll_from'])
         langlinks = {}
         idpage = self.getfinalid(frompage)
         if not idpage:
             return None
-        args = [table.ll_from == idpage]
+        args = [self.Langlinks.ll_from == idpage]
         if tolangs:
-            args.append(table.ll_lang.in_(tolangs))
-        result = table.query.filter(*args).all()
+            args.append(self.Langlinks.ll_lang.in_(tolangs))
+        result = self.Langlinks.query.filter(*args).all()
         if result:
             return {row.ll_lang: row.ll_title.decode('utf-8') for row in result}
         else:

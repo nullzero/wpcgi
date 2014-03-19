@@ -7,7 +7,7 @@ from config import TestProductionConfig as Config
 
 app.config.from_object(Config)
 
-from wpcgi.setup import setup 
+from wpcgi.setup import setup
 setup(app)
 #from app2 import app
 
