@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from p_flask import g
+from utils import debug
 
 class Model(object):
     def __init__(self, form=None, *args, **kwargs):
@@ -39,11 +40,4 @@ class Model(object):
         return path
 
     def debug(self, *args, **kwargs):
-        self.debugtext += g.request_time() + ': ['
-        with_repr = kwargs.get('with_repr', True)
-        for arg in args:
-            if with_repr:
-                self.debugtext += repr(arg) + ', '
-            else:
-                self.debugtext += arg + ', '
-        self.debugtext += ']<br/>\n'
+        debug(*args, **kwargs)

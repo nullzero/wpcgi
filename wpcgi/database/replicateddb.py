@@ -1,5 +1,6 @@
 try:
     import pyrobot
+    from p_flask import g
 except ImportError:
     import os
     import sys
@@ -12,9 +13,10 @@ import pywikibot
 
 from database import Database
 from sqlalchemy.engine.url import URL
+from utils import profile
 
 class ReplicatedDatabase(Database):
-    def connect(self, site):
+    def connect(self, site, cachefile='replicateddb.cache'):
         self.site = site
         if self.test:
             url = URL(drivername='mysql', host='localhost', database='wikidb',
@@ -22,14 +24,14 @@ class ReplicatedDatabase(Database):
         else:
             url = URL(drivername='mysql', host=site.dbName() + '.labsdb', database=site.dbName() + '_p',
                       query={'read_default_file': '~/replica.my.cnf'})
-        super(ReplicatedDatabase, self).connect(url)
+        super(ReplicatedDatabase, self).connect(url, cachefile)
 
         self.Page = self.get_model('page', primaries=['page_id'])
         self.Redirect = self.get_model('redirect', primaries=['rd_from'])
         self.Langlinks = self.get_model('langlinks', primaries=['ll_from'])
 
     def getpageid(self, page):
-        result = self.Page.query.filter_by(
+        result = self.session.query(self.Page.page_id).filter_by(
             page_namespace=page.namespace(),
             page_title=page.title(underscore=True, withNamespace=False).encode('utf-8')
         ).first()
@@ -47,7 +49,7 @@ class ReplicatedDatabase(Database):
     def getredirect(self, page):
         idpage = self.toid(page)
         if idpage:
-            return self.Redirect.query.filter_by(rd_from=idpage).first()
+            return self.session.query(self.Redirect).filter_by(rd_from=idpage).first()
         else:
             return None
 
@@ -72,7 +74,7 @@ class ReplicatedDatabase(Database):
         args = [self.Langlinks.ll_from == idpage]
         if tolangs:
             args.append(self.Langlinks.ll_lang.in_(tolangs))
-        result = self.Langlinks.query.filter(*args).all()
+        result = self.session.query(self.Langlinks).filter(*args).all()
         if result:
             return {row.ll_lang: row.ll_title.decode('utf-8') for row in result}
         else:

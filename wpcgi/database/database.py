@@ -2,6 +2,9 @@ from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from p_flask import g
+from utils import profile, debug
+import pickle
+import os
 
 try:
     from wpcgi import app
@@ -35,10 +38,17 @@ class RepresentableBase(object):
 class Database(object):
     def __init__(self):
         self.test = test
-
-    def connect(self, url):
+    
+    def connect(self, url, cachefile):
+        self.cachefile = cachefile
         self.engine = create_engine(name_or_url=url, convert_unicode=True)
-        self.metadata = MetaData(bind=self.engine)
+        if os.path.exists(cachefile):
+            with open(self.cachefile, 'r') as cache:
+                self.metadata = pickle.load(cache)
+                self.metadata.bind = self.engine
+        else:
+            self.metadata = MetaData(bind=self.engine)
+            
         self.base = declarative_base(cls=RepresentableBase)
         self.session = scoped_session(sessionmaker(bind=self.engine))
 
@@ -48,11 +58,15 @@ class Database(object):
 
     def get_model(self, tablename, primaries=[]):
         table = Table(tablename, self.metadata, autoload=True)
-        dic = dict(__table__ = table,
-                   query = self.session.query_property())
+        dic = dict(__table__ = table)
         if primaries:
             dic['__mapper_args__'] = {'primary_key': [getattr(table.c, key) for key in primaries]}
         return type(tablename, (self.base,), dic)
+    
+    def save(self):
+        with open(self.cachefile, 'w') as cache:
+            pickle.dump(self.metadata, cache)
+            
 row2dict = lambda r: {c.name: getattr(r, c.name) for c in r.__table__.columns}
 
 @app.teardown_appcontext

@@ -103,7 +103,7 @@ class WikiTranslator(Model):
             links.append(match.group(2))
         self.debug('before translate')
         translatedLinks = self.translate(links)
-        self.debug('after replace / before match')
+        self.debug('after translate / before match')
         for i, match in enumerate(matches):
             self.text = self.text.replace(match.group(), translatedLinks[i], 1)
         self.debug('after match')
@@ -170,13 +170,17 @@ class WikiTranslator(Model):
                 raise
             '''
             pages = {pywikibot.Page(self.siteSource, links[i]): links[i] for i in links}
+            self.debug('before connect database')
             db = ReplicatedDatabase()
             db.connect(self.siteSource)
+            self.debug('after connect database')
             medium = {}
             for i in links:
+                self.debug('get langlinks {}'.format(i))
                 result = db.getlanglinks(pywikibot.Page(self.siteSource, links[i]), tolangs=[self.siteDest.code])
                 if result:
                     medium[links[i]] = result[self.siteDest.code]
+            db.save()
         else:
             medium = self.apiquery(links.values())
 
