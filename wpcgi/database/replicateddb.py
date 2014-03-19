@@ -25,9 +25,11 @@ class ReplicatedDatabase(Database):
         super(ReplicatedDatabase, self).connect(url)
     
     def getpageid(self, page):
-        result = self.session.query(self.get_model('page')).filter_by(
-                                    page_namespace=page.namespace(),
-                                    page_title=page.title(underscore=True, withNamespace=False).encode('utf-8')).first()
+        result = self.get_model('page').query.filter_by(
+            page_namespace=page.namespace(),
+            page_title=page.title(underscore=True, withNamespace=False).encode('utf-8')
+        ).first()
+        
         if result:
             return result.page_id
         else:
@@ -41,7 +43,7 @@ class ReplicatedDatabase(Database):
     def getredirect(self, page):
         idpage = self.toid(page)
         if idpage:
-            return self.session.query(self.get_model('redirect')).filter_by(rd_from=idpage).first()
+            return self.get_model('redirect').query.filter_by(rd_from=idpage).first()
         else:
             return None
     
@@ -59,15 +61,15 @@ class ReplicatedDatabase(Database):
                 return idpage
     
     def getlanglinks(self, frompage, tolangs=[]):
-        table = self.get_model('langlinks')
+        table = self.get_model('langlinks', primaries=['ll_from'])
         langlinks = {}
         idpage = self.getfinalid(frompage)
         if not idpage:
             return None
-        args = [table.c.ll_from == idpage]
+        args = [table.ll_from == idpage]
         if tolangs:
-            args.append(table.c.ll_lang.in_(tolangs))
-        result = self.session.query(table).filter(*args).all()
+            args.append(table.ll_lang.in_(tolangs))
+        result = table.query.filter(*args).all()
         if result:
             return {row.ll_lang: row.ll_title.decode('utf-8') for row in result}
         else:

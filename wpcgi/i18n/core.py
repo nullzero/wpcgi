@@ -14,6 +14,7 @@ messages['th'] = {
     'core-required-symbol': u'*',
     'core-encounter-error': u'หากพบข้อผิดพลาด โปรดติดต่อ'
                             u'<a href="//th.wikipedia.org/wiki/User_talk:Nullzero">ผู้ดูแลเครื่องมือ</a>',
+    'core-error': u'ข้อผิดพลาด',
 
     'toolbar-home': u'หน้าหลัก',
     'toolbar-tools': u'เครื่องมือทั้งหมด',

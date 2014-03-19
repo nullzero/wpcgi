@@ -21,19 +21,27 @@ def inject_variables(app):
 def inject_methods(app):
     def render_helper(field, errors=None, **kwargs):
         clss = kwargs.pop('class', kwargs.pop('class_', None)) or ''
+        tooltip = kwargs.pop('tooltip', '')
         clss += ' form-control'
-        if errors:
+        if errors or tooltip:
+            errorsmsg = ''
+            if errors:
+                errorsmsg += msg['core-error'] + '\n'
+                errorsmsg += '<ul class="error-tooltip">\n'
+                errorsmsg += ''.join(map(lambda x: '<li>' + x + '</li>\n', errors))
+                errorsmsg += '</ul>\n'
+            if errors and tooltip:
+                tooltip += '<hr>\n'
             kwargs.update({'data-toogle': 'tooltip',
 		                   'data-container': 'body',
                            'data-html': 'true',
-                           'title': '<ul style="padding-left: 15px;">\n' +
-                                    ''.join(map(lambda x: '<li>' + x + '</li>\n', errors)) +
-                                    '</ul>\n'
+                           'title': tooltip + errorsmsg
 			              })
             clss += ' error'
         return field(class_=clss, **kwargs)
 
-    app.jinja_env.globals.update(render_helper=render_helper)
+    app.jinja_env.globals.update(render_helper=render_helper, msg=msg)
+    
 
 def inject_hooks(app):
     @app.before_request

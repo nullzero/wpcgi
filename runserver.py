@@ -3,6 +3,7 @@
 from flask.ext.script import Manager
 from wpcgi import app
 from config import TestConfig as Config
+import os
 
 app.config.from_object(Config)
 
@@ -22,4 +23,5 @@ manager.add_option('-c', '--config',
                    help="config file")
 
 if __name__ == "__main__":
+    os.system("find . -name '*.pyc' -delete")
     manager.run()

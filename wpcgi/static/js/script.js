@@ -12,11 +12,9 @@ $(document).ready(function(){
         <?php $(this).attr("id"); ?>
     });
     * */
-	$(function(){
-	    $("[data-toogle='tooltip']").tooltip({
-	    	placement: 'right',
-	    });
-	});
+    $("[data-toogle='tooltip']").tooltip({
+    	placement: 'right',
+    });
 });
 
 function autocompleteTitle(site, title){

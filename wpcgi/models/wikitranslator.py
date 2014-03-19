@@ -113,10 +113,18 @@ class WikiTranslator(Model):
         """
         totranslate = {}
         processed = []
-        for i, link in enumerate(links):
+        link = None
+        for i, oldlink in enumerate(links):
+            processed.append(link)
+            link = oldlink
             if link.startswith('['):
                 link = self.leadlink.sub('', link)
                 link = self.traillink.sub('', link)
+                if link.startswith('mw'): # pywikibot bug
+                    continue
+                page = pywikibot.Page(self.siteSource, link)
+                if page.site != self.siteSource and not link.startswith(':'):
+                    continue # [[en:abc]]
                 totranslate[i] = link
             elif link.startswith('{'):
                 link = self.leadlink.sub('', link)
@@ -126,7 +134,9 @@ class WikiTranslator(Model):
                     totranslate[i] = link
             else:
                 raise Exception('wait what?')
-            processed.append(link)
+                
+        processed.append(link)
+        processed.pop(0)
 
         translated = self._translate(totranslate)
         for i, link in enumerate(links):
