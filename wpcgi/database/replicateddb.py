@@ -60,7 +60,7 @@ class ReplicatedDatabase(Database):
             seen.add(idpage)
             redirect = self.getredirect(idpage)
             if redirect:
-                page = pywikibot.Page(self.site, redirect.rd_title, ns=redirect.rd_namespace)
+                page = pywikibot.Page(self.site, redirect.rd_title.decode('utf-8'), ns=redirect.rd_namespace)
             else:
                 return idpage
 
