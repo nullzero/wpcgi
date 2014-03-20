@@ -37,7 +37,7 @@ class CategoryMoverDatabase(Database):
             url = URL(drivername='mysql', host='___.labsdb', database='___',
                       query={'read_default_file': '~/replica.my.cnf'})
         super(CategoryMoverDatabase, self).connect(url, cachefile)
-        
+
         self.Queue = self.get_model('category_mover')
 
         self.session.add(self.Queue(date=datetime.now(), cat_from='a', cat_to='b', user='Nullzero', status='qa'))

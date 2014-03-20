@@ -175,11 +175,9 @@ class WikiTranslator(Model):
             db.connect(self.siteSource)
             self.debug('after connect database')
             medium = {}
-            for i in links:
-                self.debug('get langlinks {}'.format(i))
-                result = db.getlanglinks(pywikibot.Page(self.siteSource, links[i]), tolangs=[self.siteDest.code])
-                if result:
-                    medium[links[i]] = result[self.siteDest.code]
+            results = db.getlanglinks(inputs=pages.keys(), tolangs=[self.siteDest.code])
+            for page in results:
+                medium[pages[page]] = results[page].title()
             db.save()
         else:
             medium = self.apiquery(links.values())
