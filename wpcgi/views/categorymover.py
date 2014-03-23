@@ -16,17 +16,17 @@ categorymover = Blueprint('categorymover', __name__, url_prefix='/tools/category
 def queue(**kwargs):
     #form = WikiTranslatorFormCreator()(request.form, **kwargs)
     data = CategoryMover()
-    #if form.validate(data):
-    #    data.render()
-    return render('categorymover_index.html',
+    data.renderQueue()
+    return render('categorymover_queue.html',
                   tool=__name__,
                   #form=form,
-                  data=data,
-                  )
+                  data=data)
 
+"""
 @categorymover.route('/submit')
 def submit():
     return redirect(url_for('.index', **get_params(['siteDest', 'siteSource', 'title'])), code=c.REQUEST)
+"""
 
 @categorymover.route('/new')
 @langswitch
@@ -36,15 +36,27 @@ def new():
 @categorymover.route('/archive')
 @categorymover.route('/archive/<page>')
 @langswitch
-def list(page=None):
+def archive(page=None):
     pass
 
-@categorymover.route('/delete/<page>')
+@categorymover.route('/delete/<rid>')
 @langswitch
-def delete(page):
+def delete(rid):
     pass
 
-@categorymover.route('/edit/<page>')
+@categorymover.route('/edit/<rid>')
 @langswitch
-def edit(page):
+def edit(rid):
     pass
+
+@categorymover.route('/approve/<rid>')
+@langswitch
+def approve(rid):
+    return redirect(url_for('.queue'))
+
+@categorymover.route('/reject/<rid>')
+@langswitch
+def reject(rid):
+    data = CategoryMover()
+    data.renderReject(rid)
+    return redirect(url_for('.queue'))

@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.engine.url import URL
 import pickle
 import os
 
@@ -10,7 +11,10 @@ try:
     from utils import profile, debug
 except ImportError:
     print ">>> Enter test mode"
-    test = True
+    if 'WPCGI_DATABASE' in os.environ:
+        test = False
+    else:
+        test = True
 
     class Dummy(object):
         def teardown_appcontext(self, fn):
@@ -36,13 +40,22 @@ class RepresentableBase(object):
             setattr(self, key, kwargs[key])
 
 class Database(object):
-    def __init__(self):
+    def __init__(self, drop=False):
         self.test = test
+        self.drop_test = drop
 
-    def connect(self, url, cachefile):
+    def connect(self, dic, cachefile):
+        dic['drivername'] = 'mysql'
+        if 'query' not in dic:
+            dic['query'] = {}
+        dic['query']['charset'] = 'utf8'
+
+        if self.test:
+            self.cachefile = None
+
         self.cachefile = cachefile
-        self.engine = create_engine(name_or_url=url, convert_unicode=True)
-        if not test and os.path.exists(cachefile):
+        self.engine = create_engine(name_or_url=URL(**dic), convert_unicode=True)
+        if self.cachefile and not test and os.path.exists(cachefile):
             with open(self.cachefile, 'r') as cache:
                 self.metadata = pickle.load(cache)
                 self.metadata.bind = self.engine
@@ -65,12 +78,14 @@ class Database(object):
         return type(tablename, (self.base,), dic)
 
     def save(self):
-        if not test:
+        if self.cachefile and not test:
             with open(self.cachefile, 'w') as cache:
                 pickle.dump(self.metadata, cache)
 
     def disconnect(self):
-        self.session.remove()
+        self.session.remove() # must disconnect before drop_all
+        if self.drop_test:
+            self.metadata.drop_all()
 
 row2dict = lambda r: {c.name: getattr(r, c.name) for c in r.__table__.columns}
 

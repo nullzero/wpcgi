@@ -1,3 +1,6 @@
+#!/data/project/nullzerobot/python/bin/python
+# -*- coding: utf-8 -*-
+
 try:
     import pyrobot
     from p_flask import g
@@ -13,12 +16,7 @@ import wprobot
 import pywikibot
 
 from database import Database
-from sqlalchemy.engine.url import URL
 from collections import defaultdict
-
-"""
-get... = map input to output | getlanglinks
-"""
 
 def sort_inputs_by_ns(inputs):
     groups = defaultdict(list)
@@ -52,18 +50,15 @@ def separate_ns(fn):
     return new_fun
 
 class ReplicatedDatabase(Database):
-    """
-    define INPUT: pywikibot.Page or id
-    """
     def connect(self, site, cachefile='replicateddb.cache'):
         self.site = site
         if self.test:
-            url = URL(drivername='mysql', host='localhost', database='wikidb',
-                      username='wikiuser', password='wiki_password')
+            dic = dict(host='localhost', database='wikidb',
+                       username='wikiuser', password='wiki_password', query={'charset': 'utf8'})
         else:
-            url = URL(drivername='mysql', host=site.dbName() + '.labsdb', database=site.dbName() + '_p',
-                      query={'read_default_file': '~/replica.my.cnf'})
-        super(ReplicatedDatabase, self).connect(url, cachefile)
+            dic = dict(drivername='mysql', host=site.dbName() + '.labsdb', database=site.dbName() + '_p',
+                       query={'read_default_file': '~/replica.my.cnf'})
+        super(ReplicatedDatabase, self).connect(dic, cachefile)
 
         self.Page = self.get_model('page', primaries=['page_id'])
         self.Redirect = self.get_model('redirect', primaries=['rd_from'])
@@ -88,7 +83,7 @@ class ReplicatedDatabase(Database):
         if search:
             for result in self.session.query(self.Redirect).filter(self.Redirect.rd_from.in_(search)).all():
                 page = pywikibot.Page(self.site,
-                                      result.rd_title.decode('utf-8'),
+                                      result.rd_title,
                                       ns=result.rd_namespace)
                 self._redirect[result.rd_from] = page
                 self._rv_redirects[page].append(result.rd_from)
@@ -102,7 +97,7 @@ class ReplicatedDatabase(Database):
     def toid(self, inputs):
         return self.metaconvert(inputs=inputs, arr=self._toid, typePass=long, typeConvert=pywikibot.Page,
                                 filter_kwargs=lambda inputs, ns: [
-            self.Page.page_title.in_([page.title(underscore=True, withNamespace=False).encode('utf-8') for page in inputs]),
+            self.Page.page_title.in_([page.title(underscore=True, withNamespace=False) for page in inputs]),
             self.Page.page_namespace == ns,
         ])
 
@@ -143,7 +138,7 @@ class ReplicatedDatabase(Database):
 
                 for result in results:
                     page = pywikibot.Page(self.site,
-                                          result.page_title.decode('utf-8'),
+                                          result.page_title,
                                           ns=example.namespace())
                     self._topage[result.page_id] = page
                     self._toid[page] = result.page_id
@@ -164,12 +159,6 @@ class ReplicatedDatabase(Database):
 
     @separate_ns
     def getlanglinks(self, inputs=[], tolangs=[]):
-        """
-        Return langlinks of the given input
-
-        @param inputs: list of INPUT, must be called as a kwarg
-        @return: a dictionary mapping pywikibot.Page to pywikibot.Page
-        """
         langlinks = {}
 
         args = [self.Langlinks.ll_from.in_(self.toid_final(inputs))] # preload
@@ -180,12 +169,12 @@ class ReplicatedDatabase(Database):
         for result in results:
             page = self.topage(result.ll_from)
             for llpage in self.topage(self._rv_redirects[page]) + [page]:
-                langlinks[llpage] = pywikibot.Page(pywikibot.Site(result.ll_lang), result.ll_title.decode('utf-8'))
+                langlinks[llpage] = pywikibot.Page(pywikibot.Site(result.ll_lang), result.ll_title)
 
         return langlinks
 
 if __name__ == "__main__":
     enwp = ReplicatedDatabase()
     enwp.connect(pywikibot.Site())
-    print enwp.getlanglinks(inputs=[pywikibot.Page(pywikibot.Site(), 'A'), pywikibot.Page(pywikibot.Site(), 'TeSt Yep')])
+    print enwp.getlanglinks(inputs=[pywikibot.Page(pywikibot.Site(), u'ก'), pywikibot.Page(pywikibot.Site(), 'TeSt Yep')])
     enwp.disconnect()

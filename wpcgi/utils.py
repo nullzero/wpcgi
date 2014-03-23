@@ -19,7 +19,7 @@ def get_params(L):
         if var:
             dic[name] = var
     return dic
-    
+
 import cProfile as profiler
 import gc, pstats, time
 
@@ -46,7 +46,7 @@ def _profile(filename, fn, *args, **kw):
 
     return ended - began, load_stats, locals()['result']
 
-def debug(*args, **kwargs):    
+def debug(*args, **kwargs):
     g.debugtext += g.request_time() + ': ['
     with_repr = kwargs.get('with_repr', True)
     for arg in args:

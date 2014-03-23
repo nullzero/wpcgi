@@ -38,6 +38,3 @@ class Model(object):
         else:
             return None
         return path
-
-    def debug(self, *args, **kwargs):
-        debug(*args, **kwargs)

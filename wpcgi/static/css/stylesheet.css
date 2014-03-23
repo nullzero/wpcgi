@@ -51,6 +51,11 @@ hr {
 	padding-left: 15px;
 }
 
+table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
 /*
 body {
     background: #fff;
