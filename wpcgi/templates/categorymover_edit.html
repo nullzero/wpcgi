@@ -1,0 +1,33 @@
+{% from "macros/_helpers.html" import render_field %}
+{% extends "categorymover_layout.html" %}
+
+{% block subcontent %}
+	<form action="{{ url_for('categorymover.edit') }}" method="post">
+		<div class="col-lg-8 col-lg-offset-2">
+			<div class="row">
+				<div class="col-lg-4 form-horizontal">
+					<div class="form-group">
+						<label class="col-lg-4 control-label">{{ msg['categorymover-id-label'] }}</label>
+						<p class="form-control-static col-lg-8">{% if data.rid %}{{ data.rid }}{% else %}-{% endif %}</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-4 form-horizontal">
+			    {{ render_field(form.fam, placeholder=msg['categorymover-fam-placeholder']) }}
+			    {{ render_field(form.lang, placeholder=msg['categorymover-lang-placeholder']) }}
+				</div>
+				<div class="col-lg-8 form-horizontal">
+			    {{ render_field(form.catfrom, placeholder=msg['categorymover-catfrom-placeholder']) }}
+			    {{ render_field(form.catto, placeholder=msg['categorymover-catto-placeholder']) }}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12 form-horizontal">
+				  {{ render_field(form.note, placeholder=msg['categorymover-note-placeholder'], labelsize=3, fieldsize=9) }}
+				</div>
+			</div>
+      <input type="submit" value="{{ msg['categorymover-button-submit'] }}" class="btn btn-info col-lg-2 col-lg-offset-10"/>
+		</div>
+	</form>
+{% endblock %}

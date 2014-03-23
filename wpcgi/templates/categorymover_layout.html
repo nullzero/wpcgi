@@ -4,11 +4,10 @@
 {% block content %}
 	<h1>{{ msg['categorymover-title'] }}</h1>
 	<br />
-	<ul class="nav nav-pills nav-justified">
+	<ul class="nav nav-justified">
 	  <li id='link-queue' class="{{ data.nav_active['queue'] }}"><a href="{{ url_for('categorymover.queue') }}">{{ msg['categorymover-link-queue'] }} <span class="badge">{{ data.num_queue }}</span></a></li>
-	  <li id='link-new' class="{{ data.nav_active['new'] }}"><a href="{{ url_for('categorymover.new') }}">{{ msg['categorymover-link-new'] }}</a></li>
+	  <li id='link-new' class="{{ data.nav_active['new'] }}"><a href="{{ url_for('categorymover.edit') }}">{{ msg['categorymover-link-new'] }}</a></li>
 	  <li id='link-archive' class="{{ data.nav_active['archive'] }}"><a href="{{ url_for('categorymover.archive') }}">{{ msg['categorymover-link-archive'] }}</a></li>
-		<li id='link-archive' class=""><a href="#">{{ msg['categorymover-link-archive'] }}</a></li>
 	</ul>
 	<br /><br />
 	{% block subcontent %}

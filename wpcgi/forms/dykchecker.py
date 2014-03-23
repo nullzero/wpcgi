@@ -29,4 +29,4 @@ def DYKCheckerFormCreator():
                               validators=[v.Number(),
                                           v.Optional(),
                                           v.NumberRange(min=1, max=30)])
-    return DYKCheckerForm
+    return FormCl

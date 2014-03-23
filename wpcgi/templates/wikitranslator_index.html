@@ -1,8 +1,8 @@
-{% from "macros/_helpers.html" import render_field %}
+{% from "macros/_helpers.html" import render_field, header %}
 {% extends "layout.html" %}
 
 {% block content %}
-	<h1>{{ msg['wikitranslator-title'] }}</h1>
+	{{ header(msg['wikitranslator-title']) }}
 	<h5><span style="color: red">{{ msg['wikitranslator-disclaimer']}}</span></h5>
 	<br />
 	<form action="{{ url_for('wikitranslator.submit') }}" method="post">

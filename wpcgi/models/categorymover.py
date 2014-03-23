@@ -21,27 +21,42 @@ class CategoryMover(Model):
         self.queue = self.db.getQueue()
         self.num_queue = len(self.queue)
         self.nav_active = {'queue': '', 'new': '', 'archive': ''}
-        pass
+        self.setActive('queue')
 
-    def setActive(self, page):
+    def setActive(self, page=None):
         for key in self.nav_active:
             self.nav_active[key] = ''
-        self.nav_active[page] = 'active'
+        if page in self.nav_active:
+            self.nav_active[page] = 'active'
 
     def dovalidate(self):
-        pass
+        return True
 
-    def dorender(self):
-        pass
+    def save(self):
+        basedata = dict(
+            catfrom = self.form.catfrom.data,
+            catto = self.form.catto.data,
+            note = self.form.note.data
+        )
+        if self.rid:
+            self.db.edit(self.rid, **basedata)
+        else:
+            self.db.new(**basedata)
+    
+    def renderEdit(self, rid=None):
+        if rid:
+            self.setActive('edit')
+            self.rid = rid
+            data = self.db.loadEdit(rid)
+            for key in data:
+                if hasattr(self.form, key):
+                    getattr(self.form, key).data = data[key]
+        else:
+            self.setActive('new')
+            self.rid = None
 
-    def renderQueue(self):
-        # self.db.new('A', 'B', 'Change Category from A to B')
-        # self.db.new('A', 'B', 'Change Category from A to B')
-        # self.db.new('A', 'B', 'Change Category from A to B')
-        # self.db.commit()
-        self.setActive('queue')
-        self.result = self.db.getQueue()
-        # self.db.disconnect() # For test
-
-    def renderReject(self, rid):
+    def reject(self, rid):
         self.db.reject(rid)
+    
+    def approve(self, rid):
+        self.db.approve(rid)

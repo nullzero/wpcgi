@@ -5,7 +5,7 @@ from decorators import langswitch
 from models import CategoryMover
 from utils import get_params
 from normalize import normalize_url, normalize
-#from forms import WikiTranslatorFormCreator
+from forms import CategoryMoverFormCreator
 import c
 
 categorymover = Blueprint('categorymover', __name__, url_prefix='/tools/categorymover')
@@ -14,24 +14,25 @@ categorymover = Blueprint('categorymover', __name__, url_prefix='/tools/category
 @categorymover.route('/queue')
 @langswitch
 def queue(**kwargs):
-    #form = WikiTranslatorFormCreator()(request.form, **kwargs)
-    data = CategoryMover()
-    data.renderQueue()
     return render('categorymover_queue.html',
                   tool=__name__,
-                  #form=form,
-                  data=data)
-
-"""
-@categorymover.route('/submit')
-def submit():
-    return redirect(url_for('.index', **get_params(['siteDest', 'siteSource', 'title'])), code=c.REQUEST)
-"""
+                  data=CategoryMover())
 
 @categorymover.route('/new')
+@categorymover.route('/edit/<rid>')
 @langswitch
-def new():
-    pass
+def edit(rid=None):
+    form = CategoryMoverFormCreator()(request.form)
+    data = CategoryMover(form)
+    data.renderEdit(rid)
+    if form.validate(data):
+        data.save()
+        return redirect(url_for('.queue'))
+    else:
+        return render('categorymover_edit.html',
+                      tool=__name__,
+                      form=form,
+                      data=data)
 
 @categorymover.route('/archive')
 @categorymover.route('/archive/<page>')
@@ -44,19 +45,16 @@ def archive(page=None):
 def delete(rid):
     pass
 
-@categorymover.route('/edit/<rid>')
-@langswitch
-def edit(rid):
-    pass
-
 @categorymover.route('/approve/<rid>')
 @langswitch
 def approve(rid):
+    data = CategoryMover()
+    data.approve(rid)
     return redirect(url_for('.queue'))
 
 @categorymover.route('/reject/<rid>')
 @langswitch
 def reject(rid):
     data = CategoryMover()
-    data.renderReject(rid)
+    data.reject(rid)
     return redirect(url_for('.queue'))

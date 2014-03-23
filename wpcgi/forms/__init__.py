@@ -1,4 +1,5 @@
 #!/data/project/nullzerobot/python/bin/python
 
-from wpcgi.forms.dykchecker import DYKCheckerFormCreator
-from wpcgi.forms.wikitranslator import WikiTranslatorFormCreator
+from forms.dykchecker import DYKCheckerFormCreator
+from forms.wikitranslator import WikiTranslatorFormCreator
+from forms.categorymover import CategoryMoverFormCreator

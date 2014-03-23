@@ -21,4 +21,4 @@ def WikiTranslatorFormCreator():
                                   validators=[v.Required()])
     FormCl.content = TextAreaField(msg['wikitranslator-content-label'],
                                    id="txt-content")
-    return WikiTranslatorForm
+    return FormCl

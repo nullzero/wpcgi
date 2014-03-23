@@ -14,10 +14,11 @@ from database import Database
 from sqlalchemy import Column, Integer, DateTime, String, Table
 
 class CREDIT(object):
-    BLOCKED = -1,
-    USER = 0,
-    APPROVED = 1,
-    SYSOP = 2,
+    BLOCKED = -1
+    ANON = 0
+    USER = 1
+    APPROVED = 2
+    SYSOP = 3
 
 def must_be(credit=None):
     def wrapper(fn):
@@ -30,7 +31,7 @@ def must_be(credit=None):
     return wrapper
 
 class SelfDatabase(Database):
-    def connect(self, user=None, cachefile='selfdb.cache'):
+    def connect(self, user=None, cachefile='selfdb.cache', **kwargs):
         self.user = user
 
         if self.test:
@@ -40,14 +41,14 @@ class SelfDatabase(Database):
             dic = dict(host='___.labsdb', database='___',
                        query={'read_default_file': '~/replica.my.cnf'})
 
-        super(SelfDatabase, self).connect(dic, cachefile=cachefile)
+        super(SelfDatabase, self).connect(dic, cachefile=cachefile, **kwargs)
 
         class CategoryMover(self.base):
             __table__ = Table('category_mover', self.metadata,
                 Column('rid', Integer, primary_key=True),
                 Column('date', DateTime, nullable=False),
-                Column('cat_from', String(255), nullable=False),
-                Column('cat_to', String(255), nullable=False),
+                Column('catfrom', String(255), nullable=False),
+                Column('catto', String(255), nullable=False),
                 Column('user', String(255), nullable=False),
                 Column('status', Integer, nullable=False),
                 Column('note', String(300), nullable=False),
@@ -66,14 +67,16 @@ class SelfDatabase(Database):
         self.metadata.create_all()
 
         if self.test:
-            self.session.add(self.User(name='Nullzero', credit=CREDIT.SYSOP))
+            self.session.add(self.User(name='Nullzero', credit=CREDIT.USER))
+            # self.session.add(self.User(name='Nullzero', credit=CREDIT.SYSOP))
             self.session.commit()
+            pass
 
     def credit(self, level=None):
         if level:
             return getattr(CREDIT, level)
 
         if not hasattr(self, '_credit'):
-            self._credit = self.session.query(self.User.credit).first()
+            self._credit = self.session.query(self.User.credit).filter_by(name=self.user).first().credit
 
         return self._credit

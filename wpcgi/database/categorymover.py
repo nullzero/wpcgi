@@ -13,11 +13,34 @@ class STATUS(object):
     DONE = [DONE_ALL, DONE_FAILED, DONE_REJECTED]
 
 class CategoryMoverDatabase(SelfDatabase):
+    def connect(self, user):
+        super(CategoryMoverDatabase, self).connect(user)
+    
     def getQueue(self):
         output = []
         for row in self.session.query(self.CategoryMover).filter(self.CategoryMover.status.in_(STATUS.QUEUE)).all():
             if row.status == STATUS.QUEUE_APPROVED:
                 row.disable_approve = 'disabled'
+                row.is_approved = 'success'
+            
+            if self.credit() < self.credit('APPROVED'):
+                row.disable_approve = 'disabled'
+                row.disable_reject = 'disabled'
+                
+            output.append(row)
+        return output
+        
+    def getArchive(self, page):
+        output = []
+        for row in self.session.query(self.CategoryMover).filter(self.CategoryMover.status.in_(STATUS.DONE)).all():
+            if row.status == STATUS.QUEUE_APPROVED:
+                row.disable_approve = 'disabled'
+                row.is_approved = 'success'
+            
+            if self.credit() < self.credit('APPROVED'):
+                row.disable_approve = 'disabled'
+                row.disable_reject = 'disabled'
+                
             output.append(row)
         return output
 
@@ -40,17 +63,39 @@ class CategoryMoverDatabase(SelfDatabase):
             raise NotImplementedError('no id')
         data.status = STATUS.DONE_REJECTED
         self.session.commit()
+    
+    def queueStatus(self):
+        if self.credit() >= self.credit('APPROVED'):
+            return STATUS.QUEUE_APPROVED
+        else:
+            return STATUS.QUEUE_WAIT
 
     @must_be(credit='USER')
-    def new(self, cat_from, cat_to, note):
-        if self.credit() >= self.credit('APPROVED'):
-            status = STATUS.QUEUE_APPROVED
-        else:
-            status = STATUS.QUEUE_WAIT
-
-        self.session.add(self.CategoryMover(date=datetime.now(), cat_from=cat_from, cat_to=cat_to,
-                                            user=self.user, status=status, note=note))
+    def new(self, **kwargs):
+        self.session.add(self.CategoryMover(date=datetime.now(), user=self.user, status=self.queueStatus(), **kwargs))
         self.session.commit()
+    
+    @must_be(credit='USER')
+    def edit(self, rid, **kwargs):
+        data = self.session.query(self.CategoryMover).filter(self.CategoryMover.rid == rid,
+                                                             self.CategoryMover.status.in_(STATUS.QUEUE)).first()
+        if not data:
+            raise NotImplementedError('no id')
+        
+        data.status = self.queueStatus()
+        data.date = datetime.now()
+        data.user = self.user
+        for key in kwargs:
+            setattr(data, key, kwargs[key])
+        self.session.commit()
+    
+    @must_be(credit='USER')
+    def loadEdit(self, rid):
+        data = self.session.query(self.CategoryMover).filter(self.CategoryMover.rid == rid,
+                                                             self.CategoryMover.status.in_(STATUS.QUEUE)).first()
+        if not data:
+            raise NotImplementedError('no id')
+        return row2dict(data)
 
 if __name__ == "__main__":
     cm = CategoryMoverDatabase(drop=True)

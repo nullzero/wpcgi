@@ -10,7 +10,7 @@ try:
     from p_flask import g
     from utils import profile, debug
 except ImportError:
-    print ">>> Enter test mode"
+    withoutEngine = True
     if 'WPCGI_DATABASE' in os.environ:
         test = False
     else:
@@ -24,6 +24,7 @@ except ImportError:
 
     app = Dummy()
 else:
+    withoutEngine = False
     test = app.config['TESTING']
 
 class RepresentableBase(object):
@@ -44,7 +45,7 @@ class Database(object):
         self.test = test
         self.drop_test = drop
 
-    def connect(self, dic, cachefile):
+    def connect(self, dic, cachefile, autocommit=False):
         dic['drivername'] = 'mysql'
         if 'query' not in dic:
             dic['query'] = {}
@@ -63,9 +64,9 @@ class Database(object):
             self.metadata = MetaData(bind=self.engine)
 
         self.base = declarative_base(cls=RepresentableBase)
-        self.session = scoped_session(sessionmaker(bind=self.engine))
+        self.session = scoped_session(sessionmaker(bind=self.engine, autocommit=autocommit))
 
-        if not test:
+        if not withoutEngine:
             if not hasattr(g, 'sessions'):
                 g.sessions = []
             g.sessions.append(self.session)
