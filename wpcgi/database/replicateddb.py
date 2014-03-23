@@ -97,7 +97,7 @@ class ReplicatedDatabase(Database):
     def toid(self, inputs):
         return self.metaconvert(inputs=inputs, arr=self._toid, typePass=long, typeConvert=pywikibot.Page,
                                 filter_kwargs=lambda inputs, ns: [
-            self.Page.page_title.in_([page.title(underscore=True, withNamespace=False) for page in inputs]),
+            self.Page.page_title.in_([page.title(underscore=True, withNamespace=False).encode('utf-8') for page in inputs]),
             self.Page.page_namespace == ns,
         ])
 
