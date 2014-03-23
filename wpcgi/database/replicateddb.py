@@ -83,7 +83,7 @@ class ReplicatedDatabase(Database):
         if search:
             for result in self.session.query(self.Redirect).filter(self.Redirect.rd_from.in_(search)).all():
                 page = pywikibot.Page(self.site,
-                                      result.rd_title,
+                                      result.rd_title.decode('utf-8'),
                                       ns=result.rd_namespace)
                 self._redirect[result.rd_from] = page
                 self._rv_redirects[page].append(result.rd_from)
@@ -138,7 +138,7 @@ class ReplicatedDatabase(Database):
 
                 for result in results:
                     page = pywikibot.Page(self.site,
-                                          result.page_title,
+                                          result.page_title.decode('utf-8'),
                                           ns=example.namespace())
                     self._topage[result.page_id] = page
                     self._toid[page] = result.page_id
@@ -169,7 +169,7 @@ class ReplicatedDatabase(Database):
         for result in results:
             page = self.topage(result.ll_from)
             for llpage in self.topage(self._rv_redirects[page]) + [page]:
-                langlinks[llpage] = pywikibot.Page(pywikibot.Site(result.ll_lang), result.ll_title)
+                langlinks[llpage] = pywikibot.Page(pywikibot.Site(result.ll_lang), result.ll_title.decode('utf-8'))
 
         return langlinks
 
