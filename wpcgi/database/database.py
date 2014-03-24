@@ -15,14 +15,6 @@ except ImportError:
         test = False
     else:
         test = True
-
-    class Dummy(object):
-        def teardown_appcontext(self, fn):
-            def newfn(*args, **kwargs):
-                return fn(*args, **kwargs)
-            return newfn
-
-    app = Dummy()
 else:
     withoutEngine = False
     test = app.config['TESTING']
@@ -39,6 +31,16 @@ class RepresentableBase(object):
     def __init__(self, **kwargs):
         for key in kwargs:
             setattr(self, key, kwargs[key])
+
+def asDict(fn):
+    def newfn(*args, **kwargs):
+        asDict = kwargs.pop('asDict', False)
+        result = fn(*args, **kwargs)
+        if asDict:
+            result = {c.name: getattr(result, c.name)
+                              for c in result.__table__.columns}
+        return result
+    return newfn
 
 class Database(object):
     def __init__(self, drop=False):
@@ -88,12 +90,11 @@ class Database(object):
         if self.drop_test:
             self.metadata.drop_all()
 
-row2dict = lambda r: {c.name: getattr(r, c.name) for c in r.__table__.columns}
-
-@app.teardown_appcontext
-def disconnect(exception=None):
-    if hasattr(g, 'sessions'):
-        for session in g.sessions:
-            session.remove()
-    if exception:
-        raise exception
+if not withoutEngine:
+    @app.teardown_appcontext
+    def disconnect(exception=None):
+        if hasattr(g, 'sessions'):
+            for session in g.sessions:
+                session.remove()
+        if exception:
+            raise exception

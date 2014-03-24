@@ -66,16 +66,18 @@
 	      </div>
 	    </div>
 	  </nav>
-		{% with messages = get_flashed_messages() %}
-		  {% if messages %}
-				<div class="alert alert-warning alert-dismissable">
-					{% for message in messages %}
-					  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-					  <strong>Warning!</strong> {{ message }}
-					{% endfor %}
-				</div>
-		  {% endif %}
-		{% endwith %}
+    <div class="col-lg-10 col-lg-offset-1">
+  		{% with messages = get_flashed_messages(with_categories=true) %}
+  		  {% if messages %}
+  				{% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissable">
+  					  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  					  <strong>{{ msg['core-warning'] }}</strong> {{ message }}
+            </div>
+  				{% endfor %}
+  		  {% endif %}
+  		{% endwith %}
+    </div>
 		{% if tool %}
 			<div class="modal fade" id="page-description" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			  <div class="modal-dialog">

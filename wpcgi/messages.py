@@ -18,10 +18,10 @@ class Message(object):
             msg_mod = imp.load_source("msg_mod", os.path.dirname(i18n.core.__file__) + '/' + file)
             for lang in msg_mod.messages:
                 self.messages[lang].update(msg_mod.messages[lang])
-        
+
         for lang in i18n.core.messages:
             self.messages[lang].update(i18n.core.messages[lang])
-            
+
     def switch_language(self, lang):
         if lang in self.messages:
             self.lang = lang

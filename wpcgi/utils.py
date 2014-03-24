@@ -55,3 +55,17 @@ def debug(*args, **kwargs):
         else:
             g.debugtext += arg + ', '
     g.debugtext += ']<br/>\n'
+
+def newtry(success, fail, fn):
+    hasError = True
+    try:
+        fn()
+    except Exception, e:
+        if hasattr(e, 'flash_msg'):
+            flash(e.flash_msg, e.flash_level)
+    else:
+        hasError = False
+    if hasError:
+        return fail()
+    else:
+        return success()

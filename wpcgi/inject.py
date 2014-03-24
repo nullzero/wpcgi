@@ -40,7 +40,9 @@ def inject_methods(app):
             clss += ' error'
         return field(class_=clss, **kwargs)
 
-    app.jinja_env.globals.update(render_helper=render_helper, msg=msg)
+    app.jinja_env.globals.update(render_helper=render_helper,
+                                 msg=msg,
+                                 str=str)
 
 
 def inject_hooks(app):

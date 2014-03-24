@@ -1,6 +1,7 @@
+from database import asDict
 from selfdb import SelfDatabase, must_be
 from datetime import datetime
-from database import row2dict
+import wpcgi.error
 
 class STATUS(object):
     QUEUE_WAIT = 0
@@ -15,55 +16,43 @@ class STATUS(object):
 class CategoryMoverDatabase(SelfDatabase):
     def connect(self, user):
         super(CategoryMoverDatabase, self).connect(user)
-    
+
+    @asDict
     def getQueue(self):
-        output = []
-        for row in self.session.query(self.CategoryMover).filter(self.CategoryMover.status.in_(STATUS.QUEUE)).all():
-            if row.status == STATUS.QUEUE_APPROVED:
-                row.disable_approve = 'disabled'
-                row.is_approved = 'success'
-            
-            if self.credit() < self.credit('APPROVED'):
-                row.disable_approve = 'disabled'
-                row.disable_reject = 'disabled'
-                
-            output.append(row)
-        return output
-        
-    def getArchive(self, page):
-        output = []
-        for row in self.session.query(self.CategoryMover).filter(self.CategoryMover.status.in_(STATUS.DONE)).all():
-            if row.status == STATUS.QUEUE_APPROVED:
-                row.disable_approve = 'disabled'
-                row.is_approved = 'success'
-            
-            if self.credit() < self.credit('APPROVED'):
-                row.disable_approve = 'disabled'
-                row.disable_reject = 'disabled'
-                
-            output.append(row)
-        return output
+        return self.session.query(self.CategoryMover).filter(
+            self.CategoryMover.status.in_(STATUS.QUEUE)).all()
+
+    @asDict
+    def getArchive(self):
+        return self.session.query(self.CategoryMover).filter(
+            self.CategoryMover.status.in_(STATUS.DONE)).all()
 
     @must_be(credit='APPROVED')
     def approve(self, rid):
-        data = self.session.query(self.CategoryMover).filter(self.CategoryMover.rid == rid,
-                                                             self.CategoryMover.status == STATUS.QUEUE_WAIT).first()
+        data = self.session.query(self.CategoryMover).filter(
+            self.CategoryMover.rid == rid,
+            self.CategoryMover.status == STATUS.QUEUE_WAIT
+        ).first()
 
         if not data:
-            raise NotImplementedError('no id')
+            raise wpcgi.error.IDNotFoundError()
+
         data.status = STATUS.QUEUE_APPROVED
         self.session.commit()
 
     @must_be(credit='APPROVED')
     def reject(self, rid):
-        data = self.session.query(self.CategoryMover).filter(self.CategoryMover.rid == rid,
-                                                             self.CategoryMover.status.in_(STATUS.QUEUE)).first()
+        data = self.session.query(self.CategoryMover).filter(
+            self.CategoryMover.rid == rid,
+            self.CategoryMover.status.in_(STATUS.QUEUE)
+        ).first()
 
         if not data:
-            raise NotImplementedError('no id')
+            raise wpcgi.error.IDNotFoundError()
+
         data.status = STATUS.DONE_REJECTED
         self.session.commit()
-    
+
     def queueStatus(self):
         if self.credit() >= self.credit('APPROVED'):
             return STATUS.QUEUE_APPROVED
@@ -72,30 +61,46 @@ class CategoryMoverDatabase(SelfDatabase):
 
     @must_be(credit='USER')
     def new(self, **kwargs):
-        self.session.add(self.CategoryMover(date=datetime.now(), user=self.user, status=self.queueStatus(), **kwargs))
+        self.session.add(
+            self.CategoryMover(date=datetime.now(),
+                               user=self.user,
+                               status=self.queueStatus(),
+                               **kwargs
+            )
+        )
         self.session.commit()
-    
+
     @must_be(credit='USER')
     def edit(self, rid, **kwargs):
-        data = self.session.query(self.CategoryMover).filter(self.CategoryMover.rid == rid,
-                                                             self.CategoryMover.status.in_(STATUS.QUEUE)).first()
+        data = self.session.query(self.CategoryMover).filter(
+            self.CategoryMover.rid == rid,
+            self.CategoryMover.status.in_(STATUS.QUEUE)
+        ).first()
+
         if not data:
-            raise NotImplementedError('no id')
-        
+            raise wpcgi.error.IDNotFoundError()
+
         data.status = self.queueStatus()
         data.date = datetime.now()
         data.user = self.user
+
         for key in kwargs:
             setattr(data, key, kwargs[key])
+
         self.session.commit()
-    
+
+    @asDict
     @must_be(credit='USER')
     def loadEdit(self, rid):
-        data = self.session.query(self.CategoryMover).filter(self.CategoryMover.rid == rid,
-                                                             self.CategoryMover.status.in_(STATUS.QUEUE)).first()
+        data = self.session.query(self.CategoryMover).filter(
+            self.CategoryMover.rid == rid,
+            self.CategoryMover.status.in_(STATUS.QUEUE)
+        ).first()
+
         if not data:
-            raise NotImplementedError('no id')
-        return row2dict(data)
+            raise wpcgi.error.IDNotFoundError()
+
+        return data
 
 if __name__ == "__main__":
     cm = CategoryMoverDatabase(drop=True)

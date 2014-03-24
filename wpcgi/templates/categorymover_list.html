@@ -1,0 +1,56 @@
+{% macro headtable(wid, wdate, wcat, wuser, wnote, last) %}
+<th style="width: {{ wid }}%;">{{ msg['categorymover-table-id'] }}</th>
+<th style="width: {{ wdate }}%;">{{ msg['categorymover-table-date'] }}</th>
+<th style="width: {{ wcat }}%;">{{ msg['categorymover-table-from'] }}</th>
+<th style="width: {{ wcat }}%;">{{ msg['categorymover-table-to'] }}</th>
+<th style="width: {{ wuser }}%;">{{ msg['categorymover-table-user'] }}</th>
+<th style="width: {{ wnote }}%;">{{ msg['categorymover-table-note'] }}</th>
+<th style="width: {{ 100 - (wid + wdate + wcat + wuser + wnote) }}%">
+	{{ last }}
+</th>
+{% endmacro %}
+
+{% extends "categorymover_layout.html" %}
+
+{% block subcontent %}
+	{% if data.results %}
+		<table class="table">
+			{% if mode == 'queue' %}
+				{{ headtable(wid=5, wdate=12, wcat=18, wuser=12, wnote=30, last='') }}
+			{% else %}
+				{{ headtable(wid=7, wdate=14, wcat=20, wuser=14, wnote=32,
+										 last=msg['categorymover-table-status']) }}
+			{% endif %}
+			{% for row in data.results %}
+				<tr class="{{ row.color }}">
+					<td>{{ row.rid }}</td>
+					<td>{{ row.date }}</td>
+					<td>{{ row.catfrom }}</td>
+					<td>{{ row.catto }}</td>
+					<td>{{ row.user }}</td>
+					<td>{{ row.note }}</td>
+					{% if mode == 'queue' %}
+						<td>
+							<a href="{{ url_for('categorymover.edit', rid=row.rid) }}"
+							   class="btn btn-sm btn-primary col-lg-3">
+								{{ msg['categorymover-row-edit'] }}
+							</a>
+							<a href="{{ url_for('categorymover.approve', rid=row.rid) }}"
+							   class="btn btn-sm btn-success col-lg-3 col-lg-offset-1 {{ row.disable_approve }}">
+								{{ msg['categorymover-row-approve'] }}
+							</a>
+							<a href="{{ url_for('categorymover.reject' , rid=row.rid) }}"
+								 class="btn btn-sm btn-danger col-lg-3 col-lg-offset-1 {{ row.disable_reject }}">
+								{{ msg['categorymover-row-reject' ] }}
+							</a>
+						</td>
+					{% else %}
+						<td>{{ msg['categorymover-status-' + str(row.status)] }}</td>
+					{% endif %}
+				</tr>
+			{% endfor %}
+		</table>
+	{% else %}
+		<center><i>{{ msg['categorymover-no-item'] }}</i></center>
+	{% endif %}
+{% endblock %}

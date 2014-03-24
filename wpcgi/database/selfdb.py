@@ -12,6 +12,7 @@ import pywikibot
 
 from database import Database
 from sqlalchemy import Column, Integer, DateTime, String, Table
+import wpcgi.error
 
 class CREDIT(object):
     BLOCKED = -1
@@ -26,7 +27,7 @@ def must_be(credit=None):
             if getattr(CREDIT, credit) <= self.credit():
                 return fn(self, *args, **kwargs)
             else:
-                raise NotImplementedError('not approved')
+                raise wpcgi.error.NotApprovedError()
         return newfn
     return wrapper
 
@@ -47,6 +48,8 @@ class SelfDatabase(Database):
             __table__ = Table('category_mover', self.metadata,
                 Column('rid', Integer, primary_key=True),
                 Column('date', DateTime, nullable=False),
+                Column('fam', String(31), nullable=False),
+                Column('lang', String(7), nullable=False),
                 Column('catfrom', String(255), nullable=False),
                 Column('catto', String(255), nullable=False),
                 Column('user', String(255), nullable=False),
@@ -66,11 +69,11 @@ class SelfDatabase(Database):
 
         self.metadata.create_all()
 
-        if self.test:
-            self.session.add(self.User(name='Nullzero', credit=CREDIT.USER))
+
+        if not self.session.query(self.User).first():
+            self.session.add(self.User(name='Nullzero', credit=CREDIT.SYSOP))
             # self.session.add(self.User(name='Nullzero', credit=CREDIT.SYSOP))
             self.session.commit()
-            pass
 
     def credit(self, level=None):
         if level:

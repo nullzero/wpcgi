@@ -8,17 +8,17 @@ messages['th'] = {
     'categorymover-row-edit': u'แก้ไข',
     'categorymover-row-approve': u'รับรอง',
     'categorymover-row-reject': u'ปฎิเสธ',
-    
+
     'categorymover-link-queue': u'หมวดหมู่รอย้าย',
     'categorymover-link-new': u'รายการใหม่',
     'categorymover-link-archive': u'กรุ',
-    
+
     'categorymover-table-date': u'เวลา',
     'categorymover-table-from': u'หมวดหมู่ต้นทาง',
     'categorymover-table-to': u'หมวดหมู่ปลายทาง',
     'categorymover-table-user': u'ผู้ใช้',
     'categorymover-table-note': u'หมายเหตุ',
-    
+
     'categorymover-id-label': u'รหัส',
     'categorymover-fam-label': u'โครงการ',
     'categorymover-lang-label': u'ภาษา',
