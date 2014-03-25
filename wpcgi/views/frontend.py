@@ -3,6 +3,7 @@
 from p_flask import (Blueprint, render, request,
                    flash, url_for, redirect, session, abort)
 from decorators import langswitch
+from wpcgi import tools
 
 frontend = Blueprint('frontend', __name__)
 
@@ -14,7 +15,7 @@ def index():
 @frontend.route('/tools/')
 @langswitch
 def alltools():
-    return render('alltools.html')
+    return render('alltools.html', tools=tools)
 
 @frontend.route('/about/')
 @langswitch

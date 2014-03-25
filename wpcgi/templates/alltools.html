@@ -2,19 +2,13 @@
 {% block content %}
 <h1>{{ msg['all-tools'] }}</h1>
 <ul>
-  <li>
-    <a href="{{ url_for('dykchecker.index') }}">{{ msg['dykchecker-title'] }}</a> -
-    {{ msg['dykchecker-description'] }}
-  </li>
-  <li>
-    <a href="{{ url_for('wikitranslator.index') }}">{{ msg['wikitranslator-title'] }}</a> -
-    {{ msg['wikitranslator-description'] }}
-  </li>
-  <!--
-  <li>
-    <a href="SpamAnalyzer">SpamAnalyzer</a> -
-    a tool to analyze insertion of url.
-  </li>
-  -->
+  {% for tool in tools %}
+    <li>
+      {% if tool.get('disabled', False) %}<s>{% endif %}
+      <a href="{{ url_for(tool['name'] + '.index') }}">{{ msg[tool['name'] + '-title'] }}</a> -
+      {{ msg[tool['name'] + '-description'] }}
+      {% if tool.get('disabled', False) %}</s>{% endif %}
+    </li>
+  {% endfor %}
 </ul>
 {% endblock %}

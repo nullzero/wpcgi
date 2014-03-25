@@ -51,10 +51,19 @@ hr {
     padding-left: 15px;
 }
 
+/*
+.table-mystriped > tbody > tr:nth-child(4n) > td,
+.table-mystriped > tbody > tr:nth-child(4n+1) > td {
+    opacity: 0.7;
+}
+*/
+
+/*
 table {
     table-layout: fixed;
     word-wrap: break-word;
 }
+*/
 
 /*
 body {

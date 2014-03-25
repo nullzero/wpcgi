@@ -15,6 +15,7 @@ messages['th'] = {
     'core-encounter-error': u'หากพบข้อผิดพลาด โปรดติดต่อ'
                             u'<a href="//th.wikipedia.org/wiki/User_talk:Nullzero">ผู้ดูแลเครื่องมือ</a>',
     'core-error': u'ข้อผิดพลาด',
+    'core-login': u'เข้าสู่ระบบ',
 
     'toolbar-home': u'หน้าหลัก',
     'toolbar-tools': u'เครื่องมือทั้งหมด',

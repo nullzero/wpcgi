@@ -51,6 +51,9 @@
               <i class="glyphicon glyphicon-font"></i>&nbsp;&nbsp;{{ msg['toolbar-about'] }}
             </a></li>
           </ul>
+
+          <!-- from right -->
+
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -62,11 +65,20 @@
               {% endfor %}
               </ul>
             </li>
+            <li>
+              <div>
+                {% if user.login %}
+                  <a href="#">{{ user.name }}</a>
+                {% else %}
+                  <a href="#" class="btn btn-primary navbar-btn disabled">{{ msg['core-login'] }}</a>
+                {% endif %}
+              </div>
+            </li>
           </ul>
         </div>
       </div>
     </nav>
-    <div class="col-lg-6 col-lg-offset-3">
+    <div class="col-lg-10 col-lg-offset-1">
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           {% for category, message in messages %}
@@ -112,7 +124,7 @@
     <br />
     <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     {% if tool %}
       <script src="{{ url_for('static', filename='js/tools/' + tool + '.js') }}"></script>

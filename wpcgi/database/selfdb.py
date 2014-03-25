@@ -39,7 +39,7 @@ class SelfDatabase(Database):
             dic = dict(host='localhost', database='test',
                        username='root', password='password')
         else:
-            dic = dict(host='___.labsdb', database='___',
+            dic = dict(host='tools-db', database='s51093__tools',
                        query={'read_default_file': '~/replica.my.cnf'})
 
         super(SelfDatabase, self).connect(dic, cachefile=cachefile, **kwargs)
@@ -68,7 +68,6 @@ class SelfDatabase(Database):
         self.User = User
 
         self.metadata.create_all()
-
 
         if not self.session.query(self.User).first():
             self.session.add(self.User(name='Nullzero', credit=CREDIT.USER))

@@ -5,14 +5,14 @@ from decorators import langswitch
 from models import CategoryMover
 from utils import get_params, newtry
 from normalize import normalize_url, normalize
-from forms import CategoryMoverFormCreator
+from forms.categorymover import CategoryMoverFormCreator
 from messages import msg
 import c
 
 categorymover = Blueprint('categorymover', __name__,
                           url_prefix='/tools/categorymover')
 
-@categorymover.route('/')
+@categorymover.route('/', endpoint='index')
 @categorymover.route('/queue')
 @langswitch
 def queue(**kwargs):
@@ -34,29 +34,22 @@ def archive(page=None):
                   data=data,
                   mode='archive')
 
-def calling():
-    print locals()
-
 @categorymover.route('/new')
 @categorymover.route('/edit/<rid>')
-@categorymover.route('/submit/<rid>/<status>')
 @langswitch
-def edit(rid=None, status=None):
+def edit(rid=None):
     form = CategoryMoverFormCreator()(request.form)
-    data = CategoryMover(form)
-    if rid == 'new':
-        rid = None
-    if status is None or not form.validate(data):
-        fun = lambda: data.renderEdit(rid)
+    data = CategoryMover(form, rid)
+
+    if not form.validate(data):
+        fun = lambda: data.renderEdit()
         onSuccess = lambda _: render('categorymover_edit.html',
                                      tool=__name__,
                                      form=form,
                                      data=data)
         onFail = lambda: redirect(url_for('.queue'))
     else:
-        assert(status == 'success')
-
-        fun = lambda: data.save(rid)
+        fun = lambda: data.save()
 
         def onSuccess(result):
             message = 'categorymover-{0}-success'.format('edit' if rid else 'new')
@@ -70,9 +63,9 @@ def edit(rid=None, status=None):
 @categorymover.route('/approve/<rid>')
 @langswitch
 def approve(rid):
-    data = CategoryMover()
+    data = CategoryMover(rid)
 
-    fun = lambda: data.approve(rid)
+    fun = lambda: data.approve()
     onSuccess = lambda _: redirect(url_for('.queue'))
     onFail = lambda: redirect(url_for('.queue'))
 
@@ -81,9 +74,9 @@ def approve(rid):
 @categorymover.route('/reject/<rid>')
 @langswitch
 def reject(rid):
-    data = CategoryMover()
+    data = CategoryMover(rid)
 
-    fun = lambda: data.reject(rid)
+    fun = lambda: data.reject()
     onSuccess = lambda _: redirect(url_for('.queue'))
     onFail = lambda: redirect(url_for('.queue'))
 

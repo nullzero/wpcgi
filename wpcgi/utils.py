@@ -62,7 +62,10 @@ def newtry(local):
         result = local['fun']()
     except Exception, e:
         if hasattr(e, 'flash_msg'):
-            flash(e.flash_msg, e.flash_level)
+            if e.flash_msg:
+                flash(e.flash_msg, e.flash_level)
+        else:
+            raise e
     else:
         hasError = False
     if hasError:

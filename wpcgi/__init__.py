@@ -10,3 +10,16 @@ sys.path.append(os.path.abspath(os.path.join(os.path.split(__file__)[0], "packag
 
 from flask import Flask
 app = Flask(__name__)
+
+tools = [
+    {
+        'name': 'dykchecker',
+    },
+    {
+        'name': 'wikitranslator',
+    },
+    {
+        'name': 'categorymover',
+        'disabled': True,
+    },
+]

@@ -5,7 +5,7 @@ from decorators import langswitch
 from models import DYKChecker
 from utils import get_params
 from normalize import normalize_url, normalize
-from forms import DYKCheckerFormCreator
+from forms.dykchecker import DYKCheckerFormCreator
 import c
 
 dykchecker = Blueprint('dykchecker', __name__, url_prefix='/tools/dykchecker')

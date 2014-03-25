@@ -40,8 +40,15 @@ def inject_methods(app):
             clss += ' error'
         return field(class_=clss, **kwargs)
 
+    class User(object):
+        def __init__(self):
+            self.login = False
+
+    user = User()
+
     app.jinja_env.globals.update(render_helper=render_helper,
                                  msg=msg,
+                                 user=user,
                                  str=str)
 
 

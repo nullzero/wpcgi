@@ -4,6 +4,8 @@
 messages = {}
 
 messages['th'] = {
+    'categorymover-title': u'บริการย้ายหมวดหมู่',
+
     'categorymover-table-id': u'รหัส',
     'categorymover-row-edit': u'แก้ไข',
     'categorymover-row-approve': u'รับรอง',
@@ -14,8 +16,8 @@ messages['th'] = {
     'categorymover-link-archive': u'กรุ',
 
     'categorymover-table-date': u'เวลา',
-    'categorymover-table-from': u'หมวดหมู่ต้นทาง',
-    'categorymover-table-to': u'หมวดหมู่ปลายทาง',
+    'categorymover-table-site': u'ไซต์',
+    'categorymover-table-cat': u'หมวดหมู่',
     'categorymover-table-user': u'ผู้ใช้',
     'categorymover-table-note': u'หมายเหตุ',
 

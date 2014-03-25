@@ -23,13 +23,13 @@ color = {
 }
 
 class CategoryMover(Model):
-    def doinit(self):
+    def doinit(self, rid=None):
         self.db = CategoryMoverDatabase()
         self.db.connect('Nullzero')
         self.queue = self.db.getQueue()
         self.num_queue = len(self.queue)
         self.nav_active = {'queue': '', 'new': '', 'archive': ''}
-        self.rid = None
+        self.rid = rid
 
     def setActive(self, page=None):
         for key in self.nav_active:
@@ -59,7 +59,7 @@ class CategoryMover(Model):
     def dovalidate(self):
         return True
 
-    def save(self, rid):
+    def save(self):
         basedata = dict(
             fam = self.form.fam.data,
             lang = self.form.lang.data,
@@ -67,26 +67,26 @@ class CategoryMover(Model):
             catto = self.form.catto.data,
             note = self.form.note.data,
         )
-        if rid:
-            self.db.edit(rid, **basedata)
-            return rid
+        if self.rid:
+            self.db.edit(self.rid, **basedata)
+            return self.rid
         else:
             return self.db.new(**basedata)
 
-    def renderEdit(self, rid=None):
-        self.rid = rid
-        if rid:
+    def renderEdit(self):
+        if self.rid:
             self.setActive('edit')
 
-            data = self.db.loadEdit(rid, asDict=True)
-            for key in data:
-                if hasattr(self.form, key):
-                    getattr(self.form, key).data = data[key]
+            if not self.form.request:
+                data = self.db.loadEdit(self.rid, asDict=True)
+                for key in data:
+                    if hasattr(self.form, key):
+                        getattr(self.form, key).data = data[key]
         else:
             self.setActive('new')
 
-    def reject(self, rid):
-        self.db.reject(rid)
+    def reject(self):
+        self.db.reject(self.rid)
 
-    def approve(self, rid):
-        self.db.approve(rid)
+    def approve(self):
+        self.db.approve(self.rid)
