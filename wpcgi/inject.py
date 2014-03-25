@@ -33,10 +33,10 @@ def inject_methods(app):
             if errors and tooltip:
                 tooltip += '<hr>\n'
             kwargs.update({'data-toogle': 'tooltip',
-		                   'data-container': 'body',
+                           'data-container': 'body',
                            'data-html': 'true',
                            'title': tooltip + errorsmsg
-			              })
+                          })
             clss += ' error'
         return field(class_=clss, **kwargs)
 

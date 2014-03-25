@@ -5,6 +5,8 @@ from wtforms.validators import ValidationError
 from messages import msg
 import re
 
+##############################
+
 class _Required(Required):
     def __init__(self, *args, **kwargs):
         if not kwargs.get('message', False):
@@ -12,6 +14,18 @@ class _Required(Required):
         super(_Required, self).__init__(*args, **kwargs)
 
 Required = _Required
+
+##############################
+
+class _NumberRange(NumberRange):
+    def __init__(self, *args, **kwargs):
+        if 'message' not in kwargs:
+            kwargs['message'] = msg['validator-mustbe-in-min-max']
+        super(_NumberRange, self).__init__(*args, **kwargs)
+
+NumberRange = _NumberRange
+
+##############################
 
 def Number(negative=False, decimal=False):
     charset = r'\d'
@@ -26,8 +40,12 @@ def Number(negative=False, decimal=False):
 
     return _Number
 
-class _NumberRange(NumberRange):
+##############################
+
+class IgnoreMe(object):
     def __init__(self, *args, **kwargs):
-        if 'message' not in kwargs:
-            kwargs['message'] = msg['validator-mustbe-in-min-max']
-        super(_NumberRange, self).__init__(*args, **kwargs)
+        pass
+
+    __call__ = __init__
+
+##############################

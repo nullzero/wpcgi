@@ -3,123 +3,123 @@
 <html>
   <head>
     <title>{% if tool %}{{ tool }} - {% endif %}{{ msg['core-name'] }}</title>
-		<meta charset="utf-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="icon" type="image/png" href="//wikitech.wikimedia.org/w/images/c/cf/Labslogo_thumb.png">
-		<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-		<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
-		<link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
-		{% if tool %}
-		  <link rel="stylesheet" href="{{ url_for('static', filename='css/tools/' + tool + '.css') }}">
-		{% endif %}
+    <link rel="icon" type="image/png" href="//wikitech.wikimedia.org/w/images/c/cf/Labslogo_thumb.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
+    {% if tool %}
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/tools/' + tool + '.css') }}">
+    {% endif %}
   </head>
   <body>
-	  <nav class="navbar navbar-default" role="navigation">
-	    <div class="container-fluid">
-	      <div class="navbar-header">
-					<!-- TODO: What is it!? -->
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-		        <span class="sr-only">Toggle navigation</span>
-		        <span class="icon-bar"></span>
-		        <span class="icon-bar"></span>
-		        <span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand " style="padding: 10px;" href="/">
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <!-- TODO: What is it!? -->
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand " style="padding: 10px;" href="/">
             <img width="30px" border="0"
                  title="{{ msg['powered-by'] }}"
-								 src="//wikitech.wikimedia.org/w/images/c/cf/Labslogo_thumb.png">
-					</a>
-				</div>
-				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-		      <ul class="nav navbar-nav">
-		        <li class="active">
-							<a>{% if tool %}{{ msg[tool] }}{% endif %}</a>
-						</li>
-	          <li><a href="{{ url_for('frontend.index') }}">
-	              <i class="glyphicon glyphicon-home"></i>&nbsp;&nbsp;{{ msg['toolbar-home'] }}
-	          </a></li>
-	          <li><a href="{{ url_for('frontend.alltools') }}">
-	              <i class="glyphicon glyphicon-wrench"></i>&nbsp;&nbsp;{{ msg['toolbar-tools'] }}
-	          </a></li>
-	          <li><a href="/?status">
-	            <i class="glyphicon glyphicon-eye-open"></i>&nbsp;&nbsp;{{ msg['toolbar-status-of-bot'] }}
-	          </a></li>
-	          <li><a href="//th.wikipedia.org/wiki/User_talk:Nullzero">
-	            <i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;{{ msg['toolbar-contact'] }}
-	          </a></li>
-	          <li><a href="{{ url_for('frontend.about') }}">
-	            <i class="glyphicon glyphicon-font"></i>&nbsp;&nbsp;{{ msg['toolbar-about'] }}
-	          </a></li>
-	        </ul>
-	        <ul class="nav navbar-nav navbar-right">
-	          <li class="dropdown">
-	            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-	              <i class="glyphicon glyphicon-globe"></i>&nbsp;&nbsp;Language<b class="caret"></b>
-	            </a>
-	            <ul class="dropdown-menu">
-							{% for lang in languages %}
-								<li><a href="?uselang={{ lang }}">{{ languages[lang] }}</a></li>
-							{% endfor %}
-	            </ul>
-	          </li>
-	        </ul>
-	      </div>
-	    </div>
-	  </nav>
-    <div class="col-lg-10 col-lg-offset-1">
-  		{% with messages = get_flashed_messages(with_categories=true) %}
-  		  {% if messages %}
-  				{% for category, message in messages %}
+                 src="//wikitech.wikimedia.org/w/images/c/cf/Labslogo_thumb.png">
+          </a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active">
+              <a>{% if tool %}{{ msg[tool] }}{% endif %}</a>
+            </li>
+            <li><a href="{{ url_for('frontend.index') }}">
+                <i class="glyphicon glyphicon-home"></i>&nbsp;&nbsp;{{ msg['toolbar-home'] }}
+            </a></li>
+            <li><a href="{{ url_for('frontend.alltools') }}">
+                <i class="glyphicon glyphicon-wrench"></i>&nbsp;&nbsp;{{ msg['toolbar-tools'] }}
+            </a></li>
+            <li><a href="/?status">
+              <i class="glyphicon glyphicon-eye-open"></i>&nbsp;&nbsp;{{ msg['toolbar-status-of-bot'] }}
+            </a></li>
+            <li><a href="//th.wikipedia.org/wiki/User_talk:Nullzero">
+              <i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;{{ msg['toolbar-contact'] }}
+            </a></li>
+            <li><a href="{{ url_for('frontend.about') }}">
+              <i class="glyphicon glyphicon-font"></i>&nbsp;&nbsp;{{ msg['toolbar-about'] }}
+            </a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="glyphicon glyphicon-globe"></i>&nbsp;&nbsp;Language<b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+              {% for lang in languages %}
+                <li><a href="?uselang={{ lang }}">{{ languages[lang] }}</a></li>
+              {% endfor %}
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="col-lg-6 col-lg-offset-3">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
             <div class="alert alert-{{ category }} alert-dismissable">
-  					  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  					  <strong>{{ msg['core-warning'] }}</strong> {{ message }}
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <strong>{{ msg['core-{0}'.format(category)] }}</strong> {{ message }}
             </div>
-  				{% endfor %}
-  		  {% endif %}
-  		{% endwith %}
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
     </div>
-		{% if tool %}
-			<div class="modal fade" id="page-description" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			  <div class="modal-dialog">
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			        <h4 class="modal-title" id="myModalLabel">{{ msg[tool + '-title'] }}</h4>
-			      </div>
-			      <div class="modal-body">
-			        {{ msg[tool + '-description-content']|safe }}
-			      </div>
-						<!--
-			      <div class="modal-footer">
-			        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			        <button type="button" class="btn btn-primary">Save changes</button>
-			      </div>
-						-->
-			    </div>
-			  </div>
-			</div>
-		{% endif %}
-	  <div class="container">
-			{% block content %}
-			{% endblock %}
-	  </div>
-	  <hr>
-	  <center>
-	  <span style="font-size:14">
-			{{ msg['core-encounter-error']|safe }}
-	  </span>
-	  </center>
-	  <br />
-		<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/script.js') }}"></script>
-		{% if tool %}
-	    <script src="{{ url_for('static', filename='js/tools/' + tool + '.js') }}"></script>
-		{% endif %}
-		<div id="exetime">
-			{{ msg['core-page-generated'].format(g.request_time()) }}
-		</div>
-	</body>
+    {% if tool %}
+      <div class="modal fade" id="page-description" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">{{ msg[tool + '-title'] }}</h4>
+            </div>
+            <div class="modal-body">
+              {{ msg[tool + '-description-content']|safe }}
+            </div>
+            <!--
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+            -->
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    <div class="container">
+      {% block content %}
+      {% endblock %}
+    </div>
+    <hr>
+    <center>
+    <span style="font-size:14">
+      {{ msg['core-encounter-error']|safe }}
+    </span>
+    </center>
+    <br />
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% if tool %}
+      <script src="{{ url_for('static', filename='js/tools/' + tool + '.js') }}"></script>
+    {% endif %}
+    <div id="exetime">
+      {{ msg['core-page-generated'].format(g.request_time()) }}
+    </div>
+  </body>
 </html>
 {{ g.debugtext|safe }}

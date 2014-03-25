@@ -71,7 +71,7 @@ class SelfDatabase(Database):
 
 
         if not self.session.query(self.User).first():
-            self.session.add(self.User(name='Nullzero', credit=CREDIT.SYSOP))
+            self.session.add(self.User(name='Nullzero', credit=CREDIT.USER))
             # self.session.add(self.User(name='Nullzero', credit=CREDIT.SYSOP))
             self.session.commit()
 

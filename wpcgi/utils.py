@@ -1,7 +1,7 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-from p_flask import request, g
+from p_flask import request, g, flash
 
 class AttrObject(dict):
     def __init__(self, *args, **kwargs):
@@ -56,16 +56,16 @@ def debug(*args, **kwargs):
             g.debugtext += arg + ', '
     g.debugtext += ']<br/>\n'
 
-def newtry(success, fail, fn):
+def newtry(local):
     hasError = True
     try:
-        fn()
+        result = local['fun']()
     except Exception, e:
         if hasattr(e, 'flash_msg'):
             flash(e.flash_msg, e.flash_level)
     else:
         hasError = False
     if hasError:
-        return fail()
+        return local['onFail']()
     else:
-        return success()
+        return local['onSuccess'](result)

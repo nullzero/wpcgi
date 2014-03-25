@@ -2,68 +2,66 @@
 {% extends "layout.html" %}
 
 {% block content %}
-	{{ header(msg['wikitranslator-title']) }}
-	<h5><span style="color: red">{{ msg['wikitranslator-disclaimer']}}</span></h5>
-	<br />
-	<form action="{{ url_for('wikitranslator.submit') }}" method="post">
-		<input type="hidden" id="tab-active" name="tab-active" value="{{ data.tabactive }}" />
-		<div class="row">
-			<div class="col-lg-2 form-horizontal">
-				<div class="col-lg-12 form">
-			    {{ render_field(form.siteDest,
-											    placeholder=msg['wikitranslator-siteDest-placeholder'],
-													labelsize=5,
-													fieldsize=7)
-					}}
-				</div>
-				<div class="col-lg-12 form">
-		    {{ render_field(form.siteSource,
-										    placeholder=msg['wikitranslator-siteSource-placeholder'],
-												labelsize=5,
-												fieldsize=7)
-				}}
-				</div>
-			</div>
+  {{ header(msg['wikitranslator-title']) }}
+  <h5><span style="color: red">{{ msg['wikitranslator-disclaimer']}}</span></h5>
+  <br />
+  <form action="{{ url_for('wikitranslator.submit') }}" method="post">
+    {{ form.tabStatus() }}
+    <div class="row">
+      <div class="col-lg-3 form-horizontal">
+        <div class="col-lg-12 form">
+          {{ render_field(form.siteDest,
+                          labelsize=5,
+                          fieldsize=7)
+          }}
+        </div>
+        <div class="col-lg-12 form">
+        {{ render_field(form.siteSource,
+                        labelsize=5,
+                        fieldsize=7)
+        }}
+        </div>
+      </div>
 
-	    <div class="col-lg-8 form vbarr vbarl">
-	        <div class="tabbable">
-	            <ul class="nav nav-tabs">
-	                <li class="{{ data.isActivePage }}">
-	                    <a id="tab-link-page" href="#tab-page" data-toggle="tab">{{ msg['wikitranslator-tab-page'] }}</a>
-	                </li>
-	                <li class="{{ data.isActiveContent }}">
-	                    <a id="tab-link-content" href="#tab-content" data-toggle="tab">{{ msg['wikitranslator-tab-content'] }}</a>
-	                </li>
-	            </ul>
-	            <div class="tab-content">
-	                <div class="tab-pane col-lg-offset-3 {{ data.isActivePage }}" id="tab-page">
-							 		    {{ render_field(form.title,
-							 										    placeholder=msg['wikitranslator-title-placeholder'],
-																			labelsize=2,
-							 												fieldsize=6)
-							 				}}
-	                </div>
-	                <div class="tab-pane {{ data.isActiveContent }}" id="tab-content">
-										  {{ render_field(form.content,
-																			labelsize=12,
-																			fieldsize=12,
-																			rows=10,
-																			placeholder=msg['wikitranslator-content-placeholder'])
-											}}
-	                </div>
-	            </div>
-	        </div>
-	    </div>
+      <div class="col-lg-7 form vbarr vbarl">
+          <div class="tabbable">
+              <ul class="nav nav-tabs">
+                  <li class="{{ data.isActivePage }}">
+                      <a id="tab-link-page" href="#tab-page" data-toggle="tab">{{ msg['wikitranslator-tab-page'] }}</a>
+                  </li>
+                  <li class="{{ data.isActiveContent }}">
+                      <a id="tab-link-content" href="#tab-content" data-toggle="tab">{{ msg['wikitranslator-tab-content'] }}</a>
+                  </li>
+              </ul>
+              <div class="tab-content">
+                  <div class="tab-pane col-lg-offset-3 {{ data.isActivePage }}" id="tab-page">
+                      {{ render_field(form.title,
+                                      placeholder=msg['wikitranslator-title-placeholder'],
+                                      labelsize=2,
+                                      fieldsize=6)
+                      }}
+                  </div>
+                  <div class="tab-pane {{ data.isActiveContent }}" id="tab-content">
+                      {{ render_field(form.content,
+                                      labelsize=12,
+                                      fieldsize=12,
+                                      rows=10,
+                                      placeholder=msg['wikitranslator-content-placeholder'])
+                      }}
+                  </div>
+              </div>
+          </div>
+      </div>
 
-	    <div class="col-lg-1">
-	        <input type="submit" value="{{ msg['wikitranslator-button-submit'] }}" class="btn btn-info" style="height: 50px; width: 100px"/>
-	        <input style="margin-top: 5px; width: 100px" type="button" id="btn-clear" class="btn" value="{{ msg['wikitranslator-button-reset'] }}"/>
-	    </div>
+      <div class="col-lg-1">
+          {{ form.proceed(class="btn btn-info btn-small", style="width: 100px; height: 50px") }}
+          <input style="margin-top: 5px; width: 100px" type="button" id="btn-save" class="btn disabled" value="{{ msg['wikitranslator-button-save'] }}"/>
+      </div>
 
-		</div>
-	</form>
-	{% if data.text %}
-		<hr>
-	  <pre id="text">{{ data.text|safe }}</pre>
-	{% endif %}
+    </div>
+  </form>
+  {% if data.text %}
+    <hr>
+    <pre id="text">{{ data.text|safe }}</pre>
+  {% endif %}
 {% endblock %}

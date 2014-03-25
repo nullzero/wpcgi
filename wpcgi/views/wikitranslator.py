@@ -5,7 +5,7 @@ from decorators import langswitch
 from models import WikiTranslator
 from utils import get_params
 from normalize import normalize_url, normalize
-from forms import WikiTranslatorFormCreator
+from forms.wikitranslator import WikiTranslatorFormCreator
 import c
 
 wikitranslator = Blueprint('wikitranslator', __name__, url_prefix='/tools/wikitranslator')
@@ -17,12 +17,18 @@ wikitranslator = Blueprint('wikitranslator', __name__, url_prefix='/tools/wikitr
 @normalize_url(['title'])
 def index(**kwargs):
     normalize(['title'], kwargs)
-    if kwargs.get('siteDest', False) and not kwargs.get('title', False):
-        tabactive = 'content'
-    else:
-        tabactive = 'page'
+    if not request.form.get('tabStatus', False):
+        if kwargs.get('siteDest', False) and not kwargs.get('title', False):
+            kwargs['tabStatus'] = 'content'
+        else:
+            kwargs['tabStatus'] = 'page'
+
+    if not request.form.get('siteDest', False) and not request.form.get('siteSource', False):
+        kwargs['siteDest'] = 'th'
+        kwargs['siteSource'] = 'en'
+
     form = WikiTranslatorFormCreator()(request.form, **kwargs)
-    data = WikiTranslator(form, tabactive)
+    data = WikiTranslator(form)
     if form.validate(data):
         data.render()
     return render('wikitranslator_index.html',
@@ -32,7 +38,7 @@ def index(**kwargs):
 
 @wikitranslator.route('/submit')
 def submit():
-    active = request.form.get('tab-active')
+    active = request.form.get('tabStatus')
     params = ['siteDest', 'siteSource']
     if active == 'page':
         params.append('title')

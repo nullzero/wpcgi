@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	autocompleteTitle("th", "#txt-title");
+    autocompleteTitle("th", "#txt-title");
 
     $("#btn-openwiki").click(function(){
         var title = $('#txt-title').val();
@@ -8,5 +8,5 @@ $(document).ready(function(){
             return false;
         }
     });
-   	$(document).scrollTop( $("#statpanel").offset().top ); // will make error
+    $(document).scrollTop( $("#statpanel").offset().top ); // will make error
 });

@@ -23,8 +23,20 @@ class _Form(Form):
                         field.label.text, msg['core-required-symbol'])
 
     def validate(self, data=None):
-        if not request.form and not any(self.data.values()):
+        if not request.form:
             return False
+        """
+        for fieldname in self.data:
+            field = getattr(self, fieldname)
+            ignore = False
+            for validator in field.validators:
+                if isinstance(validator, v.IgnoreMe):
+                    ignore = True
+                    break
+            if not ignore and self.data[fieldname]:
+                return False
+
+        """
         if not super(_Form, self).validate():
             return False
         if data:

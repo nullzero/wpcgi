@@ -1,47 +1,47 @@
 {% from "macros/_helpers.html" import render_field, header %}
 {% extends "layout.html" %}
 {% block content %}
-	{{ header(msg['dykchecker-title']) }}
-	<br />
-	<form action="{{ url_for('dykchecker.submit') }}" method="post">
-		<div class="row">
-			<div class="col-lg-offset-1 col-lg-4 form-horizontal">
-		    {{ render_field(form.title,
-										    placeholder=msg['dykchecker-title-placeholder'],
-												tooltip=msg['dykchecker-title-tooltip'])
-				}}
-		    {{ render_field(form.oldid,
-										    placeholder=msg['dykchecker-oldid-placeholder'],
-												tooltip=msg['dykchecker-oldid-tooltip'])
-				}}
-			</div>
-			<div class="col-lg-3 vbarl vbarr form-horizontal">
-		    {{ render_field(form.minlen,
-							          placeholder=msg['dykchecker-minlen-placeholder'],
-												input_group=True,
-									      after=msg['dykchecker-minlen-suffix'],
-												tooltip=msg['dykchecker-minlen-tooltip'])
-				}}
-		    {{ render_field(form.ratio,
-										    placeholder=msg['dykchecker-ratio-placeholder'],
-												input_group=True,
-												after=msg['dykchecker-ratio-suffix'],
-												tooltip=msg['dykchecker-ratio-tooltip'])
-				}}
-		    {{ render_field(form.maxday,
-										    placeholder=msg['dykchecker-maxday-placeholder'],
-												input_group=True,
-												after=msg['dykchecker-maxday-suffix'],
-												tooltip=msg['dykchecker-maxday-tooltip'])
-				}}
-				</div>
-			<div class="col-lg-1">
-		    <input type="submit" value="{{ msg['dykchecker-button-submit'] }}" class="btn btn-info btn-small" style="width: 100px"/>
-		    <input type="button" value="{{ msg['dykchecker-button-open-page'] }}" id="btn-openwiki" class="btn btn-primary btn-small"
-							 style="margin-top: 10px; width: 100px"/>
-			</div>
-		</div>
-	</form>
-	{% block subcontent %}
-	{% endblock %}
+  {{ header(msg['dykchecker-title']) }}
+  <br />
+  <form action="{{ url_for('dykchecker.submit') }}" method="post">
+    <div class="row">
+      <div class="col-lg-offset-1 col-lg-4 form-horizontal">
+        {{ render_field(form.title,
+                        placeholder=msg['dykchecker-title-placeholder'],
+                        tooltip=msg['dykchecker-title-tooltip'])
+        }}
+        {{ render_field(form.oldid,
+                        placeholder=msg['dykchecker-oldid-placeholder'],
+                        tooltip=msg['dykchecker-oldid-tooltip'])
+        }}
+      </div>
+      <div class="col-lg-3 vbarl vbarr form-horizontal">
+        {{ render_field(form.minlen,
+                        placeholder=msg['dykchecker-minlen-placeholder'],
+                        input_group=True,
+                        after=msg['dykchecker-minlen-suffix'],
+                        tooltip=msg['dykchecker-minlen-tooltip'])
+        }}
+        {{ render_field(form.ratio,
+                        placeholder=msg['dykchecker-ratio-placeholder'],
+                        input_group=True,
+                        after=msg['dykchecker-ratio-suffix'],
+                        tooltip=msg['dykchecker-ratio-tooltip'])
+        }}
+        {{ render_field(form.maxday,
+                        placeholder=msg['dykchecker-maxday-placeholder'],
+                        input_group=True,
+                        after=msg['dykchecker-maxday-suffix'],
+                        tooltip=msg['dykchecker-maxday-tooltip'])
+        }}
+        </div>
+      <div class="col-lg-1">
+        {{ form.proceed(class="btn btn-info btn-small", style="width: 100px") }}
+        <input type="button" value="{{ msg['dykchecker-button-open-page'] }}" id="btn-openwiki" class="btn btn-primary btn-small"
+               style="margin-top: 10px; width: 100px"/>
+      </div>
+    </div>
+  </form>
+  {% block subcontent %}
+  {% endblock %}
 {% endblock %}

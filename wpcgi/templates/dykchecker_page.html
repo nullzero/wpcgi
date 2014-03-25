@@ -1,23 +1,23 @@
 {% extends "dykchecker_index.html" %}
 
 {% block subcontent %}
-	<hr>
-	<div class="panel-group" id="statpanel">
-		{% for i, result in data.results %}
-			<div class="panel panel-default">
-			  <div class="panel-heading">
-			    <h4 class="panel-title" data-toggle="collapse" data-parent="#statpanel" data-target="#collapse{{ i }}">
-						<span class={{ result.cl }}>█</span>&nbsp;&nbsp;{{ result.text|safe }}
-					</h4>
-				</div>
-				<div id="collapse{{ i }}" class="panel-collapse collapse {% if i == 0 %}in{% endif %}">
-					<div style="padding: 10px;">
-						{{ result.value|safe }}<br /><br /><i>{{ result.desc|safe }}</i>
-					</div>
-				</div>
-			</div>
+  <hr>
+  <div class="panel-group" id="statpanel">
+    {% for i, result in data.results %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title" data-toggle="collapse" data-parent="#statpanel" data-target="#collapse{{ i }}">
+            <span class={{ result.cl }}>█</span>&nbsp;&nbsp;{{ result.text|safe }}
+          </h4>
+        </div>
+        <div id="collapse{{ i }}" class="panel-collapse collapse {% if i == 0 %}in{% endif %}">
+          <div style="padding: 10px;">
+            {{ result.value|safe }}<br /><br /><i>{{ result.desc|safe }}</i>
+          </div>
+        </div>
+      </div>
     {% endfor %}
-	</div>
-	<br>
+  </div>
+  <br>
   <pre>{{ data.text|safe }}</pre>
 {% endblock %}

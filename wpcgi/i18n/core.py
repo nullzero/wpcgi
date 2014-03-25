@@ -24,6 +24,12 @@ messages['th'] = {
 
     'validator-require': u'ต้องกรอกช่องนี้',
     'validator-not-number': u'ต้องเป็นตัวเลข',
+
+    'form-fam-wikipedia': u'วิกิพีเดีย',
+    'form-fam-wikibooks': u'วิกิตำรา',
+
+    'form-lang-th': u'th (ภาษาไทย)',
+    'form-lang-en': u'en (ภาษาอังกฤษ)',
 }
 
 messages['msg'] = {

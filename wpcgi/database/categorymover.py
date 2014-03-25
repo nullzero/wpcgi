@@ -61,14 +61,13 @@ class CategoryMoverDatabase(SelfDatabase):
 
     @must_be(credit='USER')
     def new(self, **kwargs):
-        self.session.add(
-            self.CategoryMover(date=datetime.now(),
-                               user=self.user,
-                               status=self.queueStatus(),
-                               **kwargs
-            )
-        )
+        data = self.CategoryMover(date=datetime.now(),
+                                  user=self.user,
+                                  status=self.queueStatus(),
+                                  **kwargs)
+        self.session.add(data)
         self.session.commit()
+        return data.rid
 
     @must_be(credit='USER')
     def edit(self, rid, **kwargs):

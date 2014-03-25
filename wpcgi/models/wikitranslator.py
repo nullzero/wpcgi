@@ -17,11 +17,11 @@ if app.config['SQL']:
     from database.replicateddb import ReplicatedDatabase
 
 class WikiTranslator(Model):
-    def doinit(self, tabactive):
-        self.tabactive = tabactive or 'page'
+    def doinit(self):
+        self.tabactive = self.form.tabStatus.data
         self.isActivePage = 'active'
         self.isActiveContent = ''
-        if tabactive == 'content':
+        if self.tabactive == 'content':
             self.isActivePage, self.isActiveContent = self.isActiveContent, self.isActivePage
 
         self.text = None

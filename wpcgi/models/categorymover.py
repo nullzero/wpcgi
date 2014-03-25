@@ -69,8 +69,9 @@ class CategoryMover(Model):
         )
         if rid:
             self.db.edit(rid, **basedata)
+            return rid
         else:
-            self.db.new(**basedata)
+            return self.db.new(**basedata)
 
     def renderEdit(self, rid=None):
         self.rid = rid

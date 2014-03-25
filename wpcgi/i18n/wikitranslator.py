@@ -19,7 +19,7 @@ messages['th'] = {
     'wikitranslator-content-placeholder': u'เช่น "[[C++]] is a [[programming language]]{{cn}}."',
 
     'wikitranslator-button-submit': u'แปล!',
-    'wikitranslator-button-reset': u'เรื่มใหม่',
+    'wikitranslator-button-save': u'บันทึก',
 
     'wikitranslator-tab-page': u'ใช้ชื่อหน้า',
     'wikitranslator-tab-content': u'ใช้ข้อความ',

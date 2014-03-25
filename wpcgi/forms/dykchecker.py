@@ -1,8 +1,7 @@
 #!/data/project/nullzerobot/python/bin/python
 
 from p_form import Form, c_validators as v
-from wtforms import TextField
-from wtforms.widgets import SubmitInput
+from wtforms import TextField, SubmitField
 from messages import msg
 from models import DYKChecker
 
@@ -29,4 +28,5 @@ def DYKCheckerFormCreator():
                               validators=[v.Number(),
                                           v.Optional(),
                                           v.NumberRange(min=1, max=30)])
+    FormCl.proceed = SubmitField(msg['dykchecker-button-submit'])
     return FormCl
