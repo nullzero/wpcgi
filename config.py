@@ -6,10 +6,7 @@ Note: LANG can't be overwritten, as the value is used in message.py
 directly from the class BaseConfig
 """
 
-import os
-
-with open(os.path.expanduser('~/.wpcgi.cnf'), 'r') as f:
-    key = f.read().split('\n')
+from wpcgi import FLASK_SECRET_KEY
 
 class BaseConfig(object):
     APP_NAME = 'wpcgi'
@@ -17,9 +14,7 @@ class BaseConfig(object):
     DEBUG_LOG = '../error.log'
     LANG = 'th'
     SQL = False
-    SECRET_KEY = key[0][len('secret: ')]
-    CONSUMER_KEY = key[1][len('cons_key: ')]
-    CONSUMER_SECRET = key[2][len('cons_secret: ')]
+    SECRET_KEY = FLASK_SECRET_KEY
 
 class TestConfig(BaseConfig):
     DEBUG = True

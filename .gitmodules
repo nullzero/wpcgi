@@ -1,0 +1,4 @@
+[submodule "externals/flask-oauth"]
+	path = externals/flask-mwoauth
+	url = https://github.com/valhallasw/flask-mwoauth.git
+	ignore = dirty
