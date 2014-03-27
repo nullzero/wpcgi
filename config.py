@@ -6,14 +6,20 @@ Note: LANG can't be overwritten, as the value is used in message.py
 directly from the class BaseConfig
 """
 
+import os
+
+with open(os.path.expanduser('~/.wpcgi.cnf'), 'r') as f:
+    key = f.read().split('\n')
+
 class BaseConfig(object):
     APP_NAME = 'wpcgi'
     CSRF_ENABLED = False
     DEBUG_LOG = '../error.log'
     LANG = 'th'
     SQL = False
-    # os.urandom(24)
-    SECRET_KEY = 'you-will-never-guess'
+    SECRET_KEY = key[0][len('secret: ')]
+    CONSUMER_KEY = key[1][len('cons_key: ')]
+    CONSUMER_SECRET = key[2][len('cons_secret: ')]
 
 class TestConfig(BaseConfig):
     DEBUG = True

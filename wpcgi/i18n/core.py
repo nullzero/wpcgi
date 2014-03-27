@@ -5,6 +5,28 @@ messages = {}
 
 messages['en'] = {
     '__NAME__': 'English',
+    'core-name': 'Nullzero\'s tool',
+    'core-page-generated': 'Page generated in {0} seconds',
+    'core-required-symbol': '*',
+    'core-encounter-error': 'If you encounter errors, please contact '
+                            '<a href="//th.wikipedia.org/wiki/User_talk:Nullzero">tool\'s owner</a>',
+    'core-error': 'Error: ',
+    'core-login': 'Sign in',
+
+    'toolbar-home': 'Main page',
+    'toolbar-tools': 'All tools',
+    'toolbar-status-of-bot': 'Bot\'s tatus',
+    'toolbar-contact': 'Contact',
+    'toolbar-about': 'About',
+
+    'validator-require': u'This field is required',
+    'validator-not-number': u'Must be a number',
+
+    'form-fam-wikipedia': u'Wikipedia',
+    'form-fam-wikibooks': u'Wikibooks',
+
+    'form-lang-th': u'th (Thai)',
+    'form-lang-en': u'en (English)',
 }
 
 messages['th'] = {
