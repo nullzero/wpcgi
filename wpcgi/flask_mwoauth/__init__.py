@@ -37,7 +37,7 @@ class MWOAuth(object):
     def __init__(self,
                  base_url='https://www.mediawiki.org/w',
                  clean_url='https://www.mediawiki.org/wiki',
-                 default_return_to='index',
+                 default_return_to='frontend.index',
                  consumer_key=None, consumer_secret=None):
         if not consumer_key or not consumer_secret:
             raise Exception('MWOAuthBlueprintFactory needs consumer key and secret')
@@ -84,8 +84,6 @@ class MWOAuth(object):
         @self.bp.route('/oauth-callback')
         @self.mwoauth.authorized_handler
         def oauth_authorized(resp):
-            app.logger.warning('asd')
-            app.logger.warning(repr(resp))
             next_url_key = request.args['oauth_token'] + '_target'
             default_url = url_for(self.default_return_to)
 
