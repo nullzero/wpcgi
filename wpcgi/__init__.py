@@ -28,17 +28,3 @@ tools = [
         'disabled': True,
     },
 ]
-
-import os
-
-with open(os.path.expanduser('~/.wpcgi.cnf'), 'r') as f:
-    key = f.read().split('\n')
-
-FLASK_SECRET_KEY = key[0][len('secret: '):]
-CONSUMER_KEY = key[1][len('cons_key: '):]
-CONSUMER_SECRET = key[2][len('cons_secret: '):]
-
-from flask_mwoauth import MWOAuth
-
-mwoauth = MWOAuth(consumer_key=CONSUMER_KEY, consumer_secret=CONSUMER_SECRET)
-app.register_blueprint(mwoauth.bp)

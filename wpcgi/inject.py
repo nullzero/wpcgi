@@ -4,6 +4,7 @@
 from p_flask import g, request, after_this_request
 from messages import msg
 import time
+from mwoauth import mwoauth
 
 def inject(app):
     inject_variables(app)
@@ -49,6 +50,7 @@ def inject_methods(app):
     app.jinja_env.globals.update(render_helper=render_helper,
                                  msg=msg,
                                  user=user,
+                                 mwoauth=mwoauth,
                                  str=str)
 
 

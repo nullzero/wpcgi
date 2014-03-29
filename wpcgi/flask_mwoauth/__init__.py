@@ -1,12 +1,3 @@
-#!/usr/bin/env python
-# MediaWiki OAuth connector for Flask
-#
-# Requires flask-oauth
-#
-# (C) 2013 Merlijn van Deen <valhallasw@arctus.nl>
-# Licensed under the MIT License // http://opensource.org/licenses/MIT
-#
-
 __version__ = '0.1.31'
 
 import sys
@@ -14,7 +5,8 @@ import urllib
 from flask import request, session, redirect, url_for, flash, Blueprint
 from flask_oauth import OAuth, OAuthRemoteApp, OAuthException, parse_response
 from requests.models import Request
-from wpcgi import app
+from utils import gourl
+from messages import msg
 
 class MWOAuthRemoteApp(OAuthRemoteApp):
      def handle_oauth1_response(self):
@@ -68,16 +60,16 @@ class MWOAuth(object):
         def logout():
             session['mwo_token'] = None
             session['username'] = None
-            return "Logged out!"
+            return redirect(gourl())
 
         @self.bp.route('/login')
         def login():
+            self.default_return_to = gourl()
             redirector = self.mwoauth.authorize()
 
             if 'next' in request.args:
                 oauth_token = session[self.mwoauth.name + '_oauthtok'][0]
                 session[oauth_token + '_target'] = request.args['next']
-
             redirector.headers['Location'] += "&oauth_consumer_key=" + self.mwoauth.consumer_key
             return redirector
 
@@ -85,12 +77,12 @@ class MWOAuth(object):
         @self.mwoauth.authorized_handler
         def oauth_authorized(resp):
             next_url_key = request.args['oauth_token'] + '_target'
-            default_url = url_for(self.default_return_to)
 
+            default_url = self.default_return_to
             next_url = session.pop(next_url_key, default_url)
 
             if resp is None:
-                flash(u'You denied the request to sign in.')
+                flash(msg['oauth-denied'], 'danger')
                 return redirect(next_url)
             session['mwo_token'] = (
                 resp['oauth_token'],
@@ -98,7 +90,7 @@ class MWOAuth(object):
             )
 
             username = self.get_current_user(False)
-            flash('You were signed in, %s!' % username)
+            flash(msg['oauth-signin-successful'].format(username), 'success')
 
             return redirect(next_url)
 
@@ -162,7 +154,7 @@ class MWOAuth(object):
         except KeyError:
             session['username'] = None
             if data['error']['code'] == "mwoauth-invalid-authorization":
-                flash(u'Access to this application was revoked. Please re-login!')
+                flash(msg['oauth-revoke-relogin'], 'warning')
             else:
                 raise
         except OAuthException:

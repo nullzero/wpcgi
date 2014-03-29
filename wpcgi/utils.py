@@ -1,7 +1,7 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-from p_flask import request, g, flash
+from p_flask import request, g, flash, url_for
 
 class AttrObject(dict):
     def __init__(self, *args, **kwargs):
@@ -72,3 +72,8 @@ def newtry(local):
         return local['onFail']()
     else:
         return local['onSuccess'](result)
+
+def gourl(default='frontend.index'):
+    return (request.args.get('next') or
+            request.referrer or
+            url_for(default))
