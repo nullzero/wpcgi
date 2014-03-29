@@ -5,7 +5,10 @@ site.addsitedir("/data/project/nullzerobot/python/lib/python2.7/site-packages")
 
 from wpcgi import app
 from config import ProductionConfig as Config
+from wpcgi import mwoauth
+
 app.config.from_object(Config)
+mwoauth.register_mwoauth(Config)
 
 from wpcgi.setup import setup
 setup(app)
