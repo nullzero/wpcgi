@@ -4,7 +4,7 @@ from p_form import Form, c_validators as v
 from wtforms import TextField, TextAreaField
 from wtforms.widgets import SubmitInput
 from messages import msg
-from forms import lang_default, fam_default
+from forms import fam_default
 
 class CategoryMoverForm(Form):
     pass

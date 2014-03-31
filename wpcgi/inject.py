@@ -5,6 +5,7 @@ from p_flask import g, request, after_this_request
 from messages import msg
 import time
 from mwoauth import mwoauth
+import c
 
 def inject(app):
     inject_variables(app)
@@ -51,7 +52,8 @@ def inject_methods(app):
                                  msg=msg,
                                  user=user,
                                  mwoauth=mwoauth,
-                                 str=str)
+                                 str=str,
+                                 c=c)
 
 
 def inject_hooks(app):

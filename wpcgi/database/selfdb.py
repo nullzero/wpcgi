@@ -13,6 +13,7 @@ import pywikibot
 from database import Database
 from sqlalchemy import Column, Integer, DateTime, String, Table
 import wpcgi.error
+from mwoauth import mwoauth
 
 class CREDIT(object):
     BLOCKED = -1
@@ -32,9 +33,7 @@ def must_be(credit=None):
     return wrapper
 
 class SelfDatabase(Database):
-    def connect(self, user=None, cachefile='selfdb.cache', **kwargs):
-        self.user = user
-
+    def connect(self, cachefile='selfdb.cache', **kwargs):
         if self.test:
             dic = dict(host='localhost', database='test',
                        username='root', password='password')
@@ -69,16 +68,24 @@ class SelfDatabase(Database):
 
         self.metadata.create_all()
 
-        if not self.session.query(self.User).first():
-            self.session.add(self.User(name='Nullzero', credit=CREDIT.USER))
-            # self.session.add(self.User(name='Nullzero', credit=CREDIT.SYSOP))
-            self.session.commit()
+        user = mwoauth.get_current_user()
+        if user:
+            self.userinfo = self.session.query(self.User).filter_by(name=user).first()
+            if not self.userinfo:
+                self.session.add(self.User(name=self.userinfo, credit=CREDIT.USER))
+                self.session.commit()
+        else:
+            self.userinfo = None
+
 
     def credit(self, level=None):
         if level:
             return getattr(CREDIT, level)
 
         if not hasattr(self, '_credit'):
-            self._credit = self.session.query(self.User.credit).filter_by(name=self.user).first().credit
+            if self.userinfo:
+                self._credit = self.userinfo.credit
+            else:
+                self._credit = CREDIT.ANON
 
         return self._credit

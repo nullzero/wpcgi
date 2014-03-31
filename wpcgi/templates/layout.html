@@ -72,7 +72,7 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li><a href="#">{{ msg['user-preference']|safe }}</a></li>
-                  <li><a href="{{ url_for('mwoauth.logout') }}">msg['mwoauth-logout']</a></li>
+                  <li><a href="{{ url_for('mwoauth.logout') }}">{{ msg['mwoauth-logout'] }}</a></li>
                 </ul>
               </li>
             {% else %}

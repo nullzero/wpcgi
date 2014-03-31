@@ -20,6 +20,12 @@ $(document).ready(function(){
     setTimeout(function() {
         $('.alert').fadeOut(1000);
     }, 5000);
+
+    $('.dropdown-menu li').click(function(e){
+      e.preventDefault();
+      var selected = $(this).children(":first").attr('href').substring(1);
+      $("#" + $(this).parent().data("id")).val(selected);
+    });
 });
 
 function defaultFor(arg, val) { return typeof arg !== 'undefined' ? arg : val; }
