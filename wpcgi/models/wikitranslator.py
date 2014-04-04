@@ -169,7 +169,8 @@ class WikiTranslator(Model):
             medium = {}
             results = db.getlanglinks(inputs=pages.keys(), tolangs=[self.siteDest.code])
             for page in results:
-                medium[pages[page]] = results[page].title()
+                if page in pages:
+                    medium[pages[page]] = results[page].title()
             db.save()
         else:
             medium = self.apiquery(links.values())

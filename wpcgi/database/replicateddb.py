@@ -106,7 +106,7 @@ class ReplicatedDatabase(Database):
                                 filter_kwargs=lambda inputs: [self.Page.page_id.in_(inputs)])
 
     def toid_final(self, inputs):
-        return self.toid(inputs) + self.toid(self.getredirects(inputs=inputs).keys())
+        return self.toid(inputs) + self.toid(self.getredirects(inputs=inputs).values())
 
     @separate_ns
     def metaconvert(self, inputs, arr, typePass, typeConvert, filter_kwargs):
@@ -166,6 +166,7 @@ class ReplicatedDatabase(Database):
             args.append(self.Langlinks.ll_lang.in_(tolangs))
 
         results = self.session.query(self.Langlinks).filter(*args).all()
+
         for result in results:
             page = self.topage(result.ll_from)
             for llpage in self.topage(self._rv_redirects[page]) + [page]:
