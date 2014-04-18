@@ -16,6 +16,9 @@ dykchecker = Blueprint('dykchecker', __name__, url_prefix='/tools/dykchecker')
 @langswitch
 @normalize_url(['title'])
 def index(**kwargs):
+    if request.args.get('submit') is not None:
+        return redirect(url_for('.index', **get_params(['title', 'oldid'])), code=c.REQUEST)
+
     normalize(['title'], kwargs)
     form = DYKCheckerFormCreator()(request.form, **kwargs)
     data = DYKChecker(form)
@@ -30,7 +33,3 @@ def index(**kwargs):
         return render('dykchecker_index.html',
                       tool=__name__,
                       form=form)
-
-@dykchecker.route('/submit')
-def submit():
-    return redirect(url_for('.index', **get_params(['title', 'oldid'])), code=c.REQUEST)

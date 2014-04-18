@@ -23,28 +23,41 @@ class _Form(Form):
                         field.label.text, msg['core-required-symbol'])
 
     def validate(self, data=None):
+        '''
         if not request.form:
             return False
-        """
-        for fieldname in self.data:
-            field = getattr(self, fieldname)
-            ignore = False
-            for validator in field.validators:
-                if isinstance(validator, v.IgnoreMe):
-                    ignore = True
-                    break
-            if not ignore and self.data[fieldname]:
-                return False
-
-        """
-        if not super(_Form, self).validate():
+        '''
+        def isInteracting():
+            for fieldname in self.data:
+                field = getattr(self, fieldname)
+                ignore = False
+                for validator in field.validators:
+                    if isinstance(validator, v.IgnoreMe):
+                        ignore = True
+                        break
+                if not ignore and self.data[fieldname]:
+                    return True
             return False
-        if data:
+
+        interacting = isInteracting()
+
+        fail = False
+
+        if not super(_Form, self).validate():
+            fail = True
+        if not fail and data:
             errors = data.validate()
             for field in errors:
                 getattr(self, field).errors.extend(errors[field])
             if errors:
-                return False
+                fail = True
+
+        if fail:
+            if not interacting:
+                for fieldname in self.data:
+                    field = getattr(self, fieldname)
+                    field.errors = []
+            return False
         return True
 
 Form = _Form

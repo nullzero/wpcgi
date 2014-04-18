@@ -3,7 +3,7 @@
 {% block content %}
   {{ header(msg['dykchecker-title']) }}
   <br />
-  <form action="{{ url_for('dykchecker.submit') }}" method="post">
+  <form action="?submit" method="post">
     <div class="row">
       <div class="col-lg-offset-1 col-lg-4 form-horizontal">
         {{ render_field(form.title,

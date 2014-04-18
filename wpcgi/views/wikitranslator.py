@@ -16,6 +16,13 @@ wikitranslator = Blueprint('wikitranslator', __name__, url_prefix='/tools/wikitr
 @langswitch
 @normalize_url(['title'])
 def index(**kwargs):
+    if request.args.get('submit') is not None:
+        active = request.form.get('tabStatus')
+        params = ['siteDest', 'siteSource']
+        if active == 'page':
+            params.append('title')
+        return redirect(url_for('.index', **get_params(params)), code=c.REQUEST)
+
     normalize(['title'], kwargs)
     if not request.form.get('tabStatus', False):
         if kwargs.get('siteDest', False) and not kwargs.get('title', False):
@@ -36,10 +43,3 @@ def index(**kwargs):
                   form=form,
                   data=data)
 
-@wikitranslator.route('/submit')
-def submit():
-    active = request.form.get('tabStatus')
-    params = ['siteDest', 'siteSource']
-    if active == 'page':
-        params.append('title')
-    return redirect(url_for('.index', **get_params(params)), code=c.REQUEST)

@@ -14,10 +14,10 @@ def WikiTranslatorFormCreator():
                                  id='txt-title')
     FormCl.siteDest = TextField(msg['wikitranslator-siteDest-label'],
                                 id='txt-siteDest',
-                                validators=[v.Required()])
+                                validators=[v.Required(), v.IgnoreMe()])
     FormCl.siteSource = TextField(msg['wikitranslator-siteSource-label'],
                                   id='txt-siteSource',
-                                  validators=[v.Required()])
+                                  validators=[v.Required(), v.IgnoreMe()])
     FormCl.content = TextAreaField(msg['wikitranslator-content-label'],
                                    id="txt-content")
     FormCl.tabStatus = HiddenField(id="tab-active", validators=[v.IgnoreMe()])

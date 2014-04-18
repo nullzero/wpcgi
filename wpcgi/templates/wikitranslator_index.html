@@ -5,7 +5,7 @@
   {{ header(msg['wikitranslator-title']) }}
   <h5><span style="color: red">{{ msg['wikitranslator-disclaimer']}}</span></h5>
   <br />
-  <form action="{{ url_for('wikitranslator.submit') }}" method="post">
+  <form action="?submit" method="post">
     {{ form.tabStatus() }}
     <div class="row">
       <div class="col-lg-3 form-horizontal">
