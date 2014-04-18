@@ -32,7 +32,7 @@ class Model(object):
         while page.exists():
             if page.isRedirectPage():
                 page = page.getRedirectTarget()
-                path.append(page.title())
+                path.append(page)
             else:
                 break
         else:
