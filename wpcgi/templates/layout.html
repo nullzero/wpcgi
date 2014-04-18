@@ -41,6 +41,9 @@
             <li><a href="{{ url_for('frontend.alltools') }}">
                 <i class="glyphicon glyphicon-wrench"></i>&nbsp;&nbsp;{{ msg['toolbar-tools'] }}
             </a></li>
+            <li><a href="{{ url_for('frontend.faq') }}">
+              <i class="glyphicon glyphicon-question-sign"></i>&nbsp;&nbsp;{{ msg['toolbar-faq'] }}
+            </a></li>
             <li><a href="/?status">
               <i class="glyphicon glyphicon-eye-open"></i>&nbsp;&nbsp;{{ msg['toolbar-status-of-bot'] }}
             </a></li>
@@ -72,7 +75,9 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li><a href="#">{{ msg['user-preference']|safe }}</a></li>
-                  <li><a href="{{ url_for('mwoauth.logout') }}">{{ msg['mwoauth-logout'] }}</a></li>
+                  <li><a href="{{ url_for('mwoauth.logout', next=request.script_root+ request.path) }}">
+                    {{ msg['mwoauth-logout'] }}</a>
+                  </li>
                 </ul>
               </li>
             {% else %}
@@ -132,7 +137,7 @@
     <br />
     <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     {% if tool %}
       <script src="{{ url_for('static', filename='js/tools/' + tool + '.js') }}"></script>

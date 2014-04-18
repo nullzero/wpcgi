@@ -22,9 +22,9 @@ $(document).ready(function(){
     }, 5000);
 
     $('.dropdown-menu li').click(function(e){
-      e.preventDefault();
-      var selected = $(this).children(":first").attr('href').substring(1);
-      $("#" + $(this).parent().data("id")).val(selected);
+        if($(this).parent().data("prevent")) e.preventDefault();
+        var selected = $(this).children(":first").attr('href').substring(1);
+        $("#" + $(this).parent().data("id")).val(selected);
     });
 });
 

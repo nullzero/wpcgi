@@ -25,7 +25,7 @@ color = {
 class CategoryMover(Model):
     def doinit(self, rid=None):
         self.db = CategoryMoverDatabase()
-        self.db.connect('Nullzero')
+        self.db.connect()
         self.queue = self.db.getQueue()
         self.num_queue = len(self.queue)
         self.nav_active = {'queue': '', 'new': '', 'archive': ''}

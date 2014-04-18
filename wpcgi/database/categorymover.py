@@ -14,8 +14,8 @@ class STATUS(object):
     DONE = [DONE_ALL, DONE_FAILED, DONE_REJECTED]
 
 class CategoryMoverDatabase(SelfDatabase):
-    def connect(self, user):
-        super(CategoryMoverDatabase, self).connect(user)
+    def connect(self):
+        super(CategoryMoverDatabase, self).connect()
 
     @asDict
     def getQueue(self):
@@ -100,6 +100,13 @@ class CategoryMoverDatabase(SelfDatabase):
             raise wpcgi.error.IDNotFoundError()
 
         return data
+
+    def done(self, rid, status):
+        data = self.session.query(self.CategoryMover).filter(
+            self.CategoryMover.rid == rid,
+        ).first()
+
+        data.status = status
 
 if __name__ == "__main__":
     cm = CategoryMoverDatabase(drop=True)

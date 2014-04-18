@@ -4,6 +4,7 @@
 import os
 from p_flask import Flask, request, render_template, g, Blueprint
 import utils
+from mwoauth import mwoauth
 from views import frontend, dykchecker, wikitranslator, categorymover
 from messages import msg
 import inject
@@ -11,6 +12,7 @@ import inject
 __all__ = ['setup']
 
 DEFAULT_BLUEPRINTS = (
+    mwoauth.bp,
     frontend,
     dykchecker,
     wikitranslator,

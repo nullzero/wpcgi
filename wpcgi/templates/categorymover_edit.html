@@ -14,8 +14,8 @@
       </div>
       <div class="row">
         <div class="col-lg-4 form-horizontal">
-          {{ render_field(form.fam, placeholder=msg['categorymover-fam-placeholder']) }}
-          {{ render_field(form.lang, placeholder=msg['categorymover-lang-placeholder']) }}
+          {{ render_field(form.fam, placeholder=msg['categorymover-fam-placeholder'], choices=c.FORM_ALLFAMS) }}
+          {{ render_field(form.lang, placeholder=msg['categorymover-lang-placeholder'], choices=c.FORM_ALLLANGS) }}
         </div>
         <div class="col-lg-8 form-horizontal">
           {{ render_field(form.catfrom, placeholder=msg['categorymover-catfrom-placeholder']) }}

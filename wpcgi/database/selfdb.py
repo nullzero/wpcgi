@@ -13,7 +13,7 @@ import pywikibot
 from database import Database
 from sqlalchemy import Column, Integer, DateTime, String, Table
 import wpcgi.error
-from mwoauth import mwoauth
+from mwoauth import mwoauth # fake mwoauth
 
 class CREDIT(object):
     BLOCKED = -1
@@ -33,7 +33,7 @@ def must_be(credit=None):
     return wrapper
 
 class SelfDatabase(Database):
-    def connect(self, cachefile='selfdb.cache', **kwargs):
+    def connect(self, user=None, cachefile='selfdb.cache', **kwargs):
         if self.test:
             dic = dict(host='localhost', database='test',
                        username='root', password='password')
@@ -68,7 +68,9 @@ class SelfDatabase(Database):
 
         self.metadata.create_all()
 
-        user = mwoauth.get_current_user()
+        if not user:
+            user = mwoauth.get_current_user()
+
         if user:
             self.userinfo = self.session.query(self.User).filter_by(name=user).first()
             if not self.userinfo:

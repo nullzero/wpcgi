@@ -46,6 +46,7 @@ messages['th'] = {
 
     'toolbar-home': u'หน้าหลัก',
     'toolbar-tools': u'เครื่องมือทั้งหมด',
+    'toolbar-faq': 'FAQ',
     'toolbar-status-of-bot': u'สถานะของบอต',
     'toolbar-contact': u'ติดต่อ',
     'toolbar-about': u'เกี่ยวกับ',
@@ -53,8 +54,8 @@ messages['th'] = {
     'validator-require': u'ต้องกรอกช่องนี้',
     'validator-not-number': u'ต้องเป็นตัวเลข',
 
-    'form-fam-wikipedia': u'วิกิพีเดีย',
-    'form-fam-wikibooks': u'วิกิตำรา',
+    'form-fam-wikipedia': u'wikipedia (วิกิพีเดีย)',
+    'form-fam-wikibooks': u'wikibooks (วิกิตำรา)',
 
     'form-lang-th': u'th (ภาษาไทย)',
     'form-lang-en': u'en (ภาษาอังกฤษ)',
