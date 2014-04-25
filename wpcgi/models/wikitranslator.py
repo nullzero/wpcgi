@@ -71,7 +71,7 @@ class WikiTranslator(Model):
         self.end = '~~~#e!'
 
         self.leadlink = lre.lre(r'^[\[\{]+')
-        self.traillink = lre.lre(r'#.*$')
+        self.traillink = lre.lre(r'[#{].*$')
 
         self.cnt = 0
         self.text = []

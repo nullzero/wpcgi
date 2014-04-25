@@ -1,12 +1,21 @@
+#Database
+- make it dependent with the framework so wprobot can use it
+- error class?
+
+# Core
+- user system?
+-- blocked
+-- mocked user (not login)
+-- normal
+-- confirmed
+-- technician
+-- admin
+
 # DYKChecker
 - hide advanced options
 
 # WikiTranslator
 - don't translate pre, nowiki, source
-- generalize translation (หมวดหมู่ => namespace(14))
-
-# CategoryMover
-- soon! (integrate with bot, database)
 
 # SpamAnalyzer
 - soon! (integrate with bot, database)
