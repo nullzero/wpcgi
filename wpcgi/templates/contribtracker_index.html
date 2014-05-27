@@ -47,7 +47,7 @@
   {% if data.text %}
     {{ msg['contribtracker-word-count'] }}: {{ data.length }}
     <hr>
-    <pre id="text">{{ data.text|safe }}</pre>
-    <pre id="text">{{ data.swath|safe }}</pre>
+    <pre>{{ data.text|safe }}</pre>
+    <pre>{{ data.swath|safe }}</pre>
   {% endif %}
 {% endblock %}

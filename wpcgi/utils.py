@@ -104,8 +104,7 @@ class TextEngine(object):
         self.removeTag("pre")
         self.removeTag("syntaxhighlight")
         self.removeTag("poem")
-        self.removeTag("ref")
-
+        #self.removeTag("ref") # can't do this because of <ref name="manager"/><ref name="nobel">blah blah</ref>
 
         self.subst.append(
             r"(\[\[[^\]\|\[]*\|)(.*?)(\]\])", r"{}\1{}\2{}\3{}".format(
@@ -114,8 +113,8 @@ class TextEngine(object):
         )
 
         self.removePart(r"(< ?/? ?(br|center|sup|sub|nowiki|ref) ?/? ?>)")
-        #self.removePart(r"(<ref[^>]*?/ ?>)")
-        #self.removePart(r"(?s)(<ref[^>/]*?>.*?</ref>)")
+        self.removePart(r"(<ref[^>]*?/ ?>)")
+        self.removePart(r"(?s)(<ref[^>/]*?>.*?</ref>)")
         self.removePart(r"(?s)(?<!\[)(\[(?!\[) *http://.*?\])")
         self.removePart(r"(https?://\S*)")
         self.removePart(r"(?s)(\[\[[^\]\|]*?\:.*?\]\])")
