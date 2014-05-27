@@ -6,9 +6,9 @@ from utils import AttrObject
 from messages import msg
 import pyrobot
 import pywikibot
-from wp import lre
 import wp
 from model import Model
+from utils import TextEngine
 
 class DYKChecker(Model):
     def doinit(self):
@@ -95,7 +95,7 @@ class DYKChecker(Model):
 
     def check_length(self):
         self.text = self.textEngine.remove(self.text)
-        self.length = self.textEngine.length(self.text)
+        self.length, self.swath = self.textEngine.length(self.text)
         self.results.append(
             AttrObject(cl=self.evaluate(self.length > self.minlen),
                        value=msg['dykchecker-length-value'].format(self.length),
@@ -155,83 +155,10 @@ class DYKChecker(Model):
             else:
                 text = self.page.getOldVersion(oldestRev[0], get_redirect=True)
             text = self.textEngine.remove(text)
-            length = self.textEngine.length(text)
+            length = self.textEngine.length(text)[0]
             ratio = float(self.length) / float(length)
             result.cl = self.evaluate(ratio >= (self.ratio + 1))
             result.value = msg['dykchecker-old-revision-value'].format(
                 oldestRev[0], oldestRev[1], (now - oldestRev[1]).days, length, ratio - 1.0
             )
         self.results.append(result)
-
-class TextEngine(object):
-    def __init__(self):
-        self.subst = lre.Subst()
-        self.op = "~~~#o!"
-        self.ed = "~~~#c!"
-
-        self.subst.append(r"[ \t]+", " ")
-
-        self.removePair("<!--", "-->")
-        self.removePair("{|", "|}")
-        self.removePair("{{", "}}")
-        self.removePair("<gallery>", "</gallery>")
-        self.removePair("<div", "</div>")
-        self.removePair("<math>", "</math>")
-
-        self.subst.append(
-            r"(\[\[[^\]\|\[]*\|)(.*?)(\]\])", r"{}\1{}\2{}\3{}".format(
-                self.op, self.ed, self.op, self.ed
-            )
-        )
-
-        self.removePart(r"(< ?/? ?(br|center|sup|sub) ?/? ?>)")
-        self.removePart(r"(<br ?/? ?>)")
-        self.removePart(r"(<ref[^>]*?/ ?>)")
-        self.removePart(r"(?s)(<ref[^>/]*?>.*?</ref>)")
-        self.removePart(r"(?s)(?<!\[)(\[(?!\[) *http://.*?\])")
-        self.removePart(r"(https?://\S*)")
-        self.removePart(r"(?s)(\[\[[^\]\|]*?\:.*?\]\])")
-        self.removePart(r"(\'{2,})")
-        self.removePart(ur"(?ms)^(== ?(อ้างอิง|ดูเพิ่ม|แหล่งข้อมูลอื่น|เชิงอรรถ) ?== ?$.*)$")
-        self.removePart(r"(?m)(^=+ ?|=+ ?$)")
-        self.removePart(r"(?m)^([\:\*\#]+)")
-
-        self.removePair("[", "[")
-        self.removePair("]", "]")
-
-        self.subst.append(self.ed + self.op, '')
-
-    def removePair(self, begin, end):
-        self.subst.append(lre.escape(begin), self.op + begin)
-        self.subst.append(lre.escape(end), end + self.ed)
-
-    def removePart(self, pat):
-        self.subst.append(pat, self.op + r"\1" + self.ed)
-
-    def remove(self, text):
-        return self.subst.process(text)
-
-    def convert(self, text):
-        return (cgi.escape(text).replace("\n", "<br/>")
-                                .replace(self.op, '<span class="eqtext">')
-                                .replace(self.ed, '</span>'))
-
-    def length(self, text):
-        text = (text.replace("(", "[")
-                    .replace(")", "]")
-                    .replace(self.op, "(")
-                    .replace(self.ed, ")"))
-        level = 0
-        ans = 0
-        for i in text:
-            if i == "(":
-                level += 1
-            elif i == ")":
-                level -= 1
-            elif level == 0 and self.valid(i):
-                ans += 1
-        return ans
-
-    def valid(self, ch):
-        blacklist = [" ", "\n"]
-        return ch not in blacklist

@@ -5,7 +5,7 @@ import os
 from p_flask import Flask, request, render_template, g, Blueprint
 import utils
 from mwoauth import mwoauth
-from views import frontend, dykchecker, wikitranslator, categorymover
+from views import frontend, dykchecker, wikitranslator, categorymover, contribtracker
 from messages import msg
 import inject
 
@@ -17,6 +17,7 @@ DEFAULT_BLUEPRINTS = (
     dykchecker,
     wikitranslator,
     categorymover,
+    contribtracker,
 )
 
 def setup(app, blueprints=None):

@@ -27,4 +27,7 @@ tools = [
         'name': 'categorymover',
         'disabled': True,
     },
+    {
+        'name': 'contribtracker',
+    },
 ]

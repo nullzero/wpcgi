@@ -1,0 +1,53 @@
+{% from "macros/_helpers.html" import render_field, header %}
+{% extends "layout.html" %}
+
+{% block content %}
+  {{ header(msg['contribtracker-title']) }}
+  <br />
+  <form action="?submit" method="post">
+    {{ form.tabStatus() }}
+    <div class="row">
+      <div class="col-lg-11 form vbarr vbarl">
+          <div class="tabbable">
+              <ul class="nav nav-tabs">
+                  <li class="{{ data.isActivePage }}">
+                      <a id="tab-link-page" href="#tab-page" data-toggle="tab">{{ msg['contribtracker-tab-page'] }}</a>
+                  </li>
+                  <li class="{{ data.isActiveContent }}">
+                      <a id="tab-link-content" href="#tab-content" data-toggle="tab">{{ msg['contribtracker-tab-content'] }}</a>
+                  </li>
+              </ul>
+              <div class="tab-content">
+                  <div class="tab-pane col-lg-offset-3 {{ data.isActivePage }}" id="tab-page">
+                      {{ render_field(form.title,
+                                      placeholder=msg['contribtracker-title-placeholder'],
+                                      labelsize=2,
+                                      fieldsize=6)
+                      }}
+                  </div>
+                  <div class="tab-pane {{ data.isActiveContent }}" id="tab-content">
+                      {{ render_field(form.content,
+                                      labelsize=12,
+                                      fieldsize=12,
+                                      rows=10,
+                                      placeholder=msg['contribtracker-content-placeholder'])
+                      }}
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div class="col-lg-1">
+          {{ form.proceed(class="btn btn-info btn-small", style="width: 100px; height: 50px") }}
+          <input style="margin-top: 5px; width: 100px" type="button" id="btn-save" class="btn disabled" value="{{ msg['contribtracker-button-save'] }}"/>
+      </div>
+
+    </div>
+  </form>
+  {% if data.text %}
+    {{ msg['contribtracker-word-count'] }}: {{ data.length }}
+    <hr>
+    <pre id="text">{{ data.text|safe }}</pre>
+    <pre id="text">{{ data.swath|safe }}</pre>
+  {% endif %}
+{% endblock %}
