@@ -170,7 +170,7 @@ class TextEngine(object):
 
         trimtext = "".join(trimtext)
 
-        p = subprocess.Popen(["/data/project/nullzerobot/externals/swath", "-b", delim, "-u", "u,u"],
+        p = subprocess.Popen(["/data/project/nullzerobot/local/bin/swath", "-b", delim, "-u", "u,u"],
                              stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE)
         output = p.communicate(input=trimtext.encode('utf-8'))[0].decode('utf-8')
