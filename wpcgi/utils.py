@@ -175,7 +175,7 @@ class TextEngine(object):
                              stdout=subprocess.PIPE)
         output = p.communicate(input=trimtext.encode('utf-8'))[0].decode('utf-8')
         text = []
-        blacklist = [" ", "\n", "(", ")"]
+        blacklist = [" ", "\n", "(", ")", ""]
         for i in output:
             if i in blacklist:
                 text.append(delim)
@@ -194,7 +194,7 @@ class TextEngine(object):
             if item.group() not in blacklist:
                 cnt += 1
                 output.append(item.group().replace('[', '(').replace(']', ')'))
-        print cnt, charlimit / 2, charlimit / 12
+        # print cnt, charlimit / 2, charlimit / 12
         cnt = max(cnt, charlimit / 10)
         cnt = min(cnt, charlimit / 2)
         return (cnt, " ".join(output))
