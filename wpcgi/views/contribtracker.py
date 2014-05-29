@@ -22,20 +22,18 @@ def user(user=None):
     return NotImplemented
 
 @contribtracker.route('/text/<mode>')
-@contribtracker.route('/text/<mode>/<title>')
+@contribtracker.route('/text/<mode>/<path:title>')
 @langswitch
 def text(**kwargs):
     print kwargs
     if request.args.get('submit') is not None:
         active = request.form.get('tabStatus')
-        print 'active', active
         params = []
         if active == 'page':
             mode = 'page'
             params.append('title')
         else:
             mode = 'content'
-        print get_params(params)
         return redirect(url_for('.text', mode=mode, **get_params(params)), code=c.REQUEST)
 
     if not request.form.get('tabStatus', False):
