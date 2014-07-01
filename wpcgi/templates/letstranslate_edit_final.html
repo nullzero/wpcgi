@@ -1,0 +1,36 @@
+{% from "macros/_helpers.html" import render_field, header %}
+{% extends "layout.html" %}
+
+{% block content %}
+  {{ header(msg['letstranslate-title']) }}
+  <form action="{{ url_for('.edit', rid=data.rid, mode='final') }}" method="post">
+    <div class="col-lg-10 col-lg-offset-1">
+      <div class="row">
+        <div class="col-lg-6 form-horizontal">
+          {{ render_field(form.pid, placeholder=msg['letstranslate-pid-placeholder'], disabled=True) }}
+          {{ render_field(form.name, placeholder=msg['letstranslate-name-placeholder'], disabled=True) }}
+          {{ render_field(form.email, placeholder=msg['letstranslate-email-placeholder'], disabled=True) }}
+        </div>
+        <div class="col-lg-6 form-horizontal">
+          {{ render_field(form.lang, placeholder=msg['letstranslate-lang-placeholder'], choices=c.FORM_ALLLANGS, disabled=True) }}
+          {{ render_field(form.title, placeholder=msg['letstranslate-title-placeholder'], disabled=True) }}
+          {{ render_field(form.name2, placeholder=msg['letstranslate-name2-placeholder'], disabled=True) }}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="row">
+        <div class="col-lg-12 form">
+          {{ render_field(form.content2, placeholder=msg['letstranslate-content2-placeholder'],
+                          labelsize=12, fieldsize=12, rows=10, disabled=True) }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 form">
+          {{ render_field(form.content, placeholder=msg['letstranslate-content-placeholder'],
+                          labelsize=12, fieldsize=12, rows=10, disabled=True) }}
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock %}

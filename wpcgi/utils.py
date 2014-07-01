@@ -70,7 +70,7 @@ def newtry(local):
             if e.flash_msg:
                 flash(e.flash_msg, e.flash_level)
         else:
-            raise e
+            raise
     else:
         hasError = False
     if hasError:

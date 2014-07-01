@@ -1,4 +1,4 @@
-{% macro render_field(field, input_group=False, before='', after='', labelsize=4, fieldsize=8, choices=None) %}
+{% macro render_field(field, input_group=False, before='', after='', labelsize=4, fieldsize=8, choices=None, disabled=False) %}
 <div class="form-group {% if field.errors %}has-error{% endif %}">
   {% if field.label %}
     {{ field.label(class="col-lg-{} control-label".format(labelsize)) }}
@@ -10,13 +10,17 @@
     {% else %}
       {{ before|safe }}
     {% endif %}
-    {{ render_helper(field, errors=field.errors, **kwargs)}}
+    {% if disabled %}
+      {{ render_helper(field, errors=field.errors, readonly=None, **kwargs)}}
+    {% else %}
+      {{ render_helper(field, errors=field.errors, **kwargs)}}
+    {% endif %}
     {% if input_group %}
         {% if after %}<span class="input-group-addon">{{ after|safe }}</span>{% endif %}
     {% endif %}
     {% if choices %}
       <div class="input-group-btn">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"/></button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" {% if disabled %}disabled{% endif %}><span class="caret"/></button>
         <ul class="dropdown-menu" data-id="{{ field.id }}">
           {% for choice in choices %}
             <li><a href="#{{ choice[0] }}">{{ choice[1] }}</a></li>

@@ -1,10 +1,9 @@
 #!/data/project/nullzerobot/python/bin/python
 
 from p_form import Form, c_validators as v
-from wtforms import TextField, TextAreaField
+from wtforms import TextField
 from wtforms.widgets import SubmitInput
 from messages import msg
-from forms import fam_default
 
 class CategoryMoverForm(Form):
     pass

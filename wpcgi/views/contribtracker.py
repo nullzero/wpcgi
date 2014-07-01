@@ -25,7 +25,6 @@ def user(user=None):
 @contribtracker.route('/text/<mode>/<path:title>')
 @langswitch
 def text(**kwargs):
-    print kwargs
     if request.args.get('submit') is not None:
         active = request.form.get('tabStatus')
         params = []

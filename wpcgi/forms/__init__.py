@@ -1,10 +1,13 @@
 #!/data/project/nullzerobot/python/bin/python
 
-from wtforms import SelectField
-from messages import msg
+from p_form import Form
 
-def fam_default(*args, **kwargs):
-    return SelectField(*args, choices=[
-        ('wikipedia', msg['form-fam-wikipedia']),
-        ('wikibooks', msg['form-fam-wikibooks'])
-    ], **kwargs)
+def getField(template, fieldlist):
+    class Dummy(Form):
+        pass
+
+    for field in fieldlist:
+        setattr(Dummy, field, getattr(template, field))
+
+    return Dummy
+

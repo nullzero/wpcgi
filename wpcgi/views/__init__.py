@@ -5,3 +5,4 @@ from views.dykchecker import dykchecker
 from views.wikitranslator import wikitranslator
 from views.categorymover import categorymover
 from views.contribtracker import contribtracker
+from views.letstranslate import letstranslate

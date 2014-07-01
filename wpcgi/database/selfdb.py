@@ -11,7 +11,7 @@ import wprobot
 import pywikibot
 
 from database import Database
-from sqlalchemy import Column, Integer, DateTime, String, Table
+from sqlalchemy import Column, Integer, DateTime, String, Table, Text
 import wpcgi.error
 from mwoauth import mwoauth # fake mwoauth
 
@@ -56,6 +56,21 @@ class SelfDatabase(Database):
                 Column('note', String(300), nullable=False),
             )
 
+        class LetsTranslate(self.base):
+            __table__ = Table('lets_translate', self.metadata,
+                Column('rid', Integer, primary_key=True),
+                Column('date', DateTime, nullable=False),
+                Column('pid', Integer, nullable=False),
+                Column('lang', String(7), nullable=False),
+                Column('title', String(255), nullable=False),
+                Column('email', String(255), nullable=False),
+                Column('name', String(255), nullable=False),
+                Column('name2', String(255), nullable=True),
+                Column('status', Integer, nullable=False),
+                Column('content', Text, nullable=False),
+                Column('content2', Text, nullable=True),
+            )
+
         class User(self.base):
             __table__ = Table('user', self.metadata,
                 Column('uid', Integer, primary_key=True),
@@ -65,6 +80,7 @@ class SelfDatabase(Database):
 
         self.CategoryMover = CategoryMover
         self.User = User
+        self.LetsTranslate = LetsTranslate
 
         self.metadata.create_all()
 

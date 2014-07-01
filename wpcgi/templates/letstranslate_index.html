@@ -1,0 +1,22 @@
+{% from "macros/_helpers.html" import render_field, header %}
+{% extends "layout.html" %}
+
+{% macro link(title, mode) %}
+<li>
+  <a href="{{ url_for('.' + title, mode=mode) }}">
+    {{ msg['letstranslate-' + title] }}
+  </a>
+  - {{ msg['letstranslate-' + title + '-description'] }}
+</li>
+{% endmacro %}
+
+{% block content %}
+  {{ header(msg['letstranslate-title']) }}
+  <ul>
+    {{ link('getarticle') }}
+    {{ link('edit') }}
+    {{ link('list', mode='translated') }}
+    {{ link('list', mode='reserved') }}
+    {{ link('list', mode='final') }}
+  </ul>
+{% endblock %}

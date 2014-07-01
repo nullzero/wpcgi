@@ -4,3 +4,4 @@ from models.dykchecker import DYKChecker
 from models.wikitranslator import WikiTranslator
 from models.categorymover import CategoryMover
 from models.contribtracker import ContribTracker
+from models.letstranslate import LetsTranslate

@@ -30,4 +30,7 @@ tools = [
     {
         'name': 'contribtracker',
     },
+    {
+        'name': 'letstranslate',
+    },
 ]

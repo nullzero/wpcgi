@@ -58,7 +58,6 @@ class MWOAuth(object):
 
         @self.bp.route('/logout')
         def logout():
-            print 'asd'
             session['mwo_token'] = None
             session['username'] = None
             return redirect(gourl())
