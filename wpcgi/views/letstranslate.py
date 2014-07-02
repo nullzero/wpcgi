@@ -7,6 +7,7 @@ from normalize import normalize_url, normalize
 from forms.letstranslate import LetsTranslateFormCreator
 from models import LetsTranslate
 from messages import msg
+from database.letstranslate import STATUS
 import c
 
 letstranslate = Blueprint('letstranslate', __name__,
@@ -36,6 +37,7 @@ def list(mode):
 @langswitch
 def edit(mode=None, rid=None):
     additional = {}
+    suppress_flash = False
     if mode == 'translated':
         file = 'letstranslate_edit_translated.html'
         nextstep = '.edit'
@@ -47,12 +49,14 @@ def edit(mode=None, rid=None):
         file = 'letstranslate_edit_reserved.html'
         nextstep = '.index'
         nextstepdict = {}
-    elif mode == 'final':
+    elif mode == 'final' or mode == 'rejected' or mode == 'done':
         file = 'letstranslate_edit_final.html'
-        nextstep = 'list'
+        nextstep = '.list'
         nextstepdict = {
-            'mode': 'final'
+            'mode': mode
         }
+        if mode == 'rejected' or mode == 'done':
+            suppress_flash = True
     elif mode is None and rid is None:
         file = 'letstranslate_new.html'
         mode = 'new'
@@ -67,12 +71,13 @@ def edit(mode=None, rid=None):
 
     if not form.validate(data):
         fun = lambda: data.renderEdit()
-        onSuccess = lambda _: render(file, tool=__name__, form=form, data=data)
+        onSuccess = lambda _: render(file, tool=__name__, form=form, data=data, mode=mode, status=STATUS)
         onFail = lambda: redirect(url_for('.index'))
     else:
         fun = lambda: data.save()
         def onSuccess(_):
-            flash(msg['letstranslate-save-success'], 'success')
+            if not suppress_flash:
+                flash(msg['letstranslate-save-success'], 'success')
             return redirect(url_for(nextstep, **nextstepdict))
         onFail = lambda: redirect(url_for('.index'))
 
@@ -87,6 +92,19 @@ def reject(mode, rid):
     def onSuccess(_):
         flash(msg['letstranslate-reject-success'], 'success')
         return redirect(url_for('.list', mode=mode))
+    onFail = lambda: redirect(url_for('.index'))
+
+    return newtry(locals())
+
+@letstranslate.route('/recover/<rid>')
+@langswitch
+def recover(rid):
+    data = LetsTranslate(rid=rid)
+
+    fun = lambda: data.recover()
+    def onSuccess(_):
+        flash(msg['letstranslate-recover-success'], 'success')
+        return redirect(url_for('.list', mode='rejected'))
     onFail = lambda: redirect(url_for('.index'))
 
     return newtry(locals())

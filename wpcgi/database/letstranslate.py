@@ -54,7 +54,11 @@ class LetsTranslateDatabase(SelfDatabase):
             self.CategoryMover.rid == rid,
         ).first()
 
+        if not data:
+            raise wpcgi.error.IDNotFoundError()
+
         data.status = status
+        self.session.commit()
 
     def reject(self, rid):
         data = self.session.query(self.LetsTranslate).filter(
@@ -65,6 +69,17 @@ class LetsTranslateDatabase(SelfDatabase):
             raise wpcgi.error.IDNotFoundError()
 
         data.status = STATUS.REJECTED
+        self.session.commit()
+
+    def recover(self, rid):
+        data = self.session.query(self.LetsTranslate).filter(
+            self.LetsTranslate.rid == rid,
+        ).first()
+
+        if not data:
+            raise wpcgi.error.IDNotFoundError()
+
+        data.status = STATUS.RESERVED
         self.session.commit()
 
 if __name__ == "__main__":

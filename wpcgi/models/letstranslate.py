@@ -81,3 +81,6 @@ class LetsTranslate(Model):
 
     def reject(self):
         self.db.reject(self.rid)
+
+    def recover(self):
+        self.db.recover(self.rid)

@@ -55,6 +55,7 @@ messages['th'] = {
 
     'validator-require': u'ต้องกรอกช่องนี้',
     'validator-not-number': u'ต้องเป็นตัวเลข',
+    'validator-invalid-email': u'ที่อยู่อีเมลไม่ถูกต้อง',
 
     'form-fam-wikipedia': u'wikipedia (วิกิพีเดีย)',
     'form-fam-wikibooks': u'wikibooks (วิกิตำรา)',

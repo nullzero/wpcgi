@@ -27,6 +27,16 @@ NumberRange = _NumberRange
 
 ##############################
 
+class _Email(Email):
+    def __init__(self, *args, **kwargs):
+        if 'message' not in kwargs:
+            kwargs['message'] = msg['validator-invalid-email']
+        super(_Email, self).__init__(*args, **kwargs)
+
+Email = _Email
+
+##############################
+
 def Number(negative=False, decimal=False):
     charset = r'\d'
     if negative:

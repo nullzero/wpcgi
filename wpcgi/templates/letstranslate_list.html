@@ -13,6 +13,8 @@
 {% extends "letstranslate_layout.html" %}
 
 {% block subcontent %}
+  <h3>{{ msg['letstranslate-index-' + mode] }}</h3>
+  <br />
   {% if data.results %}
     <div class='col-lg-8 col-lg-offset-2'>
       <table class="table" style="text-align: center;">
@@ -42,6 +44,6 @@
       </table>
     </div>
   {% else %}
-    <center><i>{{ msg['categorymover-no-item'] }}</i></center>
+    <center><i>{{ msg['letstranslate-no-item'] }}</i></center>
   {% endif %}
 {% endblock %}

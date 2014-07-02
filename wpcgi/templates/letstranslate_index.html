@@ -5,9 +5,9 @@
 <div class="row">
   <a href="{{ url_for('.' + title, mode=mode) }}" class="btn btn-default btn-lg col-lg-10 col-lg-offset-1 vspace">
     {% if mode %}
-      {{ msg['letstranslate-index-{0}-{1}'.format(title, mode)] }}
+      {{ msg['letstranslate-index-{0}'.format(mode)] }}
     {% else %}
-      {{ msg['letstranslate-index-{0}'.format(title)] }}
+      {{ msg['letstranslate-index-new'] }}
     {% endif %}
   </a>
 </div>

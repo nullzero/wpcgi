@@ -1,8 +1,8 @@
 {% from "macros/_helpers.html" import render_field, header %}
-{% extends "letstralsate_layout.html" %}
+{% extends "letstranslate_layout.html" %}
 
 {% block subcontent %}
-  <form action="{{ url_for('.edit', rid=data.rid, mode='final') }}" method="post">
+  <form action="{{ url_for('.edit', rid=data.rid, mode=mode) }}" method="post">
     <div class="col-lg-10 col-lg-offset-1">
       <div class="row">
         <div class="col-lg-6 form-horizontal">
@@ -31,9 +31,18 @@
         </div>
       </div>
     </div>
-    <input type="submit" value="{{ msg['letstranslate-button-submit'] }}" class="btn btn-success col-lg-2 col-lg-offset-4 vspace"/>
-    <a href="{{ url_for('.reject', mode='final', rid=data.rid) }}" class="btn btn-danger col-lg-2 vspace hspace">
-      {{ msg['letstranslate-button-reject'] }}
-    </a>
+    {% if mode == 'final' %}
+      <input type="submit" value="{{ msg['letstranslate-button-submit'] }}" class="btn btn-success col-lg-2 col-lg-offset-4 vspace"/>
+      <a href="{{ url_for('.reject', mode='final', rid=data.rid) }}" class="btn btn-danger col-lg-2 vspace hspace">
+        {{ msg['letstranslate-button-reject'] }}
+      </a>
+    {% elif mode == 'rejected' %}
+      <input type="submit" value="{{ msg['letstranslate-button-submit'] }}" class="btn btn-success col-lg-2 col-lg-offset-4 vspace"/>
+      <a href="{{ url_for('.recover', rid=data.rid, status=status.RESERVED) }}" class="btn btn-primary col-lg-2 vspace hspace">
+        {{ msg['letstranslate-button-recover'] }}
+      </a>
+    {% elif mode == 'done' %}
+      <input type="submit" value="{{ msg['letstranslate-button-submit'] }}" class="btn btn-success col-lg-2 col-lg-offset-5 vspace"/>
+    {% endif %}
   </form>
 {% endblock %}
