@@ -11,6 +11,7 @@ messages['en'] = {
     'core-encounter-error': 'If you encounter errors, please contact '
                             '<a href="//th.wikipedia.org/wiki/User_talk:Nullzero">tool\'s owner</a>',
     'core-error': 'Error: ',
+    'core-success': u'Success!',
 
     'mwoauth-login': 'Sign in',
 
@@ -38,6 +39,7 @@ messages['th'] = {
     'core-encounter-error': u'หากพบข้อผิดพลาด โปรดติดต่อ'
                             u'<a href="//th.wikipedia.org/wiki/User_talk:Nullzero">ผู้ดูแลเครื่องมือ</a>',
     'core-error': u'ข้อผิดพลาด',
+    'core-success': u'สำเร็จ!',
 
     'mwoauth-login': u'เข้าสู่ระบบ',
     'mwoauth-logout': u'ออกจากระบบ',

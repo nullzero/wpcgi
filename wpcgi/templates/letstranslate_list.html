@@ -10,13 +10,13 @@
 </th>
 {% endmacro %}
 
-{% extends "layout.html" %}
+{% extends "letstranslate_layout.html" %}
 
-{% block content %}
+{% block subcontent %}
   {% if data.results %}
     <div class='col-lg-8 col-lg-offset-2'>
       <table class="table" style="text-align: center;">
-        {{ headtable(wid=10, wdate=25, wname=25, wtitle=25) }}
+        {{ headtable(wid=10, wdate=20, wname=20, wtitle=20) }}
         {% for row in data.results %}
           <tr>
             <td style="vertical-align: middle;" rowspan="2">{{ row.rid }}</td>
@@ -27,8 +27,8 @@
             <td>{{ row.title }}</td>
             <td style="vertical-align: middle; align: center;" rowspan="2">
               <a href="{{ url_for('letstranslate.edit', rid=row.rid, mode=mode) }}"
-                 class="btn btn-sm btn-primary col-lg-6 col-lg-offset-3" style="width: 50px">
-                {{ msg['categorymover-row-view'] }}
+                 class="btn btn-sm btn-primary col-lg-6 col-lg-offset-3" style="width: 80px">
+                {{ msg['letstranslate-row-view'] }}
               </a>
             </td>
           </tr>

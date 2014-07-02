@@ -1,5 +1,5 @@
 {% from "macros/_helpers.html" import render_field, header %}
-{% extends "layout.html" %}
+{% extends "letstranslate_layout.html" %}
 
 {% macro link(title) %}
 <li>
@@ -10,8 +10,7 @@
 </li>
 {% endmacro %}
 
-{% block content %}
-  {{ header(msg['letstranslate-title']) }}
+{% block subcontent %}
   <ul>
     {{ link('getarticle') }}
     {{ link('submittranslated') }}

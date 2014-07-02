@@ -1,22 +1,35 @@
 {% from "macros/_helpers.html" import render_field, header %}
-{% extends "layout.html" %}
+{% extends "letstranslate_layout.html" %}
 
-{% macro link(title, mode) %}
-<li>
-  <a href="{{ url_for('.' + title, mode=mode) }}">
-    {{ msg['letstranslate-' + title] }}
+{% macro link(title, mode=None) %}
+<div class="row">
+  <a href="{{ url_for('.' + title, mode=mode) }}" class="btn btn-default btn-lg col-lg-10 col-lg-offset-1 vspace">
+    {% if mode %}
+      {{ msg['letstranslate-index-{0}-{1}'.format(title, mode)] }}
+    {% else %}
+      {{ msg['letstranslate-index-{0}'.format(title)] }}
+    {% endif %}
   </a>
-  - {{ msg['letstranslate-' + title + '-description'] }}
-</li>
+</div>
 {% endmacro %}
 
-{% block content %}
-  {{ header(msg['letstranslate-title']) }}
-  <ul>
-    {{ link('getarticle') }}
-    {{ link('edit') }}
-    {{ link('list', mode='translated') }}
-    {{ link('list', mode='reserved') }}
-    {{ link('list', mode='final') }}
-  </ul>
+{% block subcontent %}
+  <div class="row">
+    <div class="col-lg-4">
+      <h3 class="center">{{ msg['letstranslate-index-for-translator'] }}</h3>
+      <!-- {{ link('getarticle') }} -->
+      {{ link('edit') }}
+    </div>
+    <div class="col-lg-4 vbarl">
+      <h3 class="center">{{ msg['letstranslate-index-for-formatter'] }}</h3>
+      {{ link('list', mode='translated') }}
+      {{ link('list', mode='reserved') }}
+    </div>
+    <div class="col-lg-4 vbarl">
+      <h3 class="center">{{ msg['letstranslate-index-for-organizer'] }}</h3>
+      {{ link('list', mode='final') }}
+      {{ link('list', mode='rejected') }}
+      {{ link('list', mode='done') }}
+    </div>
+  </div>
 {% endblock %}

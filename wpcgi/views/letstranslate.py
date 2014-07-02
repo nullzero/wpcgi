@@ -14,12 +14,12 @@ letstranslate = Blueprint('letstranslate', __name__,
 @letstranslate.route('/')
 @langswitch
 def index():
-    return render('letstranslate_index.html')
+    return render('letstranslate_index.html', tool=__name__)
 
 @letstranslate.route('/get_article')
 @langswitch
 def getarticle():
-    return render('letstranslate_get_article.html')
+    return render('letstranslate_get_article.html', tool=__name__)
 
 @letstranslate.route('/<mode>')
 @langswitch
@@ -35,6 +35,7 @@ def list(mode):
 @letstranslate.route('/<mode>/<rid>')
 @langswitch
 def edit(mode=None, rid=None):
+    additional = {}
     if mode == 'translated':
         file = 'letstranslate_edit_translated.html'
         nextstep = '.edit'
@@ -48,13 +49,20 @@ def edit(mode=None, rid=None):
         nextstepdict = {}
     elif mode == 'final':
         file = 'letstranslate_edit_final.html'
+        nextstep = 'list'
+        nextstepdict = {
+            'mode': 'final'
+        }
     elif mode is None and rid is None:
         file = 'letstranslate_new.html'
         mode = 'new'
         nextstep = '.index'
         nextstepdict = {}
 
-    form = LetsTranslateFormCreator(mode=mode)(request.form)
+        if not request.form.get('lang', False):
+            additional['lang'] = 'en'
+
+    form = LetsTranslateFormCreator(mode=mode)(request.form, **additional)
     data = LetsTranslate(form, rid=rid, mode=mode)
 
     if not form.validate(data):
@@ -73,4 +81,12 @@ def edit(mode=None, rid=None):
 @letstranslate.route('/reject/<mode>/<rid>')
 @langswitch
 def reject(mode, rid):
-    return render('letstranslate_index.html')
+    data = LetsTranslate(rid=rid, mode=mode)
+
+    fun = lambda: data.reject()
+    def onSuccess(_):
+        flash(msg['letstranslate-reject-success'], 'success')
+        return redirect(url_for('.list', mode=mode))
+    onFail = lambda: redirect(url_for('.index'))
+
+    return newtry(locals())

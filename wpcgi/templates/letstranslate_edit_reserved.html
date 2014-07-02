@@ -1,8 +1,7 @@
 {% from "macros/_helpers.html" import render_field, header %}
-{% extends "layout.html" %}
+{% extends "letstranslate_layout.html" %}
 
-{% block content %}
-  {{ header(msg['letstranslate-title']) }}
+{% block subcontent %}
   <form action="{{ url_for('.edit', rid=data.rid, mode='reserved') }}" method="post">
     <div class="col-lg-10 col-lg-offset-1">
       <div class="row">

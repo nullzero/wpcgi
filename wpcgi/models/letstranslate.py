@@ -32,6 +32,10 @@ class LetsTranslate(Model):
             status = STATUS.RESERVED
         elif self.mode == 'final':
             status = STATUS.FINAL
+        elif self.mode == 'rejected':
+            status = STATUS.REJECTED
+        elif self.mode == 'done':
+            status = STATUS.DONE
 
         self.results = filter(lambda x: x.status == status, self.list)
 
@@ -59,6 +63,8 @@ class LetsTranslate(Model):
         elif self.mode == 'reserved':
             fieldlist = ['content2']
             basedata['status'] = STATUS.FINAL
+        elif self.mode == 'final':
+            basedata['status'] = STATUS.DONE
 
         for field in fieldlist:
             basedata[field] = getattr(self.form, field).data
@@ -72,3 +78,6 @@ class LetsTranslate(Model):
             return self.rid
         else:
             return self.db.new(**basedata)
+
+    def reject(self):
+        self.db.reject(self.rid)

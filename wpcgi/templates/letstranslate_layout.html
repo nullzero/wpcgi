@@ -1,0 +1,16 @@
+{% from "macros/_helpers.html" import render_field, header %}
+{% extends "layout.html" %}
+
+{% block content %}
+  {{ header(msg['letstranslate-title']) }}
+  <br/>
+
+  <div class="row">
+    {% block subcontent %}
+    {% endblock %}
+  </div>
+
+  <div class="row">
+    <a href="{{ url_for('.index') }}">{{ msg['letstranslate-back-to-home'] }}</a>
+  </div>
+{% endblock %}

@@ -37,6 +37,7 @@ def inject_methods(app):
             kwargs.update({'data-toogle': 'tooltip',
                            'data-container': 'body',
                            'data-html': 'true',
+                           'data-placement': 'top',
                            'title': tooltip + errorsmsg
                           })
             clss += ' error'

@@ -1,18 +1,26 @@
 {% from "macros/_helpers.html" import render_field, header %}
-{% extends "layout.html" %}
+{% extends "letstranslate_layout.html" %}
 
-{% block content %}
-  {{ header(msg['letstranslate-title']) }}
+{% block subcontent %}
   <form action="{{ url_for('.edit') }}" method="post">
     <div class="col-lg-10 col-lg-offset-1">
       <div class="row">
         <div class="col-lg-6 form-horizontal">
-          {{ render_field(form.pid, placeholder=msg['letstranslate-pid-placeholder']) }}
-          {{ render_field(form.email, placeholder=msg['letstranslate-email-placeholder']) }}
+          {{ render_field(form.pid,
+                          placeholder=msg['letstranslate-pid-placeholder'],
+                          tooltip=msg['letstranslate-pid-tooltip']) }}
+          {{ render_field(form.email,
+                          placeholder=msg['letstranslate-email-placeholder'],
+                          tooltip=msg['letstranslate-email-tooltip']) }}
         </div>
         <div class="col-lg-6 form-horizontal">
-          {{ render_field(form.lang, placeholder=msg['letstranslate-lang-placeholder'], choices=c.FORM_ALLLANGS) }}
-          {{ render_field(form.title, placeholder=msg['letstranslate-title-placeholder']) }}
+          {{ render_field(form.lang,
+                          placeholder=msg['letstranslate-lang-placeholder'],
+                          tooltip=msg['letstranslate-lang-tooltip'],
+                          choices=c.FORM_ALLLANGS) }}
+          {{ render_field(form.title,
+                          placeholder=msg['letstranslate-title-placeholder'],
+                          tooltip=msg['letstranslate-title-tooltip']) }}
         </div>
         <div class="col-lg-6 col-lg-offset-3 form-horizontal">
           {{ form.name.label(class="col-lg-4 control-label") }}
@@ -20,7 +28,10 @@
             <span class="input-group-addon">
               {{ form.wikiuser }}
             </span>
-            {{ form.name(placeholder=msg['letstranslate-name-placeholder'], class="form-control") }}
+            {{ render_helper(form.name,
+                             placeholder=msg['letstranslate-name-placeholder'],
+                             tooltip=msg['letstranslate-name-tooltip'],
+                             class="form-control") }}
           </div>
         </div>
       </div>
@@ -28,7 +39,9 @@
     <div class="col-lg-12">
       <div class="row">
         <div class="col-lg-12 form">
-          {{ render_field(form.content, placeholder=msg['letstranslate-content-placeholder'],
+          {{ render_field(form.content,
+                          placeholder=msg['letstranslate-content-placeholder'],
+                          tooltip=msg['letstranslate-content-tooltip'],
                           labelsize=12, fieldsize=12, rows=10) }}
         </div>
       </div>
