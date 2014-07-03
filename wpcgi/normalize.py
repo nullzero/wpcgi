@@ -1,7 +1,7 @@
 #!/data/project/nullzerobot/python/bin/python
 
 from functools import wraps
-from p_flask import redirect, url_for
+from flask import redirect, url_for
 import c
 
 def normalize_url_title(dic):

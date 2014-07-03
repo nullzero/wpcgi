@@ -1,7 +1,7 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-from p_flask import g, request, after_this_request
+from flask import g, request, after_this_request
 from messages import msg
 import time
 from mwoauth import mwoauth

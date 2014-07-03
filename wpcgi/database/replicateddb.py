@@ -3,7 +3,7 @@
 
 try:
     import pyrobot
-    from p_flask import g
+    from flask import g
     from utils import profile
 except ImportError:
     import os

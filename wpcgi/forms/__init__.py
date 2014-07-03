@@ -1,6 +1,6 @@
 #!/data/project/nullzerobot/python/bin/python
 
-from p_form import Form
+from flask.ext.wtf import Form
 
 def getField(template, fieldlist):
     class Dummy(Form):

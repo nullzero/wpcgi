@@ -2,7 +2,8 @@
 
 from flask import *
 from functools import wraps
-from messages import msg
+from wpcgi.messages import msg
+import flask
 
 class _Blueprint(Blueprint):
     '''
@@ -33,10 +34,13 @@ class _Blueprint(Blueprint):
 
         return super(_Blueprint, self).route(*args, methods=methods, **kwargs)
 
-Blueprint = _Blueprint
+flask.Blueprint = _Blueprint
 
-def render(*args, **kwargs):
+def _render(*args, **kwargs):
     tool = kwargs.pop('tool', None)
     if tool:
         tool = tool.split('.')[-1]
     return render_template(*args, tool=tool, msg=msg, **kwargs)
+
+flask.render = _render
+render = _render # backward compat

@@ -7,7 +7,7 @@ import os
 
 try:
     from wpcgi import app
-    from p_flask import g
+    from flask import g
     from utils import profile, debug
 except ImportError:
     withoutEngine = True

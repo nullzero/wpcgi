@@ -4,7 +4,7 @@
 import pyrobot
 import pywikibot
 from wp import lre
-from p_flask import request, g, flash, url_for
+from flask import request, g, flash, url_for
 import subprocess
 import cgi
 

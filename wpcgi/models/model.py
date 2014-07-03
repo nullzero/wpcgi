@@ -1,7 +1,7 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-from p_flask import g
+from flask import g
 from utils import debug
 
 class Model(object):

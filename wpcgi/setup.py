@@ -1,8 +1,9 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
+import package
 import os
-from p_flask import Flask, request, render_template, g, Blueprint
+from flask import Flask, request, render_template, g, Blueprint
 import utils
 from mwoauth import mwoauth
 from views import frontend, dykchecker, wikitranslator, categorymover, contribtracker, letstranslate

@@ -1,6 +1,7 @@
 #!/data/project/nullzerobot/python/bin/python
 
-from p_form import Form, c_validators as v
+from flask.ext.wtf import Form
+import wtforms.validators as v
 from wtforms import TextField
 from wtforms.widgets import SubmitInput
 from messages import msg

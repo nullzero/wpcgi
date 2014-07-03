@@ -1,7 +1,7 @@
 #!/data/project/nullzerobot/python/bin/python
 
 from functools import wraps
-from p_flask import request, make_response, redirect, flash, render
+from flask import request, make_response, redirect, flash, render
 from messages import msg
 from mwoauth import mwoauth
 from utils import gourl
