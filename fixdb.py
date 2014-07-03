@@ -1,13 +1,18 @@
 #! /usr/bin/env python
 import MySQLdb
 
+'''
 host = "localhost"
 passwd = "password"
 user = "root"
 dbname = "test"
+'''
 
-db = MySQLdb.connect(host=host, user=user, passwd=passwd, db=dbname)
-# db = MySQLdb.connect(read_default_file='~/replica.my.cnf')
+host = "tools-db"
+dbname = "s51093__tools"
+
+# db = MySQLdb.connect(host=host, user=user, passwd=passwd, db=dbname)
+db = MySQLdb.connect(host=host, db=dbname, read_default_file='~/replica.my.cnf')
 cursor = db.cursor()
 
 cursor.execute("ALTER DATABASE `%s` CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci'" % dbname)
