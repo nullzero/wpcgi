@@ -65,6 +65,7 @@ def edit(mode=None, rid=None):
 
         if not request.form.get('lang', False):
             additional['lang'] = 'en'
+            additional['fam'] = 'wikipedia'
 
     form = LetsTranslateFormCreator(mode=mode)(request.form, **additional)
     data = LetsTranslate(form, rid=rid, mode=mode)

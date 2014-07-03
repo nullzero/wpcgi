@@ -62,6 +62,8 @@ class SelfDatabase(Database):
                 Column('date', DateTime, nullable=False),
                 Column('pid', Integer, nullable=False),
                 Column('lang', String(7), nullable=False),
+                Column('fam', String(31), nullable=False),
+                Column('ftitle', String(255), nullable=False),
                 Column('title', String(255), nullable=False),
                 Column('email', String(255), nullable=False),
                 Column('name', String(255), nullable=False),
@@ -90,7 +92,7 @@ class SelfDatabase(Database):
         if user:
             self.userinfo = self.session.query(self.User).filter_by(name=user).first()
             if not self.userinfo:
-                self.session.add(self.User(name=self.userinfo, credit=CREDIT.USER))
+                self.session.add(self.User(name=user, credit=CREDIT.USER))
                 self.session.commit()
         else:
             self.userinfo = None

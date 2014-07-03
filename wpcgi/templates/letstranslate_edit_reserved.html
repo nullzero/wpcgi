@@ -6,14 +6,18 @@
   <form action="{{ url_for('.edit', rid=data.rid, mode='reserved') }}" method="post">
     <div class="col-lg-10 col-lg-offset-1">
       <div class="row">
-        <div class="col-lg-6 form-horizontal">
+        <div class="col-lg-4 form-horizontal">
           {{ render_field(form.email, placeholder=msg['letstranslate-email-placeholder'], disabled=True) }}
           {{ render_field(form.name, placeholder=msg['letstranslate-name-placeholder'], disabled=True) }}
           {{ render_field(form.name2, placeholder=msg['letstranslate-name2-placeholder'], disabled=True) }}
         </div>
-        <div class="col-lg-6 form-horizontal">
+        <div class="col-lg-4 form-horizontal">
           {{ render_field(form.lang, placeholder=msg['letstranslate-lang-placeholder'], choices=c.FORM_ALLLANGS, disabled=True) }}
-          {{ render_field(form.title, placeholder=msg['letstranslate-title-placeholder'], disabled=True) }}
+          {{ render_field(form.fam, placeholder=msg['letstranslate-fam-placeholder'], choices=c.FORM_FAMLANGS, disabled=True) }}
+        </div>
+        <div class="col-lg-4 form-horizontal">
+          {{ render_field(form.ftitle, placeholder=msg['letstranslate-title-placeholder'], disabled=True) }}
+          {{ render_field(form.title, placeholder=msg['letstranslate-title-placeholder']) }}
         </div>
       </div>
     </div>

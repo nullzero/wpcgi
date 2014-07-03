@@ -52,7 +52,7 @@ class LetsTranslate(Model):
         fieldlist = []
 
         if self.mode == 'new':
-            fieldlist = ['pid', 'name', 'lang', 'title', 'content', 'email']
+            fieldlist = ['pid', 'name', 'lang', 'fam', 'title', 'ftitle', 'content', 'email']
             if self.form.wikiuser.data:
                 wikify = 'name'
         elif self.mode == 'translated':
@@ -61,9 +61,10 @@ class LetsTranslate(Model):
                 wikify = 'name2'
             basedata['status'] = STATUS.RESERVED
         elif self.mode == 'reserved':
-            fieldlist = ['content2']
+            fieldlist = ['title', 'content2']
             basedata['status'] = STATUS.FINAL
         elif self.mode == 'final':
+            fieldlist = ['title', 'content2']
             basedata['status'] = STATUS.DONE
 
         for field in fieldlist:

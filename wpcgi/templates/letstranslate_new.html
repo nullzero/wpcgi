@@ -5,7 +5,7 @@
   <form action="{{ url_for('.edit') }}" method="post">
     <div class="col-lg-10 col-lg-offset-1">
       <div class="row">
-        <div class="col-lg-6 form-horizontal">
+        <div class="col-lg-4 form-horizontal">
           {{ render_field(form.pid,
                           placeholder=msg['letstranslate-pid-placeholder'],
                           tooltip=msg['letstranslate-pid-tooltip']) }}
@@ -13,15 +13,26 @@
                           placeholder=msg['letstranslate-email-placeholder'],
                           tooltip=msg['letstranslate-email-tooltip']) }}
         </div>
-        <div class="col-lg-6 form-horizontal">
-          {{ render_field(form.lang,
-                          placeholder=msg['letstranslate-lang-placeholder'],
-                          tooltip=msg['letstranslate-lang-tooltip'],
-                          choices=c.FORM_ALLLANGS) }}
+        <div class="col-lg-4 form-horizontal">
+          {{ render_field(form.ftitle,
+                          placeholder=msg['letstranslate-ftitle-placeholder'],
+                          tooltip=msg['letstranslate-ftitle-tooltip']) }}
           {{ render_field(form.title,
                           placeholder=msg['letstranslate-title-placeholder'],
                           tooltip=msg['letstranslate-title-tooltip']) }}
         </div>
+        <div class="col-lg-4 form-horizontal">
+          {{ render_field(form.lang,
+                          placeholder=msg['letstranslate-lang-placeholder'],
+                          tooltip=msg['letstranslate-lang-tooltip'],
+                          choices=c.FORM_ALLLANGS) }}
+          {{ render_field(form.fam,
+                          placeholder=msg['letstranslate-fam-placeholder'],
+                          tooltip=msg['letstranslate-fam-tooltip'],
+                          choices=c.FORM_ALLFAMS) }}
+        </div>
+      </div>
+      <div class="row">
         <div class="col-lg-6 col-lg-offset-3 form-horizontal">
           {{ form.name.label(class="col-lg-4 control-label") }}
           <div class="input-group">

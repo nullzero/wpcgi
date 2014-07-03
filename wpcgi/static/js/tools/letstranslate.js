@@ -1,6 +1,7 @@
 $(document).ready(function(){
     $("#txt-lang").keyup(function(){
-        autocompleteTitle($("#txt-lang").val(), "#txt-title");
+        autocompleteTitle($("#txt-lang").val(), "#txt-ftitle", 0, "#txt-fam");
     });
     $("#txt-lang").keyup();
+    $("#txt-fam").keyup();
 });

@@ -79,7 +79,7 @@ class LetsTranslateDatabase(SelfDatabase):
         if not data:
             raise wpcgi.error.IDNotFoundError()
 
-        data.status = STATUS.RESERVED
+        data.status = STATUS.TRANSLATED
         self.session.commit()
 
 if __name__ == "__main__":
