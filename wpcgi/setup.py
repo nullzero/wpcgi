@@ -6,21 +6,17 @@ import os
 from flask import Flask, request, render_template, g, Blueprint
 import utils
 from mwoauth import mwoauth
-from views import frontend, dykchecker, wikitranslator, categorymover, contribtracker, letstranslate
+from views import frontend
+import tools
 from messages import msg
 import inject
 
 __all__ = ['setup']
 
-DEFAULT_BLUEPRINTS = (
+DEFAULT_BLUEPRINTS = tuple([
     mwoauth.bp,
-    frontend,
-    dykchecker,
-    wikitranslator,
-    categorymover,
-    contribtracker,
-    letstranslate
-)
+    frontend
+] + tools.tools)
 
 def setup(app, blueprints=None):
     if blueprints is None:

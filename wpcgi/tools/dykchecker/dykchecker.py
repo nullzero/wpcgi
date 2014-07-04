@@ -5,10 +5,10 @@ from decorators import langswitch
 from models import DYKChecker
 from utils import get_params
 from normalize import normalize_url, normalize
-from forms.dykchecker import DYKCheckerFormCreator
+import form
 import c
 
-dykchecker = Blueprint('dykchecker', __name__, url_prefix='/tools/dykchecker')
+dykchecker = Blueprint('dykchecker', __name__, tool=True)
 
 @dykchecker.route('/')
 @dykchecker.route('/<title>/')
@@ -20,7 +20,7 @@ def index(**kwargs):
         return redirect(url_for('.index', **get_params(['title', 'oldid'])), code=c.REQUEST)
 
     normalize(['title'], kwargs)
-    form = DYKCheckerFormCreator()(request.form, **kwargs)
+    form = dykchecker.form()(request.form, **kwargs)
     data = DYKChecker(form)
     if form.validate(data):
         data.render()

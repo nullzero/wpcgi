@@ -5,12 +5,13 @@ from decorators import langswitch
 from models import CategoryMover
 from utils import get_params, newtry
 from normalize import normalize_url, normalize
-from forms.categorymover import CategoryMoverFormCreator
 from messages import msg
+import form
 import c
 
 categorymover = Blueprint('categorymover', __name__,
-                          url_prefix='/tools/categorymover')
+                          url_prefix='/tools/categorymover',
+                          template_folder='templates')
 
 @categorymover.route('/', endpoint='index')
 @categorymover.route('/queue')
@@ -38,7 +39,7 @@ def archive(page=None):
 @categorymover.route('/edit/<rid>')
 @langswitch
 def edit(rid=None):
-    form = CategoryMoverFormCreator()(request.form)
+    form = categorymover.form()(request.form)
     data = CategoryMover(form, rid)
 
     if not form.validate(data):

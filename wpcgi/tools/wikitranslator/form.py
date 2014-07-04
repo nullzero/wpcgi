@@ -9,7 +9,7 @@ from models import WikiTranslator
 class WikiTranslatorForm(Form):
     pass
 
-def WikiTranslatorFormCreator():
+def form():
     FormCl = WikiTranslatorForm
     FormCl.title = TextField(msg['wikitranslator-title-label'],
                                  id='txt-title')

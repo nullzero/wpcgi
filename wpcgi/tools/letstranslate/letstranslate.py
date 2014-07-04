@@ -4,14 +4,14 @@ from flask import Blueprint, render, g, redirect, url_for, request, flash
 from decorators import langswitch
 from utils import get_params, newtry
 from normalize import normalize_url, normalize
-from forms.letstranslate import LetsTranslateFormCreator
 from models import LetsTranslate
 from messages import msg
 from database.letstranslate import STATUS
+import form
 import c
 
-letstranslate = Blueprint('letstranslate', __name__,
-                          url_prefix='/tools/letstranslate')
+letstranslate = Blueprint('letstranslate', __name__, tool=True)
+
 @letstranslate.route('/')
 @langswitch
 def index():
@@ -67,7 +67,7 @@ def edit(mode=None, rid=None):
             additional['lang'] = 'en'
             additional['fam'] = 'wikipedia'
 
-    form = LetsTranslateFormCreator(mode=mode)(request.form, **additional)
+    form = letstranslate.form(mode=mode)(request.form, **additional)
     data = LetsTranslate(form, rid=rid, mode=mode)
 
     if not form.validate(data):

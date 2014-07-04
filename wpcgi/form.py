@@ -10,4 +10,3 @@ def getField(template, fieldlist):
         setattr(Dummy, field, getattr(template, field))
 
     return Dummy
-

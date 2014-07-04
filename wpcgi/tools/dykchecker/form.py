@@ -9,7 +9,7 @@ from models import DYKChecker
 class DYKCheckerForm(Form):
     pass
 
-def DYKCheckerFormCreator():
+def form():
     FormCl = DYKCheckerForm
     FormCl.title = TextField(msg['dykchecker-title-label'],
                                  id='txt-title',

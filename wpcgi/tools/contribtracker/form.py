@@ -8,7 +8,7 @@ from messages import msg
 class ContribTrackerForm(Form):
     pass
 
-def ContribTrackerFormCreator():
+def form():
     FormCl = ContribTrackerForm
     FormCl.title = TextField(msg['contribtracker-title-label'],
                                  id='txt-title')

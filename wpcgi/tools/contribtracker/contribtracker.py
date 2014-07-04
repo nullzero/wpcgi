@@ -4,13 +4,12 @@ from flask import Blueprint, render, g, redirect, url_for, request, flash
 from decorators import langswitch
 from utils import get_params, newtry
 from normalize import normalize_url, normalize
-from forms.contribtracker import ContribTrackerFormCreator
 from models import ContribTracker
 from messages import msg
+import form
 import c
 
-contribtracker = Blueprint('contribtracker', __name__,
-                          url_prefix='/tools/contribtracker')
+contribtracker = Blueprint('contribtracker', __name__, tool=True)
 @contribtracker.route('/')
 @langswitch
 def index():
@@ -41,7 +40,7 @@ def text(**kwargs):
         else:
             kwargs['tabStatus'] = 'content'
 
-    form = ContribTrackerFormCreator()(request.form, **kwargs)
+    form = contribtracker.form()(request.form, **kwargs)
     data = ContribTracker(form)
 
     if form.validate(data):

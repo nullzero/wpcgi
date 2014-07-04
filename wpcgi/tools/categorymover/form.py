@@ -9,7 +9,7 @@ from messages import msg
 class CategoryMoverForm(Form):
     pass
 
-def CategoryMoverFormCreator():
+def form():
     FormCl = CategoryMoverForm
     FormCl.fam = TextField(msg['categorymover-fam-label'], id='txt-fam', validators=[v.Required()])
     FormCl.lang = TextField(msg['categorymover-lang-label'], id='txt-lang', validators=[v.Required()])

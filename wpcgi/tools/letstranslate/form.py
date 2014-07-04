@@ -5,7 +5,7 @@ import wtforms.validators as v
 from wtforms import TextField, TextAreaField, BooleanField
 from wtforms.widgets import SubmitInput
 from messages import msg
-from forms import getField
+from wpcgi.form import getField
 
 class Template(Form):
     pid = TextField(msg['letstranslate-pid-label'], id='txt-pid', validators=[v.Required(), v.Number()])
@@ -20,7 +20,7 @@ class Template(Form):
     content2 = TextAreaField(msg['letstranslate-content2-label'], validators=[v.Required()])
     wikiuser = BooleanField(msg['letstranslate-wikiuser-label'])
 
-def LetsTranslateFormCreator(mode):
+def form(mode):
     if mode == 'new':
         field = ['pid', 'name', 'lang', 'fam', 'title', 'ftitle', 'email', 'content', 'wikiuser']
     elif mode == 'translated':

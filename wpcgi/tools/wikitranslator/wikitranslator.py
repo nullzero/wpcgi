@@ -5,10 +5,10 @@ from decorators import langswitch
 from models import WikiTranslator
 from utils import get_params
 from normalize import normalize_url, normalize
-from forms.wikitranslator import WikiTranslatorFormCreator
+import form
 import c
 
-wikitranslator = Blueprint('wikitranslator', __name__, url_prefix='/tools/wikitranslator')
+wikitranslator = Blueprint('wikitranslator', __name__, tool=True)
 
 @wikitranslator.route('/')
 @wikitranslator.route('/<siteDest>/<siteSource>')
@@ -34,7 +34,7 @@ def index(**kwargs):
         kwargs['siteDest'] = 'th'
         kwargs['siteSource'] = 'en'
 
-    form = WikiTranslatorFormCreator()(request.form, **kwargs)
+    form = wikitranslator()(request.form, **kwargs)
     data = WikiTranslator(form)
     if form.validate(data):
         data.render()
