@@ -2,13 +2,13 @@
 
 from flask import Blueprint, render, g, redirect, url_for, request
 from decorators import langswitch
-from models import DYKChecker
 from utils import get_params
 from normalize import normalize_url, normalize
 import form
 import c
 
-dykchecker = Blueprint('dykchecker', __name__, tool=True)
+dykchecker = Blueprint('dykchecker', __name__,
+                       file=__file__, tool=True)
 
 @dykchecker.route('/')
 @dykchecker.route('/<title>/')
@@ -20,8 +20,8 @@ def index(**kwargs):
         return redirect(url_for('.index', **get_params(['title', 'oldid'])), code=c.REQUEST)
 
     normalize(['title'], kwargs)
-    form = dykchecker.form()(request.form, **kwargs)
-    data = DYKChecker(form)
+    form = dykchecker.form.getForm()(request.form, **kwargs)
+    data = dykchecker.model.Model(form)
     if form.validate(data):
         data.render()
         return render('dykchecker_page.html',

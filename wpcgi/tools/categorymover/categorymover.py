@@ -2,7 +2,6 @@
 
 from flask import Blueprint, render, g, redirect, url_for, request, flash
 from decorators import langswitch
-from models import CategoryMover
 from utils import get_params, newtry
 from normalize import normalize_url, normalize
 from messages import msg
@@ -10,14 +9,13 @@ import form
 import c
 
 categorymover = Blueprint('categorymover', __name__,
-                          url_prefix='/tools/categorymover',
-                          template_folder='templates')
+                          file=__file__, tool=True)
 
 @categorymover.route('/', endpoint='index')
 @categorymover.route('/queue')
 @langswitch
 def queue(**kwargs):
-    data = CategoryMover()
+    data = categorymover.model.Model()
     data.getQueue()
     return render('categorymover_list.html',
                   tool=__name__,
@@ -28,7 +26,7 @@ def queue(**kwargs):
 @categorymover.route('/archive/<page>')
 @langswitch
 def archive(page=None):
-    data = CategoryMover()
+    data = categorymover.model.Model()
     data.getArchive()
     return render('categorymover_list.html',
                   tool=__name__,
@@ -39,8 +37,8 @@ def archive(page=None):
 @categorymover.route('/edit/<rid>')
 @langswitch
 def edit(rid=None):
-    form = categorymover.form()(request.form)
-    data = CategoryMover(form, rid)
+    form = categorymover.form.getForm()(request.form)
+    data = categorymover.model.Model(form, rid)
 
     if not form.validate(data):
         fun = lambda: data.renderEdit()
@@ -64,7 +62,7 @@ def edit(rid=None):
 @categorymover.route('/approve/<rid>')
 @langswitch
 def approve(rid):
-    data = CategoryMover(rid)
+    data = categorymover.model.Model(rid)
 
     fun = lambda: data.approve()
     onSuccess = lambda _: redirect(url_for('.queue'))
@@ -75,7 +73,7 @@ def approve(rid):
 @categorymover.route('/reject/<rid>')
 @langswitch
 def reject(rid):
-    data = CategoryMover(rid)
+    data = categorymover.model.Model(rid)
 
     fun = lambda: data.reject()
     onSuccess = lambda _: redirect(url_for('.queue'))

@@ -9,12 +9,12 @@ from pywikibot.data import api
 from pywikibot.tools import itergroup
 from wp import lre
 import wp
-from model import Model
+from wpcgi.model import Template
 from utils import DefaultDict
 from wpcgi import app
 from utils import TextEngine
 
-class ContribTracker(Model):
+class Model(Template):
     def doinit(self):
         self.tabactive = self.form.tabStatus.data
         self.isActivePage = 'active'

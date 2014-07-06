@@ -4,12 +4,11 @@ from flask.ext.wtf import Form
 import wtforms.validators as v
 from wtforms import TextField, SubmitField
 from messages import msg
-from models import DYKChecker
 
 class DYKCheckerForm(Form):
     pass
 
-def form():
+def getForm():
     FormCl = DYKCheckerForm
     FormCl.title = TextField(msg['dykchecker-title-label'],
                                  id='txt-title',

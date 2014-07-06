@@ -2,13 +2,13 @@
 
 from flask import Blueprint, render, g, redirect, url_for, request
 from decorators import langswitch
-from models import WikiTranslator
 from utils import get_params
 from normalize import normalize_url, normalize
 import form
 import c
 
-wikitranslator = Blueprint('wikitranslator', __name__, tool=True)
+wikitranslator = Blueprint('wikitranslator', __name__,
+                           file=__file__, tool=True)
 
 @wikitranslator.route('/')
 @wikitranslator.route('/<siteDest>/<siteSource>')
@@ -35,7 +35,7 @@ def index(**kwargs):
         kwargs['siteSource'] = 'en'
 
     form = wikitranslator()(request.form, **kwargs)
-    data = WikiTranslator(form)
+    data = wikitranslator.model.Model(form)
     if form.validate(data):
         data.render()
     return render('wikitranslator_index.html',

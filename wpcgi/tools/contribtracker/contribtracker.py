@@ -4,12 +4,12 @@ from flask import Blueprint, render, g, redirect, url_for, request, flash
 from decorators import langswitch
 from utils import get_params, newtry
 from normalize import normalize_url, normalize
-from models import ContribTracker
 from messages import msg
 import form
 import c
 
-contribtracker = Blueprint('contribtracker', __name__, tool=True)
+contribtracker = Blueprint('contribtracker', __name__,
+                           file=__file__, tool=True)
 @contribtracker.route('/')
 @langswitch
 def index():
@@ -40,8 +40,8 @@ def text(**kwargs):
         else:
             kwargs['tabStatus'] = 'content'
 
-    form = contribtracker.form()(request.form, **kwargs)
-    data = ContribTracker(form)
+    form = contribtracker.form.getForm()(request.form, **kwargs)
+    data = contribtracker.model.Model(form)
 
     if form.validate(data):
         data.render()

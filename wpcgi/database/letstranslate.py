@@ -1,5 +1,5 @@
-from database import asDict
-from selfdb import SelfDatabase, must_be
+from wpcgi.database.database import asDict
+from wpcgi.database.selfdb import SelfDatabase, must_be
 from datetime import datetime
 import wpcgi.error
 

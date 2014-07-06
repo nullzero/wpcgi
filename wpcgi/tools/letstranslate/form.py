@@ -20,7 +20,7 @@ class Template(Form):
     content2 = TextAreaField(msg['letstranslate-content2-label'], validators=[v.Required()])
     wikiuser = BooleanField(msg['letstranslate-wikiuser-label'])
 
-def form(mode):
+def getForm(mode):
     if mode == 'new':
         field = ['pid', 'name', 'lang', 'fam', 'title', 'ftitle', 'email', 'content', 'wikiuser']
     elif mode == 'translated':

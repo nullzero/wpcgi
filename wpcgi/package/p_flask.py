@@ -29,12 +29,18 @@ class _Blueprint(Blueprint):
     '''
 
     def __init__(self, *args, **kwargs):
+        self._model = None
+        self._form = None
+        self._database = None
+
+        self._dir = kwargs.pop('file', None)
+        if self._dir:
+            self._dir = os.path.dirname(self._dir)
+
         if kwargs.pop('tool', False):
-            self.tool = args[0]
             kwargs['url_prefix'] = '/tools/' + args[0]
             kwargs['template_folder'] = 'templates'
-        else:
-            self.tool = None
+
         return super(_Blueprint, self).__init__(*args, **kwargs)
 
     def route(self, *args, **kwargs):
@@ -46,11 +52,26 @@ class _Blueprint(Blueprint):
 
         return super(_Blueprint, self).route(*args, methods=methods, **kwargs)
 
-    def form(self, *args, **kwargs):
-        form = imp.load_source('form', os.path.join(os.path.dirname(wpcgi.messages.__file__), 'tools', self.tool, 'form.py'))
-        return form.form(*args, **kwargs)
+    @property
+    def form(self):
+        if self._form:
+            return self._form
+        self._form = imp.load_source('form', os.path.join(self._dir, 'form.py'))
+        return self._form
 
+    @property
+    def model(self):
+        if self._model:
+            return self._model
+        self._model = imp.load_source('model', os.path.join(self._dir, 'model.py'))
+        return self._model
 
+    @property
+    def database(self):
+        if self._database:
+            return self._database
+        self._database = imp.load_source('model', os.path.join(self._dir, 'database.py'))
+        return self._database
 
 flask.Blueprint = _Blueprint
 

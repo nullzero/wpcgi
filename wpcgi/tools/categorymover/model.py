@@ -9,7 +9,7 @@ from pywikibot.data import api
 from pywikibot.tools import itergroup
 from wp import lre
 import wp
-from model import Model
+from wpcgi.model import Template
 from utils import AttrObject
 import datetime
 from database.categorymover import CategoryMoverDatabase, STATUS
@@ -22,7 +22,7 @@ color = {
     STATUS.QUEUE_WAIT: '',
 }
 
-class CategoryMover(Model):
+class Model(Template):
     def doinit(self, rid=None):
         self.db = CategoryMoverDatabase()
         self.db.connect()

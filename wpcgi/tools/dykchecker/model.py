@@ -7,10 +7,10 @@ from messages import msg
 import pyrobot
 import pywikibot
 import wp
-from model import Model
+from wpcgi.model import Template
 from utils import TextEngine
 
-class DYKChecker(Model):
+class Model(Template):
     def doinit(self):
         self.failed = False
         self.results = []

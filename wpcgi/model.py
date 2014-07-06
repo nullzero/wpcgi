@@ -4,7 +4,7 @@
 from flask import g
 from utils import debug
 
-class Model(object):
+class Template(object):
     def __init__(self, form=None, *args, **kwargs):
         self.is_validate = False
         self.errors = {}

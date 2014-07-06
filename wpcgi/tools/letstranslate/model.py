@@ -9,12 +9,12 @@ from pywikibot.data import api
 from pywikibot.tools import itergroup
 from wp import lre
 import wp
-from model import Model
+from wpcgi.model import Template
 from utils import AttrObject
 import datetime
 from database.letstranslate import LetsTranslateDatabase, STATUS
 
-class LetsTranslate(Model):
+class Model(Template):
     def doinit(self, rid=None, mode=None):
         self.db = LetsTranslateDatabase()
         self.db.connect()

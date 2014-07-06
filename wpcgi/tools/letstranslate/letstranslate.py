@@ -4,13 +4,13 @@ from flask import Blueprint, render, g, redirect, url_for, request, flash
 from decorators import langswitch
 from utils import get_params, newtry
 from normalize import normalize_url, normalize
-from models import LetsTranslate
 from messages import msg
 from database.letstranslate import STATUS
 import form
 import c
 
-letstranslate = Blueprint('letstranslate', __name__, tool=True)
+letstranslate = Blueprint('letstranslate', __name__,
+                          file=__file__, tool=True)
 
 @letstranslate.route('/')
 @langswitch
@@ -25,7 +25,7 @@ def getarticle():
 @letstranslate.route('/<mode>')
 @langswitch
 def list(mode):
-    data = LetsTranslate(mode=mode)
+    data = letstranslate.model.Model(mode=mode)
     data.getList()
     return render('letstranslate_list.html',
                   tool=__name__,
@@ -67,8 +67,8 @@ def edit(mode=None, rid=None):
             additional['lang'] = 'en'
             additional['fam'] = 'wikipedia'
 
-    form = letstranslate.form(mode=mode)(request.form, **additional)
-    data = LetsTranslate(form, rid=rid, mode=mode)
+    form = letstranslate.form.getForm(mode=mode)(request.form, **additional)
+    data = letstranslate.model.Model(form, rid=rid, mode=mode)
 
     if not form.validate(data):
         fun = lambda: data.renderEdit()
@@ -87,7 +87,7 @@ def edit(mode=None, rid=None):
 @letstranslate.route('/reject/<mode>/<rid>')
 @langswitch
 def reject(mode, rid):
-    data = LetsTranslate(rid=rid, mode=mode)
+    data = letstranslate.model.Model(rid=rid, mode=mode)
 
     fun = lambda: data.reject()
     def onSuccess(_):
@@ -100,7 +100,7 @@ def reject(mode, rid):
 @letstranslate.route('/recover/<rid>')
 @langswitch
 def recover(rid):
-    data = LetsTranslate(rid=rid)
+    data = letstranslate.model.Model(rid=rid)
 
     fun = lambda: data.recover()
     def onSuccess(_):

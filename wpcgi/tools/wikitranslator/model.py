@@ -9,14 +9,14 @@ from pywikibot.data import api
 from pywikibot.tools import itergroup
 from wp import lre
 import wp
-from model import Model
+from wpcgi.model import Template
 from utils import DefaultDict
 from wpcgi import app
 
 if app.config['SQL']:
     from database.replicateddb import ReplicatedDatabase
 
-class WikiTranslator(Model):
+class Model(Template):
     def doinit(self):
         self.tabactive = self.form.tabStatus.data
         self.isActivePage = 'active'

@@ -6,21 +6,22 @@ import os
 from collections import defaultdict
 from markdown import markdown
 from wpcgi import app
-import i18n.core
+import wpcgi.i18n
 
 class Message(object):
     def __init__(self):
         self.messages = defaultdict(dict)
         self.lang = app.config['LANG']
-        for file in os.listdir(os.path.dirname(i18n.core.__file__)):
-            if file.endswith('__init__.py') or not file.endswith('.py'):
-                continue
-            msg_mod = imp.load_source("msg_mod", os.path.dirname(i18n.core.__file__) + '/' + file)
-            for lang in msg_mod.messages:
-                self.messages[lang].update(msg_mod.messages[lang])
+        for name in os.listdir(os.path.join(os.path.dirname(__file__), 'tools')):
+            directory = os.path.join(os.path.dirname(__file__), 'tools', name)
+            if os.path.isdir(directory):
+                file = os.path.join(directory, 'i18n.py')
+                msg_mod = imp.load_source('i18n', file)
+                for lang in msg_mod.messages:
+                    self.messages[lang].update(msg_mod.messages[lang])
 
-        for lang in i18n.core.messages:
-            self.messages[lang].update(i18n.core.messages[lang])
+        for lang in wpcgi.i18n.messages:
+            self.messages[lang].update(wpcgi.i18n.messages[lang])
 
     def switch_language(self, lang):
         if lang in self.messages:
