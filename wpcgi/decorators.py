@@ -20,6 +20,7 @@ def langswitch(fn):
         return response
     return new_fn
 
+'''
 def require(fn):
     @wraps(fn)
     def new_fn(*in_args, **in_kwargs):
@@ -27,3 +28,4 @@ def require(fn):
             return render('error/permission.html')
         return fn(*in_args, **in_kwargs)
     return new_fn
+'''

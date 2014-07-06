@@ -4,7 +4,6 @@ from flask.ext.wtf import Form
 import wtforms.validators as v
 from wtforms import TextField, TextAreaField, HiddenField, SubmitField
 from messages import msg
-from models import WikiTranslator
 
 class WikiTranslatorForm(Form):
     pass

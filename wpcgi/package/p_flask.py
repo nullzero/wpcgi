@@ -7,6 +7,7 @@ from wpcgi.messages import msg
 import wpcgi.messages
 import flask
 import os
+import random
 
 class _Blueprint(Blueprint):
     '''
@@ -28,20 +29,39 @@ class _Blueprint(Blueprint):
         return super(_Blueprint, self).__init__(*args, url_prefix=url_prefix, **kwargs)
     '''
 
-    def __init__(self, *args, **kwargs):
-        self._model = None
-        self._form = None
-        self._database = None
+    def _loadSource(self, name):
+        file = os.path.join(self._dir, name + '.py')
+        if os.path.exists(file):
+            return imp.load_source(file[:-3], file) # trim .py from the name (there will be a warning if .py is in name)
+        else:
+            return None
 
+    def __init__(self, *args, **kwargs):
         self._dir = kwargs.pop('file', None)
         if self._dir:
             self._dir = os.path.dirname(self._dir)
+            self._model = self._loadSource('model')
+            self._form = self._loadSource('form')
+            self._database = self._loadSource('database')
 
         if kwargs.pop('tool', False):
             kwargs['url_prefix'] = '/tools/' + args[0]
             kwargs['template_folder'] = 'templates'
+            kwargs['static_folder'] = 'static'
 
         return super(_Blueprint, self).__init__(*args, **kwargs)
+
+    @property
+    def form(self):
+        return self._form
+
+    @property
+    def model(self):
+        return self._model
+
+    @property
+    def database(self):
+        return self._database
 
     def route(self, *args, **kwargs):
         methods = kwargs.pop('methods', [])
@@ -51,27 +71,6 @@ class _Blueprint(Blueprint):
             methods.append('POST')
 
         return super(_Blueprint, self).route(*args, methods=methods, **kwargs)
-
-    @property
-    def form(self):
-        if self._form:
-            return self._form
-        self._form = imp.load_source('form', os.path.join(self._dir, 'form.py'))
-        return self._form
-
-    @property
-    def model(self):
-        if self._model:
-            return self._model
-        self._model = imp.load_source('model', os.path.join(self._dir, 'model.py'))
-        return self._model
-
-    @property
-    def database(self):
-        if self._database:
-            return self._database
-        self._database = imp.load_source('model', os.path.join(self._dir, 'database.py'))
-        return self._database
 
 flask.Blueprint = _Blueprint
 

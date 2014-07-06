@@ -1,15 +1,3 @@
-try:
-    import pyrobot
-except ImportError:
-    import os
-    import sys
-
-    os.environ["WPROBOT_BOT"] = "Nullzerobot"
-    sys.path.append("/data/project/nullzerobot/wprobot")
-
-import wprobot
-import pywikibot
-
 from database import Database
 from sqlalchemy import Column, Integer, DateTime, String, Table, Text
 import wpcgi.error
@@ -44,7 +32,7 @@ class SelfDatabase(Database):
         super(SelfDatabase, self).connect(dic, cachefile=cachefile, **kwargs)
 
         class CategoryMover(self.base):
-            __table__ = Table('category_mover', self.metadata,
+            __table__ = Table('tool.categorymover', self.metadata,
                 Column('rid', Integer, primary_key=True),
                 Column('date', DateTime, nullable=False),
                 Column('fam', String(31), nullable=False),
@@ -57,7 +45,7 @@ class SelfDatabase(Database):
             )
 
         class LetsTranslate(self.base):
-            __table__ = Table('lets_translate', self.metadata,
+            __table__ = Table('tool.letstranslate', self.metadata,
                 Column('rid', Integer, primary_key=True),
                 Column('date', DateTime, nullable=False),
                 Column('pid', Integer, nullable=False),
@@ -80,8 +68,18 @@ class SelfDatabase(Database):
                 Column('credit', Integer, nullable=False),
             )
 
-        self.CategoryMover = CategoryMover
+        # TODO: relation between tables?
+        class UserGroup(self.base):
+            __table__ = Table('user_group', self.metadata,
+                Column('rid', Integer, primary_key=True),
+                Column('uid', Integer, nullable=False),
+                Column('group', String(255), nullable=False),
+            )
+
         self.User = User
+        self.UserGroup = UserGroup
+
+        self.CategoryMover = CategoryMover
         self.LetsTranslate = LetsTranslate
 
         self.metadata.create_all()

@@ -34,7 +34,7 @@ def index(**kwargs):
         kwargs['siteDest'] = 'th'
         kwargs['siteSource'] = 'en'
 
-    form = wikitranslator()(request.form, **kwargs)
+    form = wikitranslator.form.getForm()(request.form, **kwargs)
     data = wikitranslator.model.Model(form)
     if form.validate(data):
         data.render()

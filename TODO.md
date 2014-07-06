@@ -1,6 +1,6 @@
 #Database
-- make it dependent with the framework so wprobot can use it
-- error class?
+- make it independent with the framework so wprobot can use it
+- how to fix database schema when creating
 
 # Core
 - user system?

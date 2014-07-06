@@ -8,9 +8,9 @@
     <link rel="icon" type="image/png" href="//wikitech.wikimedia.org/w/images/c/cf/Labslogo_thumb.png">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% if tool %}
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/tools/' + tool + '.css') }}">
+      <link rel="stylesheet" href="{{ url_for('.static', filename='style.css') }}">
     {% endif %}
   </head>
   <body>
@@ -140,7 +140,7 @@
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     {% if tool %}
-      <script src="{{ url_for('static', filename='js/tools/' + tool + '.js') }}"></script>
+      <script src="{{ url_for('.static', filename='script.js') }}"></script>
     {% endif %}
     <div id="exetime">
       {{ msg['core-page-generated'].format(g.request_time()) }}

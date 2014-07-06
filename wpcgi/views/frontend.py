@@ -2,7 +2,7 @@
 
 from flask import (Blueprint, render, request,
                    flash, url_for, redirect, session, abort)
-from decorators import langswitch, require
+from decorators import langswitch
 from wpcgi import tools, app
 from mwoauth import mwoauth
 
