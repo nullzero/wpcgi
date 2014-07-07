@@ -3,7 +3,6 @@
 
 import cgi
 from messages import msg
-import pyrobot
 import pywikibot
 from pywikibot.data import api
 from pywikibot.tools import itergroup

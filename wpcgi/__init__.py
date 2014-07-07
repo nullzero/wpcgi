@@ -1,19 +1,17 @@
 #!/data/project/nullzerobot/python/bin/python
 
 import os
-import sys
 
-sys.path.append(os.path.abspath(os.path.split(__file__)[0]))
-sys.path.append(os.path.abspath(os.path.join(os.path.split(__file__)[0], "..")))
-os.environ['WPCGI_PATH'] = os.path.abspath(os.path.join(os.path.split(__file__)[0], ".."))
-
-os.environ["WPROBOT_BOT"] = "Nullzerobot"
-sys.path.append("/data/project/nullzerobot/wprobot")
-
-import wprobot
-
+# since the app has no patch, we can still use the old one here
 from flask import Flask
 app = Flask(__name__)
+
+import site
+site.addsitedir("/data/project/nullzerobot/wprobot")
+site.addsitedir(os.path.dirname(__file__))
+
+os.environ["WPROBOT_BOT"] = "Nullzerobot"
+import wprobot
 
 tools = [
     {
@@ -22,14 +20,14 @@ tools = [
     {
         'name': 'wikitranslator',
     },
-    {
-        'name': 'categorymover',
-        'disabled': True,
-    },
+    # {
+    #     'name': 'categorymover',
+    #     'disabled': True,
+    # },
     {
         'name': 'contribtracker',
     },
-    {
-        'name': 'letstranslate',
-    },
+    # {
+    #     'name': 'letstranslate',
+    # },
 ]

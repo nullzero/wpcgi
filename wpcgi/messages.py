@@ -6,7 +6,7 @@ import os
 from collections import defaultdict
 from markdown import markdown
 from wpcgi import app
-import wpcgi.i18n
+import i18n
 
 class Message(object):
     def __init__(self):
@@ -16,12 +16,12 @@ class Message(object):
             directory = os.path.join(os.path.dirname(__file__), 'tools', name)
             if os.path.isdir(directory):
                 file = os.path.join(directory, 'i18n.py')
-                msg_mod = imp.load_source('i18n', file)
+                msg_mod = imp.load_source(file[:-3], file)
                 for lang in msg_mod.messages:
                     self.messages[lang].update(msg_mod.messages[lang])
 
-        for lang in wpcgi.i18n.messages:
-            self.messages[lang].update(wpcgi.i18n.messages[lang])
+        for lang in i18n.messages:
+            self.messages[lang].update(i18n.messages[lang])
 
     def switch_language(self, lang):
         if lang in self.messages:

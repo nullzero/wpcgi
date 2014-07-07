@@ -1,3 +1,4 @@
+'''
 from database import asDict
 from selfdb import SelfDatabase, must_be
 from datetime import datetime
@@ -115,3 +116,5 @@ if __name__ == "__main__":
     cm.new('A', 'B', 'Change Category from A to B')
     print cm.getQueue()
     cm.disconnect()
+'''
+

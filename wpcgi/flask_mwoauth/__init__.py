@@ -2,9 +2,9 @@ __version__ = '0.1.31'
 
 import sys
 import urllib
+from requests.models import Request
 from flask import request, session, redirect, url_for, flash, Blueprint
 from flask_oauth import OAuth, OAuthRemoteApp, OAuthException, parse_response
-from requests.models import Request
 from utils import gourl
 from messages import msg
 

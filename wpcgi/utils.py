@@ -1,7 +1,6 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-import pyrobot
 import pywikibot
 from wp import lre
 from flask import request, g, flash, url_for

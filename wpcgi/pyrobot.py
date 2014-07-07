@@ -1,1 +1,0 @@
-#!/data/project/nullzerobot/python/bin/python

@@ -1,10 +1,10 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-import package
 import os
-from flask import Flask, request, render_template, g, Blueprint
-import utils
+import package # patch, must be called first
+import db
+from flask import Flask, render_template, Blueprint
 from mwoauth import mwoauth
 from views import frontend
 import tools

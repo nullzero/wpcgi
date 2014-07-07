@@ -28,6 +28,7 @@ wtforms.validators.NumberRange = _NumberRange
 
 ##############################
 
+# Have to do like this because the original Email.__init__ contains Email itself
 def Email__init__(self, message=msg['validator-invalid-email']):
     super(Email, self).__init__(r'^.+@[^.].*\.[a-z]{2,10}$', re.IGNORECASE, message)
 

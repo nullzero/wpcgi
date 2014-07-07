@@ -3,13 +3,12 @@
 
 import cgi
 from messages import msg
-import pyrobot
 import pywikibot
 from pywikibot.data import api
 from pywikibot.tools import itergroup
 from wp import lre
 import wp
-from wpcgi.model import Template
+from model import Template
 from utils import DefaultDict
 from wpcgi import app
 from utils import TextEngine

@@ -4,7 +4,6 @@
 import cgi
 from utils import AttrObject
 from messages import msg
-import pyrobot
 import pywikibot
 import wp
 from wpcgi.model import Template

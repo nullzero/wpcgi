@@ -1,0 +1,5 @@
+- wpcgi/__init__.py: only create app and load robot. Since it doesn't depend on other modules, other modules can call it as the base.
+- app.config.from_object()
+- setup()
+  - patch
+  - sql

@@ -1,0 +1,16 @@
+{% from "macros/_helpers.html" import render_field, header %}
+{% extends "layout.html" %}
+
+{% block content %}
+  {{ header(msg['categorymover-title']) }}
+  <br />
+  <ul class="nav nav-justified">
+    <li id='link-queue' class="{{ data.nav_active['queue'] }}"><a href="{{ url_for('categorymover.queue') }}">{{ msg['categorymover-link-queue'] }} <span class="badge">{{ data.num_queue }}</span></a></li>
+    <li id='link-new' class="{{ data.nav_active['new'] }}"><a href="{{ url_for('categorymover.edit') }}">{{ msg['categorymover-link-new'] }}</a></li>
+    <li id='link-archive' class="{{ data.nav_active['archive'] }}"><a href="{{ url_for('categorymover.archive') }}">{{ msg['categorymover-link-archive'] }}</a></li>
+  </ul>
+  <br /><br />
+  {% block subcontent %}
+  {% endblock %}
+  <br />
+{% endblock %}
