@@ -38,7 +38,7 @@ def archive(page=None):
 @langswitch
 def edit(rid=None):
     form = categorymover.form.getForm()(request.form)
-    data = categorymover.model.Model(form, rid)
+    data = categorymover.model.Model(form=form, rid=rid)
 
     if not form.validate(data):
         fun = lambda: data.renderEdit()
@@ -62,7 +62,7 @@ def edit(rid=None):
 @categorymover.route('/approve/<rid>')
 @langswitch
 def approve(rid):
-    data = categorymover.model.Model(rid)
+    data = categorymover.model.Model(rid=rid)
 
     fun = lambda: data.approve()
     onSuccess = lambda _: redirect(url_for('.queue'))
@@ -73,7 +73,7 @@ def approve(rid):
 @categorymover.route('/reject/<rid>')
 @langswitch
 def reject(rid):
-    data = categorymover.model.Model(rid)
+    data = categorymover.model.Model(rid=rid)
 
     fun = lambda: data.reject()
     onSuccess = lambda _: redirect(url_for('.queue'))

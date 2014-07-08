@@ -35,7 +35,7 @@ def index(**kwargs):
         kwargs['siteSource'] = 'en'
 
     form = wikitranslator.form.getForm()(request.form, **kwargs)
-    data = wikitranslator.model.Model(form)
+    data = wikitranslator.model.Model(form=form)
     if form.validate(data):
         data.render()
     return render('wikitranslator_index.html',

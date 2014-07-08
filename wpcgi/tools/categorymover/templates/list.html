@@ -14,7 +14,7 @@
 </th>
 {% endmacro %}
 
-{% extends "categorymover_layout.html" %}
+{% extends "sublayout.html" %}
 
 {% block subcontent %}
   {% if data.results %}
@@ -27,23 +27,23 @@
       {% endif %}
       {% for row in data.results %}
         <tr class="{{ row.color }}">
-          <td style="vertical-align: middle;" rowspan="2">{{ row.rid }}</td>
-          <td style="vertical-align: middle;" rowspan="2">{{ row.date }}</td>
+          <td style="vertical-align: middle;" rowspan="2">{{ row.id }}</td>
+          <td>{{ row.date_edited }}</td>
           <td>{{ row.fam }}</td>
-          <td>{{ row.catfrom }}</td>
-          <td style="vertical-align: middle;" rowspan="2">{{ row.user }}</td>
+          <td>{{ row.cat_from }}</td>
+          <td style="vertical-align: middle;" rowspan="2">{{ row.user.name }}</td>
           <td style="vertical-align: middle;" rowspan="2">{{ row.note }}</td>
           <td style="vertical-align: middle; align: center;" rowspan="2">
           {% if mode == 'queue' %}
-            <a href="{{ url_for('categorymover.edit', rid=row.rid) }}"
+            <a href="{{ url_for('categorymover.edit', rid=row.id) }}"
                class="btn btn-sm btn-primary col-lg-3">
               {{ msg['categorymover-row-edit'] }}
             </a>
-            <a href="{{ url_for('categorymover.approve', rid=row.rid) }}"
+            <a href="{{ url_for('categorymover.approve', rid=row.id) }}"
                class="btn btn-sm btn-success col-lg-3 col-lg-offset-1 {{ row.disable_approve }}">
               {{ msg['categorymover-row-approve'] }}
             </a>
-            <a href="{{ url_for('categorymover.reject' , rid=row.rid) }}"
+            <a href="{{ url_for('categorymover.reject' , rid=row.id) }}"
                class="btn btn-sm btn-danger col-lg-3 col-lg-offset-1 {{ row.disable_reject }}">
               {{ msg['categorymover-row-reject' ] }}
             </a>
@@ -53,8 +53,9 @@
           </td>
         </tr>
         <tr class="{{ row.color }}">
+          <td>{{ row.date_created }}</td>
           <td>{{ row.lang }}</td>
-          <td>{{ row.catto }}</td>
+          <td>{{ row.cat_to }}</td>
         </tr>
       {% endfor %}
     </table>

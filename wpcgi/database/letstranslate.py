@@ -1,7 +1,7 @@
 from wpcgi.database.database import asDict
 from wpcgi.database.selfdb import SelfDatabase, must_be
 from datetime import datetime
-import wpcgi.error
+import wpcgi.errors
 
 class STATUS(object):
     TRANSLATED = 1
@@ -31,7 +31,7 @@ class LetsTranslateDatabase(SelfDatabase):
         ).first()
 
         if not data:
-            raise wpcgi.error.IDNotFoundError()
+            raise wpcgi.errors.IDNotFoundError()
 
         for key in kwargs:
             setattr(data, key, kwargs[key])
@@ -45,7 +45,7 @@ class LetsTranslateDatabase(SelfDatabase):
         ).first()
 
         if not data:
-            raise wpcgi.error.IDNotFoundError()
+            raise wpcgi.errors.IDNotFoundError()
 
         return data
 
@@ -55,7 +55,7 @@ class LetsTranslateDatabase(SelfDatabase):
         ).first()
 
         if not data:
-            raise wpcgi.error.IDNotFoundError()
+            raise wpcgi.errors.IDNotFoundError()
 
         data.status = status
         self.session.commit()
@@ -66,7 +66,7 @@ class LetsTranslateDatabase(SelfDatabase):
         ).first()
 
         if not data:
-            raise wpcgi.error.IDNotFoundError()
+            raise wpcgi.errors.IDNotFoundError()
 
         data.status = STATUS.REJECTED
         self.session.commit()
@@ -77,7 +77,7 @@ class LetsTranslateDatabase(SelfDatabase):
         ).first()
 
         if not data:
-            raise wpcgi.error.IDNotFoundError()
+            raise wpcgi.errors.IDNotFoundError()
 
         data.status = STATUS.TRANSLATED
         self.session.commit()

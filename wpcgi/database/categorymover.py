@@ -2,17 +2,9 @@
 from database import asDict
 from selfdb import SelfDatabase, must_be
 from datetime import datetime
-import wpcgi.error
+import wpcgi.errors
 
-class STATUS(object):
-    QUEUE_WAIT = 0
-    QUEUE_APPROVED = 1
-    DONE_ALL = 2
-    DONE_FAILED = 3
-    DONE_REJECTED = 4
 
-    QUEUE = [QUEUE_WAIT, QUEUE_APPROVED]
-    DONE = [DONE_ALL, DONE_FAILED, DONE_REJECTED]
 
 class CategoryMoverDatabase(SelfDatabase):
     def connect(self):
@@ -36,7 +28,7 @@ class CategoryMoverDatabase(SelfDatabase):
         ).first()
 
         if not data:
-            raise wpcgi.error.IDNotFoundError()
+            raise wpcgi.errors.IDNotFoundError()
 
         data.status = STATUS.QUEUE_APPROVED
         self.session.commit()
@@ -49,7 +41,7 @@ class CategoryMoverDatabase(SelfDatabase):
         ).first()
 
         if not data:
-            raise wpcgi.error.IDNotFoundError()
+            raise wpcgi.errors.IDNotFoundError()
 
         data.status = STATUS.DONE_REJECTED
         self.session.commit()
@@ -78,7 +70,7 @@ class CategoryMoverDatabase(SelfDatabase):
         ).first()
 
         if not data:
-            raise wpcgi.error.IDNotFoundError()
+            raise wpcgi.errors.IDNotFoundError()
 
         data.status = self.queueStatus()
         data.date = datetime.now()
@@ -98,7 +90,7 @@ class CategoryMoverDatabase(SelfDatabase):
         ).first()
 
         if not data:
-            raise wpcgi.error.IDNotFoundError()
+            raise wpcgi.errors.IDNotFoundError()
 
         return data
 

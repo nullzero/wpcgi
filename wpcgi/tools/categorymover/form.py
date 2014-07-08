@@ -13,7 +13,7 @@ def getForm():
     FormCl = CategoryMoverForm
     FormCl.fam = TextField(msg['categorymover-fam-label'], id='txt-fam', validators=[v.Required()])
     FormCl.lang = TextField(msg['categorymover-lang-label'], id='txt-lang', validators=[v.Required()])
-    FormCl.catfrom = TextField(msg['categorymover-catfrom-label'], id='txt-catfrom', validators=[v.Required()])
-    FormCl.catto = TextField(msg['categorymover-catto-label'], id='txt-catto', validators=[v.Required()])
+    FormCl.cat_from = TextField(msg['categorymover-catfrom-label'], id='txt-catfrom', validators=[v.Required()])
+    FormCl.cat_to = TextField(msg['categorymover-catto-label'], id='txt-catto', validators=[v.Required()])
     FormCl.note = TextField(msg['categorymover-note-label'])
     return FormCl

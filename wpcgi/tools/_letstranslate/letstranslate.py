@@ -68,7 +68,7 @@ def edit(mode=None, rid=None):
             additional['fam'] = 'wikipedia'
 
     form = letstranslate.form.getForm(mode=mode)(request.form, **additional)
-    data = letstranslate.model.Model(form, rid=rid, mode=mode)
+    data = letstranslate.model.Model(form=form, rid=rid, mode=mode)
 
     if not form.validate(data):
         fun = lambda: data.renderEdit()

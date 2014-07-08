@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 try:
-    import pyrobot
     from flask import g
     from utils import profile
 except ImportError:

@@ -5,12 +5,16 @@ from flask import g
 from utils import debug
 
 class Template(object):
-    def __init__(self, form=None, *args, **kwargs):
+    def __init__(self, first_arg=None, form=None, **kwargs):
+
+        if first_arg:
+            raise Exception('To create a model, please use kwargs.')
+
         self.is_validate = False
         self.errors = {}
         self.form = form
         self.debugtext = ""
-        self.doinit(*args, **kwargs)
+        self.doinit(**kwargs)
 
     def validate(self):
         self.is_validate = True

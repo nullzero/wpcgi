@@ -20,12 +20,10 @@ def langswitch(fn):
         return response
     return new_fn
 
-'''
 def require(fn):
     @wraps(fn)
     def new_fn(*in_args, **in_kwargs):
-        if not mwoauth.get_current_user():
+        if not mwoauth.user():
             return render('error/permission.html')
         return fn(*in_args, **in_kwargs)
     return new_fn
-'''

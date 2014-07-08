@@ -4,8 +4,7 @@ import site
 site.addsitedir("/data/project/nullzerobot/python/lib/python2.7/site-packages")
 
 import os
-from flask.ext.script import Manager
-from flask.ext.script.commands import Clean
+from flask.ext.script import Manager, Command
 from wpcgi import app
 
 SQLALCHEMY_DATABASE_URI = None
@@ -21,8 +20,26 @@ def create_app(config=None):
     setup(app)
     return app
 
+class Clean(Command):
+    """Remove *.pyc and *.pyo files recursively starting at current directory.
+    Copied from flask.ext.script.commands"""
+    def run(self):
+        for dirpath, dirnames, filenames in os.walk('.'):
+            for filename in filenames:
+                if filename.endswith('.pyc') or filename.endswith('.pyo'):
+                    full_pathname = os.path.join(dirpath, filename)
+                    print('Removing %s' % full_pathname)
+                    os.remove(full_pathname)
+
+        dirname = os.path.join(os.path.dirname(__file__), 'wpcgi/tools')
+        for file in os.listdir(dirname):
+            file = os.path.join(dirname, file)
+            if '.' not in file and not os.path.isdir(file):
+                print('Removing %s' % file)
+                os.remove(file)
+
 manager = Manager(create_app)
-manager.add_option('-c', '--config', dest='config', required=True, help='config file')
+manager.add_option('-c', '--config', dest='config', required=False, default='TestConfig', help='config file')
 manager.add_command('clean', Clean())
 
 @manager.command
@@ -49,6 +66,7 @@ def db_create():
 @manager.command
 def db_migrate():
     import imp
+    import re
     from migrate.versioning import api
     from wpcgi.db import db
     migration = SQLALCHEMY_MIGRATE_REPO + '/versions/%04d_migration.py' % (api.db_version(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO) + 1)
@@ -56,6 +74,7 @@ def db_migrate():
     old_model = api.create_model(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
     exec old_model in tmp_module.__dict__
     script = api.make_update_script_for_model(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO, tmp_module.meta, db.metadata)
+    script = re.sub('INTEGER\(.*?\)', 'INTEGER', script)
     open(migration, "wt").write(script)
     api.upgrade(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
     print 'New migration saved as ' + migration

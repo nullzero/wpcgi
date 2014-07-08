@@ -1,5 +1,5 @@
 {% from "macros/_helpers.html" import render_field %}
-{% extends "categorymover_layout.html" %}
+{% extends "sublayout.html" %}
 
 {% block subcontent %}
   <form action="{{ url_for('categorymover.edit', rid=data.rid) }}" method="post">
@@ -18,8 +18,8 @@
           {{ render_field(form.lang, placeholder=msg['categorymover-lang-placeholder'], choices=c.FORM_ALLLANGS) }}
         </div>
         <div class="col-lg-8 form-horizontal">
-          {{ render_field(form.catfrom, placeholder=msg['categorymover-catfrom-placeholder']) }}
-          {{ render_field(form.catto, placeholder=msg['categorymover-catto-placeholder']) }}
+          {{ render_field(form.cat_from, placeholder=msg['categorymover-catfrom-placeholder']) }}
+          {{ render_field(form.cat_to, placeholder=msg['categorymover-catto-placeholder']) }}
         </div>
       </div>
       <div class="row">

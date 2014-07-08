@@ -1,6 +1,6 @@
 from database import Database
 from sqlalchemy import Column, Integer, DateTime, String, Table, Text
-import wpcgi.error
+import wpcgi.errors
 from mwoauth import mwoauth # fake mwoauth
 
 class CREDIT(object):
@@ -9,16 +9,6 @@ class CREDIT(object):
     USER = 1
     APPROVED = 2
     SYSOP = 3
-
-def must_be(credit=None):
-    def wrapper(fn):
-        def newfn(self, *args, **kwargs):
-            if getattr(CREDIT, credit) <= self.credit():
-                return fn(self, *args, **kwargs)
-            else:
-                raise wpcgi.error.NotApprovedError()
-        return newfn
-    return wrapper
 
 class SelfDatabase(Database):
     def connect(self, user=None, cachefile='selfdb.cache', **kwargs):
@@ -30,19 +20,6 @@ class SelfDatabase(Database):
                        query={'read_default_file': '~/replica.my.cnf'})
 
         super(SelfDatabase, self).connect(dic, cachefile=cachefile, **kwargs)
-
-        class CategoryMover(self.base):
-            __table__ = Table('tool.categorymover', self.metadata,
-                Column('rid', Integer, primary_key=True),
-                Column('date', DateTime, nullable=False),
-                Column('fam', String(31), nullable=False),
-                Column('lang', String(7), nullable=False),
-                Column('catfrom', String(255), nullable=False),
-                Column('catto', String(255), nullable=False),
-                Column('user', String(255), nullable=False),
-                Column('status', Integer, nullable=False),
-                Column('note', String(300), nullable=False),
-            )
 
         class LetsTranslate(self.base):
             __table__ = Table('tool.letstranslate', self.metadata,
@@ -61,29 +38,10 @@ class SelfDatabase(Database):
                 Column('content2', Text, nullable=True),
             )
 
-        class User(self.base):
-            __table__ = Table('user', self.metadata,
-                Column('uid', Integer, primary_key=True),
-                Column('name', String(255), nullable=False),
-                Column('credit', Integer, nullable=False),
-            )
-
-        # TODO: relation between tables?
-        class UserGroup(self.base):
-            __table__ = Table('user_group', self.metadata,
-                Column('rid', Integer, primary_key=True),
-                Column('uid', Integer, nullable=False),
-                Column('group', String(255), nullable=False),
-            )
-
-        self.User = User
-        self.UserGroup = UserGroup
-
-        self.CategoryMover = CategoryMover
         self.LetsTranslate = LetsTranslate
 
         self.metadata.create_all()
-
+        '''
         if not user:
             user = mwoauth.get_current_user()
 
@@ -94,6 +52,7 @@ class SelfDatabase(Database):
                 self.session.commit()
         else:
             self.userinfo = None
+        '''
 
 
     def credit(self, level=None):

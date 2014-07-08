@@ -20,10 +20,10 @@ tools = [
     {
         'name': 'wikitranslator',
     },
-    # {
-    #     'name': 'categorymover',
-    #     'disabled': True,
-    # },
+    {
+        'name': 'categorymover',
+        'disabled': True,
+    },
     {
         'name': 'contribtracker',
     },

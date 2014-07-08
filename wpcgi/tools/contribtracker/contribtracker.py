@@ -41,7 +41,7 @@ def text(**kwargs):
             kwargs['tabStatus'] = 'content'
 
     form = contribtracker.form.getForm()(request.form, **kwargs)
-    data = contribtracker.model.Model(form)
+    data = contribtracker.model.Model(form=form)
 
     if form.validate(data):
         data.render()

@@ -21,7 +21,7 @@ def index(**kwargs):
 
     normalize(['title'], kwargs)
     form = dykchecker.form.getForm()(request.form, **kwargs)
-    data = dykchecker.model.Model(form)
+    data = dykchecker.model.Model(form=form)
     if form.validate(data):
         data.render()
         return render('dykchecker_page.html',

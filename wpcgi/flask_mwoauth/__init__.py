@@ -3,10 +3,13 @@ __version__ = '0.1.31'
 import sys
 import urllib
 from requests.models import Request
-from flask import request, session, redirect, url_for, flash, Blueprint
+from flask import request, session, redirect, url_for, flash, Blueprint, render
 from flask_oauth import OAuth, OAuthRemoteApp, OAuthException, parse_response
 from utils import gourl
 from messages import msg
+import wpcgi.database.user as model
+from wpcgi.db import db
+import wpcgi.errors
 
 class MWOAuthRemoteApp(OAuthRemoteApp):
      def handle_oauth1_response(self):
@@ -31,6 +34,7 @@ class MWOAuth(object):
                  clean_url='https://www.mediawiki.org/wiki',
                  default_return_to='frontend.index',
                  consumer_key=None, consumer_secret=None):
+        self._u = None
         if not consumer_key or not consumer_secret:
             raise Exception('MWOAuthBlueprintFactory needs consumer key and secret')
         self.base_url = base_url
@@ -160,3 +164,32 @@ class MWOAuth(object):
         except OAuthException:
             session['username'] = None
         return session['username']
+
+    def getUser(self):
+        name = self.get_current_user()
+        if not name:
+            u = model.User.query.get(1)
+            if not u:
+                u = model.User(name='#')
+                db.session.add(u)
+                db.session.commit()
+        else:
+            u = model.User.query.filter_by(name=name).first()
+            if not u:
+                u = model.User(name=name)
+                db.session.add(u)
+                db.session.commit()
+        return u
+
+    def in_group(self, groups, error=False):
+        def wrapper(fn):
+            def newfn(obj, *args, **kwargs):
+                user = self.getUser()
+                if user.in_group(groups):
+                    return fn(obj, *args, **kwargs)
+
+                if error:
+                    raise wpcgi.error.NotApprovedError()
+                return render('errors/permission.html', group=group)
+            return newfn
+        return wrapper
