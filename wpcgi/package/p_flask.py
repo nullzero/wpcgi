@@ -74,10 +74,11 @@ class _Blueprint(Blueprint):
 
 flask.Blueprint = _Blueprint
 
-def _render(*args, **kwargs):
+def _render(templatename, *args, **kwargs):
     tool = kwargs.pop('tool', None)
     if tool:
         tool = tool.split('.')[-1]
-    return render_template(*args, tool=tool, msg=msg, **kwargs)
+        templatename = tool + '/' + templatename
+    return render_template(templatename, *args, tool=tool, msg=msg, **kwargs)
 
 flask.render = _render

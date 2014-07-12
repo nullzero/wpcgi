@@ -27,7 +27,7 @@ tools = [
     {
         'name': 'contribtracker',
     },
-    # {
-    #     'name': 'letstranslate',
-    # },
+    {
+        'name': 'letstranslate',
+    },
 ]

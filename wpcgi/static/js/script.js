@@ -14,7 +14,7 @@ $(document).ready(function(){
     * */
 
     $("[data-toogle='tooltip']").tooltip({
-        placement: 'right',
+        placement: 'top',
     });
 
     setTimeout(function() {

@@ -3,7 +3,7 @@
 
 from model import Template
 from wpcgi.db import db, asDict
-from mwoauth import mwoauth
+from decorators import in_group
 from datetime import datetime
 import wpcgi.errors
 
@@ -27,7 +27,7 @@ color = {
 
 class CategoryMover(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.now)
     date_edited = db.Column(db.DateTime, nullable=False)
     fam = db.Column(db.String(31), nullable=False)
     lang = db.Column(db.String(7), nullable=False)
@@ -39,26 +39,19 @@ class CategoryMover(db.Model):
 
     user = db.relationship("User", backref="categorymovers")
 
-    def __init__(self, *args, **kwargs):
-        if not kwargs.get('user_id', None):
-            kwargs['user_id'] = mwoauth.getUser().id
-        super(CategoryMover, self).__init__(*args, **kwargs)
-
 class Model(Template):
     def doinit(self, rid=None):
-        print rid
         if rid:
             self.data = CategoryMover.query.filter_by(id=rid).first()
-            print 'asd'
+            if not self.data:
+                raise wpcgi.errors.IDNotFoundError()
         else:
-            print 'ghi'
             self.data = None
 
         self.queue = self.getByStatus(STATUS.QUEUE)
         self.num_queue = len(self.queue)
         self.nav_active = {'queue': '', 'new': '', 'archive': ''}
         self.rid = rid
-        self.user = mwoauth.getUser()
 
     def getByStatus(self, status):
         if isinstance(status, list):
@@ -104,13 +97,14 @@ class Model(Template):
             cat_to = self.form.cat_to.data,
             note = self.form.note.data,
             date_edited = datetime.now(),
+            user_id = self.user.id
         )
         if self.user.in_group(['categorymover', 'approved']):
             basedata['status'] = STATUS.QUEUE_APPROVED
         else:
             basedata['status'] = STATUS.QUEUE_WAIT
 
-        if self.rid:
+        if self.data:
             for key in basedata:
                 setattr(self.data, key, basedata[key])
             db.session.commit()
@@ -131,14 +125,14 @@ class Model(Template):
         else:
             self.setActive('new')
 
-    @mwoauth.in_group(['categorymover', 'approved'])
+    @in_group(['categorymover', 'approved'])
     def reject(self):
         if self.data.status not in STATUS.QUEUE:
             raise wpcgi.errors.IDNotFoundError()
         self.data.status = STATUS.DONE_REJECTED
         db.session.commit()
 
-    @mwoauth.in_group(['categorymover', 'approved'])
+    @in_group(['categorymover', 'approved'])
     def approve(self):
         if self.data.status not in STATUS.QUEUE:
             raise wpcgi.errors.IDNotFoundError()

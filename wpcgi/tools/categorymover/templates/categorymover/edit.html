@@ -1,5 +1,5 @@
 {% from "macros/_helpers.html" import render_field %}
-{% extends "sublayout.html" %}
+{% extends "categorymover/layout.html" %}
 
 {% block subcontent %}
   <form action="{{ url_for('categorymover.edit', rid=data.rid) }}" method="post">

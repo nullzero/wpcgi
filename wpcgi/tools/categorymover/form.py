@@ -3,17 +3,15 @@
 from flask.ext.wtf import Form
 import wtforms.validators as v
 from wtforms import TextField
-from wtforms.widgets import SubmitInput
 from messages import msg
+from wpcgi.form import getField
 
-class CategoryMoverForm(Form):
-    pass
+class Template(Form):
+    fam = TextField(msg['categorymover-fam-label'], id='txt-fam', validators=[v.Required()])
+    lang = TextField(msg['categorymover-lang-label'], id='txt-lang', validators=[v.Required()])
+    cat_from = TextField(msg['categorymover-cat_from-label'], id='txt-cat_from', validators=[v.Required()])
+    cat_to = TextField(msg['categorymover-cat_to-label'], id='txt-cat_to', validators=[v.Required()])
+    note = TextField(msg['categorymover-note-label'])
 
 def getForm():
-    FormCl = CategoryMoverForm
-    FormCl.fam = TextField(msg['categorymover-fam-label'], id='txt-fam', validators=[v.Required()])
-    FormCl.lang = TextField(msg['categorymover-lang-label'], id='txt-lang', validators=[v.Required()])
-    FormCl.cat_from = TextField(msg['categorymover-catfrom-label'], id='txt-catfrom', validators=[v.Required()])
-    FormCl.cat_to = TextField(msg['categorymover-catto-label'], id='txt-catto', validators=[v.Required()])
-    FormCl.note = TextField(msg['categorymover-note-label'])
-    return FormCl
+    return getField(Template)

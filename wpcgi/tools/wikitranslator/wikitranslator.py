@@ -38,7 +38,7 @@ def index(**kwargs):
     data = wikitranslator.model.Model(form=form)
     if form.validate(data):
         data.render()
-    return render('wikitranslator_index.html',
+    return render('index.html',
                   tool=__name__,
                   form=form,
                   data=data)

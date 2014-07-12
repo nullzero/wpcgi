@@ -6,6 +6,7 @@ from messages import msg
 import time
 from mwoauth import mwoauth
 import c
+import wpcgi.errors
 
 def inject(app):
     inject_variables(app)
@@ -28,32 +29,27 @@ def inject_methods(app):
         if errors or tooltip:
             errorsmsg = ''
             if errors:
-                errorsmsg += msg['core-error'] + '\n'
+                errorsmsg += '<div class="error-tooltip">\n'
+                errorsmsg += '<b><u>' + msg['core-error'] + '</u></b>\n'
                 errorsmsg += '<ul class="error-tooltip">\n'
                 errorsmsg += ''.join(map(lambda x: '<li>' + x + '</li>\n', errors))
                 errorsmsg += '</ul>\n'
+                errorsmsg += '</div>'
             if errors and tooltip:
-                tooltip += '<hr>\n'
+                tooltip += '<hr class="hr-tooltip">\n'
             kwargs.update({'data-toogle': 'tooltip',
                            'data-container': 'body',
                            'data-html': 'true',
-                           'data-placement': 'top',
                            'title': tooltip + errorsmsg
                           })
             clss += ' error'
         return field(class_=clss, **kwargs)
 
-    class User(object):
-        def __init__(self):
-            self.login = False
-
-    user = User()
-
     app.jinja_env.globals.update(render_helper=render_helper,
                                  msg=msg,
-                                 user=user,
                                  mwoauth=mwoauth,
                                  str=str,
+                                 len=len,
                                  c=c)
 
 
@@ -69,3 +65,4 @@ def inject_hooks(app):
         if lang is not None:
             msg.switch_language(lang)
         '''
+

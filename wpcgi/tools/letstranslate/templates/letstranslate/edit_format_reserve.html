@@ -1,0 +1,39 @@
+{% from "macros/_helpers.html" import render_field, header %}
+{% extends "letstranslate/layout.html" %}
+
+{% block subcontent %}
+  <h3>{{ msg['letstranslate-index-format_reserve'] }}</h3>
+  <form action="{{ url_for('.edit_format', id=data.id, mode='reserve') }}" method="post">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2">
+        <div class="row">
+          <div class="col-lg-6 form-horizontal">
+            {{ render_field(form.title_untranslated,
+                            placeholder=msg['letstranslate-title_untranslated-placeholder'],
+                            disabled=True)
+            }}
+            {{ render_field(form.title_translated,
+                            placeholder=msg['letstranslate-title_translated-placeholder'],
+                            disabled=True)
+            }}
+          </div>
+          <div class="col-lg-6 form-horizontal">
+            {{ render_field(form.lang, placeholder=msg['letstranslate-lang-placeholder'], choices=c.FORM_ALLLANGS, disabled=True) }}
+            {{ render_field(form.fam, placeholder=msg['letstranslate-fam-placeholder'], choices=c.FORM_ALLFAMS, disabled=True) }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row">
+          <div class="col-lg-12 form">
+            {{ render_field(form.content_translated, placeholder=msg['letstranslate-content_translated-placeholder'],
+                            labelsize=12, fieldsize=12, rows=10, disabled=True) }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <input type="submit" value="{{ msg['letstranslate-button-submit'] }}" class="btn btn-success col-lg-2 col-lg-offset-5 vspace"/>
+  </form>
+{% endblock %}

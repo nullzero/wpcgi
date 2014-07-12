@@ -3,8 +3,9 @@
 from functools import wraps
 from flask import request, make_response, redirect, flash, render
 from messages import msg
-from mwoauth import mwoauth
 from utils import gourl
+import wpcgi.errors
+from mwoauth import mwoauth
 
 def langswitch(fn):
     """
@@ -20,10 +21,16 @@ def langswitch(fn):
         return response
     return new_fn
 
-def require(fn):
-    @wraps(fn)
-    def new_fn(*in_args, **in_kwargs):
-        if not mwoauth.user():
-            return render('error/permission.html')
-        return fn(*in_args, **in_kwargs)
-    return new_fn
+def in_group(groups, error=False):
+    def decorator(fn):
+        @wraps(fn)
+        def callee(*args, **kwargs):
+            user = mwoauth.getUser()
+            if not user.in_group(groups):
+                if error:
+                    raise wpcgi.errors.NotApprovedError()
+                return render('errors/permission.html', groups=groups)
+            else:
+                return fn(*args, **kwargs)
+        return callee
+    return decorator

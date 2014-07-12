@@ -24,8 +24,8 @@ messages['th'] = {
     'categorymover-id-label': u'รหัส',
     'categorymover-fam-label': u'โครงการ',
     'categorymover-lang-label': u'ภาษา',
-    'categorymover-catfrom-label': u'หมวดหมู่ต้นทาง',
-    'categorymover-catto-label': u'หมวดหมู่ปลายทาง',
+    'categorymover-cat_from-label': u'หมวดหมู่ต้นทาง',
+    'categorymover-cat_to-label': u'หมวดหมู่ปลายทาง',
     'categorymover-note-label': u'เหตุผล / หมายเหตุ',
     'categorymover-button-submit': u'ส่ง',
 }

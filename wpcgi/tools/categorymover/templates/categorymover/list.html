@@ -14,7 +14,7 @@
 </th>
 {% endmacro %}
 
-{% extends "sublayout.html" %}
+{% extends "categorymover/layout.html" %}
 
 {% block subcontent %}
   {% if data.results %}
@@ -31,7 +31,7 @@
           <td>{{ row.date_edited }}</td>
           <td>{{ row.fam }}</td>
           <td>{{ row.cat_from }}</td>
-          <td style="vertical-align: middle;" rowspan="2">{{ row.user.name }}</td>
+          <td style="vertical-align: middle;" rowspan="2">{{ row.user.username }}</td>
           <td style="vertical-align: middle;" rowspan="2">{{ row.note }}</td>
           <td style="vertical-align: middle; align: center;" rowspan="2">
           {% if mode == 'queue' %}

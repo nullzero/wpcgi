@@ -7,7 +7,6 @@ from normalize import normalize_url, normalize
 from messages import msg
 import form
 import c
-from mwoauth import mwoauth
 
 categorymover = Blueprint('categorymover', __name__,
                           file=__file__, tool=True)
@@ -73,7 +72,6 @@ def approve(rid):
 
 @categorymover.route('/reject/<rid>')
 def reject(rid):
-    print '>>>', rid
     data = categorymover.model.Model(rid=rid)
 
     fun = lambda: data.reject()

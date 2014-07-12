@@ -45,7 +45,7 @@ def text(**kwargs):
 
     if form.validate(data):
         data.render()
-    return render('contribtracker_index.html',
+    return render('index.html',
                   tool=__name__,
                   form=form,
                   data=data)

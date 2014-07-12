@@ -1,19 +1,17 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-from flask import g
-from utils import debug
+from mwoauth import mwoauth
 
 class Template(object):
     def __init__(self, first_arg=None, form=None, **kwargs):
-
         if first_arg:
             raise Exception('To create a model, please use kwargs.')
 
         self.is_validate = False
         self.errors = {}
         self.form = form
-        self.debugtext = ""
+        self.user = mwoauth.getUser()
         self.doinit(**kwargs)
 
     def validate(self):
@@ -22,11 +20,9 @@ class Template(object):
         return self.errors
 
     def render(self, *args, **kwargs):
-        if not self.is_validate:
-            raise Exception('Must validate first')
         self.dorender(*args, **kwargs)
 
-    def error(self, field, m):
+    def error(self, field, m=None):
         if field not in self.errors:
             self.errors[field] = []
         self.errors[field].append(m)

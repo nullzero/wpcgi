@@ -24,12 +24,12 @@ def index(**kwargs):
     data = dykchecker.model.Model(form=form)
     if form.validate(data):
         data.render()
-        return render('dykchecker_page.html',
+        return render('page.html',
                       tool=__name__,
                       form=form,
                       data=data)
 
     else:
-        return render('dykchecker_index.html',
+        return render('index.html',
                       tool=__name__,
                       form=form)

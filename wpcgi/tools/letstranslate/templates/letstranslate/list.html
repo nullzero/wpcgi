@@ -1,0 +1,64 @@
+{% macro headtable(wid, wdate, wname, wsite, wtitle) %}
+{% with style = "opacity: 0.7; background-color: lightgray; text-align: center; vertical-align: middle; width:" %}
+{{ args }}
+<th style="{{ style }} {{ wid }}%;">{{ msg['letstranslate-table-id'] }}</th>
+<th style="{{ style }} {{ wdate }}%;">{{ msg['letstranslate-table-date'] }}</th>
+{% if (data.action, data.mode) != ('format', 'reserve') %}
+  <th style="{{ style }} {{ wname }}%;">{{ msg['letstranslate-table-name'] }}</th>
+{% endif %}
+<th style="{{ style }} {{ wsite }}%;">{{ msg['letstranslate-table-site'] }}</th>
+<th style="{{ style }} {{ wtitle }}%;">{{ msg['letstranslate-table-title'] }}</th>
+<th style="{{ style }} {{ 100 - wid - wdate - wname - wtitle - wsite}}%">
+  {{ last }}
+{% endwith %}
+</th>
+{% endmacro %}
+
+{% macro td(text, line=1) %}
+  <td style="vertical-align: middle;" rowspan="{{ line }}">{{ text|safe }}</td>
+{% endmacro %}
+
+{% extends "letstranslate/layout.html" %}
+
+{% block subcontent %}
+  <h3>{{ msg['letstranslate-index-' + data.action + '_' + data.mode] }}</h3>
+  <br />
+  {% if data.results %}
+    <div class='col-lg-10 col-lg-offset-1'>
+      <table class="table" style="text-align: center;">
+        {% if (data.action, data.mode) != ('format', 'reserve') %}
+          {{ headtable(wid=5, wdate=22, wname=19, wsite=15, wtitle=22) }}
+        {% else %}
+          {{ headtable(wid=10, wdate=22, wname=0, wsite=22, wtitle=22) }}
+        {% endif %}
+        {% for row in data.results %}
+          <tr>
+            {{ td(row.id, 2) }}
+            {{ td(row.date_created) }}
+            {% if (data.action, data.mode) != ('format', 'reserve') %}
+              {{ td(data.wikifyUser(row, row.user_translator))|safe }}
+            {% endif %}
+            {{ td(row.fam) }}
+            {{ td(row.title_translated) }}
+            <td style="vertical-align: middle; align: center;" rowspan="2">
+              <a href="{{ url_for('letstranslate.edit_' + data.action, id=row.id, mode=data.mode) }}"
+                 class="btn btn-sm btn-primary col-lg-6 col-lg-offset-3" style="width: 80px">
+                {{ msg['letstranslate-row-view'] }}
+              </a>
+            </td>
+          </tr>
+          <tr>
+            {{ td(row.date_edited) }}</td>
+            {% if (data.action, data.mode) != ('format', 'reserve') %}
+              {{ td(data.wikifyUser(row, row.user_formatter.name, wikify=True))|safe }}
+            {% endif %}
+            {{ td(row.lang) }}
+            {{ td(row.title_untranslated) }}
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  {% else %}
+    <center><i>{{ msg['letstranslate-no-item'] }}</i></center>
+  {% endif %}
+{% endblock %}

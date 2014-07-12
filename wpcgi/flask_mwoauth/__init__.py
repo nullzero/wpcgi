@@ -86,7 +86,7 @@ class MWOAuth(object):
             next_url = session.pop(next_url_key, default_url)
 
             if resp is None:
-                flash(msg['oauth-denied'], 'danger')
+                flash(msg['mwoauth-denied'], 'danger')
                 return redirect(next_url)
             session['mwo_token'] = (
                 resp['oauth_token'],
@@ -94,7 +94,7 @@ class MWOAuth(object):
             )
 
             username = self.get_current_user(False)
-            flash(msg['oauth-signin-successful'].format(username), 'success')
+            flash(msg['mwoauth-signin-successful'].format(username), 'success')
 
             return redirect(next_url)
 
@@ -158,7 +158,7 @@ class MWOAuth(object):
         except KeyError:
             session['username'] = None
             if data['error']['code'] == "mwoauth-invalid-authorization":
-                flash(msg['oauth-revoke-relogin'], 'warning')
+                flash(msg['mwoauth-revoke-relogin'], 'warning')
             else:
                 raise
         except OAuthException:
@@ -179,17 +179,8 @@ class MWOAuth(object):
                 u = model.User(name=name)
                 db.session.add(u)
                 db.session.commit()
+
+                r = model.UserGroup(user_id=u.id, group='*')
+                db.session.add(r)
+                db.session.commit()
         return u
-
-    def in_group(self, groups, error=False):
-        def wrapper(fn):
-            def newfn(obj, *args, **kwargs):
-                user = self.getUser()
-                if user.in_group(groups):
-                    return fn(obj, *args, **kwargs)
-
-                if error:
-                    raise wpcgi.error.NotApprovedError()
-                return render('errors/permission.html', group=group)
-            return newfn
-        return wrapper

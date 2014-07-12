@@ -53,6 +53,17 @@ wtforms.validators.Number = _Number
 
 ##############################
 
+def _Wiki():
+    def _Wiki(form, field):
+        if not field.data or any(char in field.data for char in '#[]'):
+            raise ValidationError(msg['validator-not-wiki'])
+
+    return _Wiki
+
+wtforms.validators.Wiki = _Wiki
+
+##############################
+
 class _IgnoreMe(object):
     def __init__(self, *args, **kwargs):
         pass
