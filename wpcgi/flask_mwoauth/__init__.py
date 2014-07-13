@@ -3,13 +3,12 @@ __version__ = '0.1.31'
 import sys
 import urllib
 from requests.models import Request
-from flask import request, session, redirect, url_for, flash, Blueprint, render
+from flask import request, session, redirect, flash, Blueprint
 from flask_oauth import OAuth, OAuthRemoteApp, OAuthException, parse_response
 from utils import gourl
 from messages import msg
 import wpcgi.database.user as model
 from wpcgi.db import db
-import wpcgi.errors
 
 class MWOAuthRemoteApp(OAuthRemoteApp):
      def handle_oauth1_response(self):
@@ -178,9 +177,5 @@ class MWOAuth(object):
             if not u:
                 u = model.User(name=name)
                 db.session.add(u)
-                db.session.commit()
-
-                r = model.UserGroup(user_id=u.id, group='*')
-                db.session.add(r)
                 db.session.commit()
         return u

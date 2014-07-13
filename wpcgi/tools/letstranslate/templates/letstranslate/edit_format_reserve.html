@@ -2,7 +2,7 @@
 {% extends "letstranslate/layout.html" %}
 
 {% block subcontent %}
-  <h3>{{ msg['letstranslate-index-format_reserve'] }}</h3>
+  <h3>{{ msg['letstranslate-index-format_reserve'] }}</h3><br />
   <form action="{{ url_for('.edit_format', id=data.id, mode='reserve') }}" method="post">
     <div class="row">
       <div class="col-lg-8 col-lg-offset-2">

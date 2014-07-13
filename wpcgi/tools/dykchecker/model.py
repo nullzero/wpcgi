@@ -1,11 +1,9 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-import cgi
 from utils import AttrObject
 from messages import msg
 import pywikibot
-import wp
 from wpcgi.model import Template
 from utils import TextEngine
 
@@ -21,7 +19,7 @@ class Model(Template):
         self.maxday = int(self.form.maxday.data or 14)
 
     def dovalidate(self):
-        self.site = pywikibot.Site()
+        self.site = pywikibot.Site('th')
         self.page = pywikibot.Page(self.site, self.title)
 
         path = self.exists(self.page)

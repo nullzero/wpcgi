@@ -3,9 +3,10 @@
 
 {% block subcontent %}
   <form action="{{ url_for('.edit_organize', id=data.id, mode=data.mode) }}" method="post">
-    <div class="col-lg-10 col-lg-offset-1">
-      <div class="row">
+    <div class="row">
+      <div class="col-lg-10 col-lg-offset-1">
         <div class="col-lg-4 form-horizontal">
+          {{ render_field(form.id, disabled=True) }}
           {{ render_field(form.pid, placeholder=msg['letstranslate-pid-placeholder'], disabled=True) }}
           {{ render_field(form.user_translator, placeholder=msg['letstranslate-name-placeholder'], disabled=True) }}
           {{ render_field(form.email, placeholder=msg['letstranslate-email-placeholder'], disabled=True) }}
@@ -13,6 +14,7 @@
         <div class="col-lg-4 form-horizontal">
           {{ render_field(form.lang, placeholder=msg['letstranslate-lang-placeholder'], choices=c.FORM_ALLLANGS, disabled=True) }}
           {{ render_field(form.fam, placeholder=msg['letstranslate-fam-placeholder'], choices=c.FORM_ALLFAMS, disabled=True) }}
+          {{ render_field(form.user_formatter, disabled=True) }}
         </div>
         <div class="col-lg-4 form-horizontal">
           {{ render_field(form.title_untranslated,
@@ -23,22 +25,25 @@
                           placeholder=msg['letstranslate-title_translatedx-placeholder'],
                           disabled=(data.mode != 'submit'))
           }}
-          {{ render_field(form.user_formatter, disabled=True) }}
+          {{ render_field(form.length, disabled=True, after=msg['letstranslate-length-word'], input_group=True) }}
         </div>
       </div>
     </div>
-    <div class="col-lg-12">
-      <div class="row">
-        <div class="col-lg-12 form">
-          {{ render_field(form.content_formatted, placeholder=msg['letstranslate-content_formatted-placeholder'],
-                          labelsize=12, fieldsize=12, rows=10, disabled=(data.mode != 'submit')) }}
-        </div>
+    {% if data.mode == 'submit' %}
+      <div class="col-lg-8 col-lg-offset-2">
+        {{ render_field(form.summary, disabled=True, labelsize=2, fieldsize=10) }}
       </div>
-      <div class="row">
-        <div class="col-lg-12 form">
-          {{ render_field(form.content_translated, placeholder=msg['letstranslate-content_translated-placeholder'],
-                          labelsize=12, fieldsize=12, rows=10, disabled=True) }}
-        </div>
+    {% endif %}
+    <div class="row">
+      <div class="col-lg-12 form">
+        {{ render_field(form.content_formatted, placeholder=msg['letstranslate-content_formatted-placeholder'],
+                        labelsize=12, fieldsize=12, rows=10, disabled=(data.mode != 'submit')) }}
+      </div>
+    </div>
+    <div class="row vspace">
+      <div class="col-lg-12 form">
+        {{ render_field(form.content_translated, placeholder=msg['letstranslate-content_translated-placeholder'],
+                        labelsize=12, fieldsize=12, rows=10, disabled=True) }}
       </div>
     </div>
     {% if data.mode == 'submit' %}

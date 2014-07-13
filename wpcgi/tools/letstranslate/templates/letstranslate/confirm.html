@@ -2,26 +2,24 @@
 {% extends "letstranslate/layout.html" %}
 
 {% block subcontent %}
-  <div class="col-lg-6 col-lg-offset-3">
+  <form action="dummy" method="post">
     <div class="row">
-      <div class="col-lg-3 col-lg-offset-3">
-        {{ msg['letstranslate-confirm-length'] }}
-      </div>
-      <div class="col-lg-6">
-        {{ data.length() }}
+      <div class="col-lg-4 col-lg-offset-4 form-horizontal">
+        {{ render_field(form.id, disabled=True, labelsize=5, fieldsize=7) }}
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-3 col-lg-offset-3">
-        {{ msg['letstranslate-confirm-id'] }}
-      </div>
-      <div class="col-lg-6">
-        {{ data.data.id }}
+      <div class="col-lg-4 col-lg-offset-4 form-horizontal">
+        {{ render_field(form.length, disabled=True, labelsize=5, fieldsize=7, after=msg['letstranslate-length-word'], input_group=True) }}
       </div>
     </div>
-    <br />
-    {{ msg['letstranslate-confirm-text'] }}
-    <br />
-    <br />
-  </div>
+    <div class="row">
+      <div class="col-lg-6 col-lg-offset-3">
+        <br />
+        {{ msg['letstranslate-confirm-text'] }}
+        <br />
+        <br />
+      </div>
+    </div>
+  </form>
 {% endblock %}

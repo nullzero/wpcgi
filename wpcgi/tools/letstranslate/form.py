@@ -3,7 +3,6 @@
 from flask.ext.wtf import Form
 import wtforms.validators as v
 from wtforms import TextField, TextAreaField, BooleanField
-from wtforms.widgets import SubmitInput
 from messages import msg
 from wpcgi.form import getField
 
@@ -18,13 +17,19 @@ class Template(Form):
     email = TextField(msg['letstranslate-email-label'], id='txt-email', validators=[v.Required(), v.Email()])
     content_translated = TextAreaField(msg['letstranslate-content_translated-label'], validators=[v.Required()])
     content_formatted = TextAreaField(msg['letstranslate-content_formatted-label'], validators=[v.Required()])
-    wikiuser = BooleanField(msg['letstranslate-wikiuser-label'])
+    wikiuser = BooleanField()
+    length = TextField(msg['letstranslate-length-label'])
+    id = TextField(msg['letstranslate-id-label'])
+    summary = TextField(msg['letstranslate-summary-label'])
 
 def getForm(action, mode):
     if action == 'translate':
-        field = ['pid', 'user_translator', 'lang', 'fam',
-                 'title_untranslated', 'title_translated',
-                 'email', 'content_translated', 'wikiuser']
+        if mode == 'result':
+            field = ['length', 'id']
+        else:
+            field = ['pid', 'user_translator', 'lang', 'fam',
+                     'title_untranslated', 'title_translated',
+                     'email', 'content_translated', 'wikiuser']
     elif action == 'format':
         if mode == 'reserve':
             field = ['lang', 'fam', 'title_untranslated', 'title_translated', 'content_translated']
@@ -33,8 +38,10 @@ def getForm(action, mode):
                      'title_untranslated', 'title_translated',
                      'email', 'content_translated', 'content_formatted']
     else:
-        field = ['pid', 'user_translator', 'lang', 'fam',
+        field = ['id', 'length', 'pid', 'user_translator', 'lang', 'fam',
                  'title_untranslated', 'title_translated',
                  'email', 'content_translated', 'content_formatted', 'user_formatter']
+        if mode == 'submit':
+            field.append('summary')
 
     return getField(Template, field)

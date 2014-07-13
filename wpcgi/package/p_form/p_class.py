@@ -23,11 +23,9 @@ class _Form(Form):
                         field.label.text, msg['core-required-symbol'])
 
     def validate(self, data=None):
-        '''
-        if not request.form:
-            return False
-        '''
         def isInteracting():
+            if request.form:
+                return True
             for fieldname in self.data:
                 field = getattr(self, fieldname)
                 ignore = False

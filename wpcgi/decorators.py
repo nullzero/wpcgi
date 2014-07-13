@@ -1,10 +1,8 @@
 #!/data/project/nullzerobot/python/bin/python
 
 from functools import wraps
-from flask import request, make_response, redirect, flash, render
+from flask import request, make_response, render
 from messages import msg
-from utils import gourl
-import wpcgi.errors
 from mwoauth import mwoauth
 
 def langswitch(fn):
@@ -21,14 +19,13 @@ def langswitch(fn):
         return response
     return new_fn
 
-def in_group(groups, error=False):
+def in_group(groups):
     def decorator(fn):
         @wraps(fn)
         def callee(*args, **kwargs):
             user = mwoauth.getUser()
+            print user
             if not user.in_group(groups):
-                if error:
-                    raise wpcgi.errors.NotApprovedError()
                 return render('errors/permission.html', groups=groups)
             else:
                 return fn(*args, **kwargs)

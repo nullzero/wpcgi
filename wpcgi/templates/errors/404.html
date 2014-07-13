@@ -1,0 +1,11 @@
+{% extends "error.html" %}
+{% block subcontent %}
+
+<div style="text-align: center">
+<h1>{{ msg['errorpage-404-title'] }}</h1>
+<br />
+{{ msg['errorpage-404-description'] }}
+<a href="{{ url }}">{{ msg['errorpage-404-return'] }}<a>
+</div>
+
+{% endblock %}

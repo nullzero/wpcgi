@@ -8,7 +8,6 @@ import os
 try:
     from wpcgi import app
     from flask import g
-    from utils import profile, debug
 except ImportError:
     withoutEngine = True
     if 'WPCGI_DATABASE' in os.environ:

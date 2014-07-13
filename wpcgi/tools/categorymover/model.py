@@ -3,9 +3,8 @@
 
 from model import Template
 from wpcgi.db import db, asDict
-from decorators import in_group
 from datetime import datetime
-import wpcgi.errors
+from flask import abort
 
 class STATUS(object):
     QUEUE_WAIT = 0
@@ -39,12 +38,17 @@ class CategoryMover(db.Model):
 
     user = db.relationship("User", backref="categorymovers")
 
+class IDNotFoundError(Exception):
+    msg = 'error-id-not-found'
+    level = 'danger'
+    next = 'categorymover.index'
+
 class Model(Template):
     def doinit(self, rid=None):
         if rid:
             self.data = CategoryMover.query.filter_by(id=rid).first()
             if not self.data:
-                raise wpcgi.errors.IDNotFoundError()
+                raise IDNotFoundError
         else:
             self.data = None
 
@@ -108,10 +112,12 @@ class Model(Template):
             for key in basedata:
                 setattr(self.data, key, basedata[key])
             db.session.commit()
+            return self.data.id
         else:
             categorymover = CategoryMover(**basedata)
             db.session.add(categorymover)
             db.session.commit()
+            return categorymover.id
 
     def renderEdit(self):
         if self.rid:
@@ -125,16 +131,13 @@ class Model(Template):
         else:
             self.setActive('new')
 
-    @in_group(['categorymover', 'approved'])
-    def reject(self):
+    def changeStatus(self, mode):
         if self.data.status not in STATUS.QUEUE:
-            raise wpcgi.errors.IDNotFoundError()
-        self.data.status = STATUS.DONE_REJECTED
-        db.session.commit()
-
-    @in_group(['categorymover', 'approved'])
-    def approve(self):
-        if self.data.status not in STATUS.QUEUE:
-            raise wpcgi.errors.IDNotFoundError()
-        self.data.status = STATUS.QUEUE_APPROVED
+            raise IDNotFoundError
+        if mode == 'reject':
+            self.data.status = STATUS.DONE_REJECTED
+        elif mode == 'approve':
+            self.data.status = STATUS.QUEUE_APPROVED
+        else:
+            abort(404)
         db.session.commit()

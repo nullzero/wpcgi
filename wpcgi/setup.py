@@ -4,18 +4,18 @@
 import os
 import package # patch, must be called first
 import db
-from flask import Flask, render_template, Blueprint
 from mwoauth import mwoauth
-from views import frontend
+from views.frontend import frontend
+from views.error import error
 import tools
-from messages import msg
 import inject
 
 __all__ = ['setup']
 
 DEFAULT_BLUEPRINTS = tuple([
     mwoauth.bp,
-    frontend
+    frontend,
+    error
 ] + tools.tools)
 
 def setup(app, blueprints=None):

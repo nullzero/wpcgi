@@ -1,9 +1,9 @@
 {% extends "error.html" %}
 {% block subcontent %}
 
-<h1>{{ msg['permissionerror-title'] }}</h1>
+<h1>{{ msg['errorpage-permission-title'] }}</h1>
 <br />
-{{ msg['permissionerror-body']|safe }}
+{{ msg['errorpage-permission-body']|safe }}
 <ul style="margin-top: 10px">
 {% for group in groups %}
 <li><b>{{ msg['permission-' + group] }}</b> ({{ group }}): {{ msg['permission-' + group + '-description'] }}</li>

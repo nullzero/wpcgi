@@ -1,11 +1,8 @@
 #!/data/project/nullzerobot/python/bin/python
 
-from flask import Blueprint, render, g, redirect, url_for, request, flash
+from flask import Blueprint, render, redirect, url_for, request
 from decorators import langswitch
-from utils import get_params, newtry
-from normalize import normalize_url, normalize
-from messages import msg
-import form
+from utils import get_params
 import c
 
 contribtracker = Blueprint('contribtracker', __name__,

@@ -1,27 +1,11 @@
 #!/data/project/nullzerobot/python/bin/python
 
-from flask import Blueprint, render, g, redirect, url_for, request, flash
+from flask import Blueprint, render, redirect, url_for, request, flash
 from decorators import langswitch, in_group
-from utils import get_params
-from normalize import normalize_url, normalize
 from messages import msg
-import form
-import c
-import wpcgi.errors
-from pprint import pprint
 
 letstranslate = Blueprint('letstranslate', __name__,
                           file=__file__, tool=True)
-
-@letstranslate.app_errorhandler(Exception)
-def exception(e):
-    if isinstance(e, letstranslate.model.IDNotFoundError):
-        flash(msg['error-letstranslate-id-not-found'], 'danger')
-    elif isinstance(e, letstranslate.model.ModeError):
-        flash(msg['error-letstranslate-mode'], 'danger')
-    else:
-        raise
-    return redirect(url_for('.index'))
 
 @letstranslate.route('/')
 @langswitch
@@ -109,8 +93,10 @@ def edit_meta(action, mode=None, file='index.html', id=None, suppress_flash=Fals
 
 @letstranslate.route('/translate/<id>')
 def confirm_translate(id):
-    data = letstranslate.model.Model(action='translate', id=id, mode='result')
-    return render('confirm.html', tool=__name__, data=data)
+    form = letstranslate.form.getForm(action='translate', mode='result')(request.form)
+    data = letstranslate.model.Model(form=form, action='translate', id=id, mode='result')
+    data.renderEdit()
+    return render('confirm.html', tool=__name__, form=form, data=data)
 
 @letstranslate.route('/reject/<mode>/<id>')
 @in_group(['*'])

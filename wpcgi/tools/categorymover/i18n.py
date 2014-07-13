@@ -28,6 +28,9 @@ messages['th'] = {
     'categorymover-cat_to-label': u'หมวดหมู่ปลายทาง',
     'categorymover-note-label': u'เหตุผล / หมายเหตุ',
     'categorymover-button-submit': u'ส่ง',
+
+    'categorymover-edit-success': u'',
+    'categorymover-new-success': u'',
 }
 
 messages['en'] = {

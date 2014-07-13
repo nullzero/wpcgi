@@ -1,10 +1,9 @@
 #!/data/project/nullzerobot/python/bin/python
 
-from flask import Blueprint, render, g, redirect, url_for, request
+from flask import Blueprint, render, redirect, url_for, request
 from decorators import langswitch
 from utils import get_params
 from normalize import normalize_url, normalize
-import form
 import c
 
 dykchecker = Blueprint('dykchecker', __name__,

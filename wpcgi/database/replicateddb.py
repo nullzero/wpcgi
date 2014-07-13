@@ -3,7 +3,6 @@
 
 try:
     from flask import g
-    from utils import profile
 except ImportError:
     import os
     import sys
@@ -11,7 +10,6 @@ except ImportError:
     os.environ["WPROBOT_BOT"] = "Nullzerobot"
     sys.path.append("/data/project/nullzerobot/wprobot")
 
-import wprobot
 import pywikibot
 
 from database import Database

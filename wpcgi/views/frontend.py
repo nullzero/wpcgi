@@ -1,10 +1,8 @@
 #!/data/project/nullzerobot/python/bin/python
 
-from flask import (Blueprint, render, request,
-                   flash, url_for, redirect, session, abort)
+from flask import Blueprint, render
 from decorators import langswitch
-from wpcgi import tools, app
-from mwoauth import mwoauth
+from wpcgi import tools
 
 frontend = Blueprint('frontend', __name__)
 

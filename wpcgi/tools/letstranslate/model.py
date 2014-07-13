@@ -4,9 +4,9 @@
 from model import Template
 from datetime import datetime
 from wpcgi.db import db, asDict
-from decorators import in_group
-import wpcgi.errors
 from utils import TextEngine
+from messages import msg
+from flask import abort
 
 class STATUS(object):
     TRANSLATED = 1
@@ -34,10 +34,9 @@ class LetsTranslate(db.Model):
     user_formatter = db.relationship("User", backref="letstranslates")
 
 class IDNotFoundError(Exception):
-    pass
-
-class ModeError(Exception):
-    pass
+    msg = 'error-id-not-found'
+    level = 'danger'
+    next = 'letstranslate.index'
 
 class Model(Template):
     def doinit(self, id=None, action=None, mode=None):
@@ -54,9 +53,8 @@ class Model(Template):
             ('recover', None): STATUS.REJECTED,
         }
         if (action, mode) not in statusMap.keys():
-            raise ModeError
+            abort(404)
         if id:
-            notFound = False
             self.data = LetsTranslate.query.filter_by(id=id).first()
             if not self.data or statusMap[(action, mode)] != self.data.status:
                 raise IDNotFoundError
@@ -90,16 +88,27 @@ class Model(Template):
         self.results = filter(lambda x: x.status == status, query)
 
     def renderEdit(self):
-        if self.action != 'translate' and not self.form.request:
+        if (self.action, self.mode) == ('translate', None):
+            return
+
+        if not (hasattr(self.form, 'request') and self.form.request):
             data = asDict(self.data)
             for key in data:
                 if hasattr(self.form, key):
                     getattr(self.form, key).data = data[key]
-        if self.action == 'organize':
-            self.form.user_formatter.data = self.data.user_formatter.username
 
         if (self.action, self.mode) == ('format', 'submit'):
             self.form.content_formatted.data = ''
+
+        if (self.action, self.mode) == ('organize', 'submit'):
+            self.form.summary.data = msg['letstranslate-summary'].format(data['user_translator'], self.data.user_formatter.username)
+
+        if hasattr(self.form, 'length'):
+            engine = TextEngine()
+            self.form.length.data = engine.length(self.data.content_translated)[0]
+
+        if hasattr(self.form, 'user_formatter'):
+            self.form.user_formatter.data = self.data.user_formatter.username
 
     def save(self):
         wikify = None
@@ -163,7 +172,3 @@ class Model(Template):
                                                                                           lang=row.lang,
                                                                                           name=name)
         return name
-
-    def length(self):
-        engine = TextEngine()
-        return engine.length(self.data.content_translated)[0]

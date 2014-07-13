@@ -1,9 +1,8 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-import pywikibot
 from wp import lre
-from flask import request, g, flash, url_for
+from flask import request, g, url_for
 import subprocess
 import cgi
 
@@ -26,7 +25,6 @@ def get_params(L):
 
 import cProfile as profiler
 import gc, pstats, time
-
 
 def profile(fn):
     def wrapper(*args, **kw):
@@ -59,23 +57,6 @@ def debug(*args, **kwargs):
         else:
             g.debugtext += arg + ', '
     g.debugtext += ']<br/>\n'
-
-def newtry(local):
-    hasError = True
-    try:
-        result = local['fun']()
-    except Exception, e:
-        if hasattr(e, 'flash_msg'):
-            if e.flash_msg:
-                flash(e.flash_msg, e.flash_level)
-        else:
-            raise
-    else:
-        hasError = False
-    if hasError:
-        return local['onFail']()
-    else:
-        return local['onSuccess'](result)
 
 def gourl(default='frontend.index'):
     return (request.args.get('next') or

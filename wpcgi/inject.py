@@ -1,12 +1,12 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-from flask import g, request, after_this_request
+from flask import g, render
 from messages import msg
 import time
 from mwoauth import mwoauth
 import c
-import wpcgi.errors
+from utils import gourl
 
 def inject(app):
     inject_variables(app)
@@ -66,3 +66,6 @@ def inject_hooks(app):
             msg.switch_language(lang)
         '''
 
+    @app.errorhandler(404)
+    def errorhandler(e):
+        return render('errors/404.html', url=gourl())

@@ -2,12 +2,9 @@
 
 import imp
 from flask import *
-from functools import wraps
 from wpcgi.messages import msg
-import wpcgi.messages
 import flask
 import os
-import random
 
 class _Blueprint(Blueprint):
     '''
