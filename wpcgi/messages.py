@@ -6,7 +6,7 @@ import os
 from collections import defaultdict
 from markdown import markdown
 from wpcgi import app
-import i18n
+from wpcgi import i18n
 
 class Message(object):
     def __init__(self):
