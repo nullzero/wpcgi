@@ -7,6 +7,7 @@ from collections import defaultdict
 from markdown import markdown
 from wpcgi import app
 from wpcgi import i18n
+from flask import request
 
 class Message(object):
     def __init__(self):

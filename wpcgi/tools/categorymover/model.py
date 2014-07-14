@@ -4,7 +4,7 @@
 from model import Template
 from wpcgi.db import db, asDict
 from datetime import datetime
-from flask import abort
+from flask import abort, url_for, redirect, flash
 
 class STATUS(object):
     QUEUE_WAIT = 0
@@ -39,9 +39,9 @@ class CategoryMover(db.Model):
     user = db.relationship("User", backref="categorymovers")
 
 class IDNotFoundError(Exception):
-    msg = 'error-id-not-found'
-    level = 'danger'
-    next = 'categorymover.index'
+    def next(self):
+        flash(msg['error-id-not-found'], 'danger')
+        return redirect(url_for('letstranslate.index'))
 
 class Model(Template):
     def doinit(self, rid=None):

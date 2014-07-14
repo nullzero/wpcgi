@@ -6,7 +6,7 @@ from datetime import datetime
 from wpcgi.db import db, asDict
 from utils import TextEngine
 from messages import msg
-from flask import abort
+from flask import abort, flash, url_for, redirect
 
 class STATUS(object):
     TRANSLATED = 1
@@ -34,9 +34,9 @@ class LetsTranslate(db.Model):
     user_formatter = db.relationship("User", backref="letstranslates")
 
 class IDNotFoundError(Exception):
-    msg = 'error-id-not-found'
-    level = 'danger'
-    next = 'letstranslate.index'
+    def next(self):
+        flash(msg['error-id-not-found'], 'danger')
+        return redirect(url_for('letstranslate.index'))
 
 class Model(Template):
     def doinit(self, id=None, action=None, mode=None):

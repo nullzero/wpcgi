@@ -24,7 +24,6 @@ def in_group(groups):
         @wraps(fn)
         def callee(*args, **kwargs):
             user = mwoauth.getUser()
-            print user
             if not user.in_group(groups):
                 return render('errors/permission.html', groups=groups)
             else:

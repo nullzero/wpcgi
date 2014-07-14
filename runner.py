@@ -77,8 +77,8 @@ def db_migrate():
     script = re.sub('INTEGER\(.*?\)', 'INTEGER', script)
     open(migration, "wt").write(script)
     print 'New migration saved as ' + migration
-    api.upgrade(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
-    print 'Current database version: ' + str(api.db_version(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO))
+    # api.upgrade(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO)
+    # print 'Current database version: ' + str(api.db_version(SQLALCHEMY_DATABASE_URI, SQLALCHEMY_MIGRATE_REPO))
 
 @manager.command
 def db_upgrade():

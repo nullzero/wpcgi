@@ -1,7 +1,7 @@
 #!/data/project/nullzerobot/python/bin/python
 # -*- coding: utf-8 -*-
 
-from flask import g, render
+from flask import g, render, request
 from messages import msg
 import time
 from mwoauth import mwoauth
@@ -60,12 +60,6 @@ def inject_hooks(app):
         g.request_start_time = time.time()
         g.request_time = lambda: "%.5f" % (time.time() - g.request_start_time)
 
-        '''
         lang = request.cookies.get('uselang')
         if lang is not None:
             msg.switch_language(lang)
-        '''
-
-    @app.errorhandler(404)
-    def errorhandler(e):
-        return render('errors/404.html', url=gourl())

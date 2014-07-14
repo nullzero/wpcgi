@@ -24,6 +24,7 @@ class BaseConfig(object):
     CONSUMER_SECRET = key[2][len('cons_secret: '):]
     SQLALCHEMY_DATABASE_URI = 'mysql://tools-db/s51093__tools?read_default_file=~/replica.my.cnf'
     SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
+    SQLALCHEMY_POOL_RECYCLE = 3600
     MODE = 'default'
 
 class TestConfig(BaseConfig):

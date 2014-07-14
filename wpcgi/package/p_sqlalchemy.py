@@ -11,12 +11,6 @@ class RepresentableBase(Model):
             self.__class__.__name__,
             ', '.join(['{0}={1!r}'.format(*_) for _ in items]))
 
-    """
-    def __init__(self, **kwargs):
-        for key in kwargs:
-            setattr(self, key, kwargs[key])
-    """
-
 class _SQLAlchemy(SQLAlchemy):
     def make_declarative_base(self):
         """Creates the declarative base."""

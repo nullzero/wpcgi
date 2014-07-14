@@ -12,6 +12,7 @@ messages['en'] = {
                             '<a href="//th.wikipedia.org/wiki/User_talk:Nullzero">tool\'s owner</a>',
     'core-error': 'Error: ',
     'core-success': u'Success!',
+    'core-faq': u'FAQ',
 
     'mwoauth-login': 'Sign in',
 
