@@ -55,7 +55,7 @@ wtforms.validators.Number = _Number
 
 def _Wiki():
     def _Wiki(form, field):
-        if not field.data or any(char in field.data for char in '#[]'):
+        if not field.data or any(char in field.data for char in '#'):
             raise ValidationError(msg['validator-not-wiki'])
 
     return _Wiki
