@@ -30,6 +30,9 @@ class Message(object):
             return True
         return False
 
+    def __contains__(self, name):
+        return name in self.messages[self.lang]
+
     def __getitem__(self, name):
         if name in self.messages[self.lang]:
             if isinstance(self.messages[self.lang][name], tuple):

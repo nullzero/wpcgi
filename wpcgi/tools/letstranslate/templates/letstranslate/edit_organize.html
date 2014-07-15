@@ -7,7 +7,7 @@
       <div class="col-lg-10 col-lg-offset-1">
         <div class="col-lg-4 form-horizontal">
           {{ render_field(form.id, disabled=True) }}
-          {{ render_field(form.pid, placeholder=msg['letstranslate-pid-placeholder'], disabled=True) }}
+          {{ render_field(form.pid, label=msg['letstranslate-pid-label'], placeholder=msg['letstranslate-pid-placeholder'], disabled=True) }}
           {{ render_field(form.user_translator, placeholder=msg['letstranslate-name-placeholder'], disabled=True) }}
           {{ render_field(form.email, placeholder=msg['letstranslate-email-placeholder'], disabled=True) }}
         </div>
@@ -22,7 +22,7 @@
                           disabled=True)
           }}
           {{ render_field(form.title_translated,
-                          placeholder=msg['letstranslate-title_translatedx-placeholder'],
+                          placeholder=msg['letstranslate-title_translated-placeholder'],
                           disabled=(data.mode != 'submit'))
           }}
           {{ render_field(form.length, disabled=True, after=msg['letstranslate-length-word'], input_group=True) }}

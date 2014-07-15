@@ -7,7 +7,7 @@ from messages import msg
 from wpcgi.form import getField
 
 class Template(Form):
-    pid = TextField(msg['letstranslate-pid-label'], id='txt-pid', validators=[v.Required(), v.Number()])
+    pid = TextField(id='txt-pid', validators=[v.Required(), v.Number()])
     user_translator = TextField(msg['letstranslate-user_translator-label'], id='txt-user_translator', validators=[v.Required(), v.Wiki()])
     user_formatter = TextField(msg['letstranslate-user_formatter-label'], id='txt-name', validators=[v.Required()])
     lang = TextField(msg['letstranslate-lang-label'], id='txt-lang', validators=[v.Required(), v.IgnoreMe()])

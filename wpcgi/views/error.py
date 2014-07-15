@@ -1,9 +1,10 @@
 #!/data/project/nullzerobot/python/bin/python
 
-from flask import Blueprint
+from flask import Blueprint, render
 from decorators import langswitch
 from mwoauth import mwoauth
 from messages import msg
+from utils import gourl
 
 error = Blueprint('errors', __name__)
 

@@ -2,7 +2,7 @@
 
 import imp
 from flask import *
-from wpcgi.messages import msg
+from messages import msg
 import flask
 import os
 

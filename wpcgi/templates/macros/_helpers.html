@@ -1,5 +1,9 @@
-{% macro render_field(field, input_group=False, before='', after='', labelsize=4, fieldsize=8, choices=None, disabled=False) %}
+{% macro render_field(field, input_group=False, before='', after='', labelsize=4, fieldsize=8, choices=None, disabled=False, label="", name="") %}
 <div class="form-group {% if field.errors %}has-error{% endif %}">
+  {% if label %}
+    {% do updateLabel(field, label) %}
+  {% endif %}
+
   {% if field.label %}
     {{ field.label(class="col-lg-{} control-label".format(labelsize)) }}
   {% endif %}

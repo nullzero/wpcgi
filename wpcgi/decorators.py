@@ -1,7 +1,7 @@
 #!/data/project/nullzerobot/python/bin/python
 
 from functools import wraps
-from flask import request, make_response, render
+from flask import request, make_response, render, redirect, url_for
 from messages import msg
 from mwoauth import mwoauth
 
@@ -13,7 +13,8 @@ def langswitch(fn):
     def new_fn(*in_args, **in_kwargs):
         lang = request.args.get('uselang', None)
         setcookie = (lang and msg.switch_language(lang))
-        response = make_response(fn(*in_args, **in_kwargs))
+        res = fn(*in_args, **in_kwargs)
+        response = make_response(res)
         if setcookie:
             response.set_cookie('uselang', lang)
         return response

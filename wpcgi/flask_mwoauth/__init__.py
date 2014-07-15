@@ -165,14 +165,14 @@ class MWOAuth(object):
         return session['username']
 
     def getUser(self):
+        u = model.User.query.get(1)
+        if u is None:
+            u = model.User(name='#')
+            db.session.add(u)
+            db.session.commit()
+
         name = self.get_current_user()
-        if not name:
-            u = model.User.query.get(1)
-            if not u:
-                u = model.User(name='#')
-                db.session.add(u)
-                db.session.commit()
-        else:
+        if name is not None:
             u = model.User.query.filter_by(name=name).first()
             if not u:
                 u = model.User(name=name)

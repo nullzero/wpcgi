@@ -8,6 +8,8 @@
       <div class="row">
         <div class="col-lg-4 form-horizontal">
           {{ render_field(form.pid,
+                          name='letstranslate-pid',
+                          label=msg['letstranslate-pid-label'],
                           placeholder=msg['letstranslate-pid-placeholder'],
                           tooltip=msg['letstranslate-pid-tooltip']) }}
           {{ render_field(form.email,
@@ -18,9 +20,7 @@
           {{ render_field(form.title_untranslated,
                           placeholder=msg['letstranslate-title_untranslated-placeholder'],
                           tooltip=msg['letstranslate-title_untranslated-tooltip']) }}
-          {{ render_field(form.title_translated,
-                          placeholder=msg['letstranslate-title_translated-placeholder'],
-                          tooltip=msg['letstranslate-title_translated-tooltip']) }}
+          {% block form_title_translated %}{{ super() }}{% endblock %}
         </div>
         <div class="col-lg-4 form-horizontal">
           {{ render_field(form.lang,
@@ -33,8 +33,6 @@
                           choices=c.FORM_ALLFAMS) }}
         </div>
       </div>
-
-
       <div class="row">
         <div class="col-lg-6 col-lg-offset-3 form-horizontal">
           {{ render_field(form.user_translator,

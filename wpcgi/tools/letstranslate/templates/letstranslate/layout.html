@@ -5,11 +5,30 @@
   {{ header(msg['letstranslate-title']) }}
 
   <div class="row">
-    {% block subcontent %}
-    {% endblock %}
+    {% block subcontent %}{% endblock %}
   </div>
 
   <div class="row">
     <a href="{{ url_for('.index') }}">{{ msg['letstranslate-back-to-home'] }}</a>
   </div>
 {% endblock %}
+
+{% if form %}
+  {% if form.title_translated %}
+    {% block form_title_translated %}
+      {{ render_field(form.title_translated,
+                      label=msg['letstranslate-title_translated-label'],
+                      placeholder=msg['letstranslate-title_translated-placeholder'],
+                      tooltip=msg['letstranslate-title_translated-tooltip']) }}
+    {% endblock %}
+  {% endif %}
+  {% if form.content_formatted %}
+    {% block form_content_formatted %}
+      {{ render_field(form.content_formatted,
+                      label=msg['letstranslate-content_formatted-label'],
+                      placeholder=msg['letstranslate-content_formatted-placeholder'],
+                      tooltip=msg['letstranslate-content_formatted-tooltip'],
+                      labelsize=12, fieldsize=12, rows=10) }}
+    {% endblock %}
+  {% endif %}
+{% endif %}

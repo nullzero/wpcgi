@@ -168,7 +168,7 @@ class Model(Template):
             wikify = True
 
         if wikify:
-            name = '<a href="http://{lang}.{fam}.org/wiki/User:{name}">{name}</a>'.format(fam=row.fam,
-                                                                                          lang=row.lang,
-                                                                                          name=name)
+            name = u'<a href="http://{lang}.{fam}.org/wiki/User:{name}">{name}</a>'.format(fam=row.fam,
+                                                                                           lang=row.lang,
+                                                                                           name=name)
         return name

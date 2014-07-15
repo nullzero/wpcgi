@@ -45,12 +45,19 @@ def inject_methods(app):
             clss += ' error'
         return field(class_=clss, **kwargs)
 
+    def updateLabel(field, label):
+        field.label.text = label
+
     app.jinja_env.globals.update(render_helper=render_helper,
                                  msg=msg,
                                  mwoauth=mwoauth,
                                  str=str,
                                  len=len,
-                                 c=c)
+                                 c=c,
+                                 updateLabel=updateLabel)
+
+    # inject tag
+    app.jinja_env.add_extension('jinja2.ext.do')
 
 
 def inject_hooks(app):
