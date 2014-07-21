@@ -22,10 +22,17 @@ def inject_variables(app):
         return dict(languages=languages)
 
 def inject_methods(app):
-    def render_helper(field, errors=None, **kwargs):
-        clss = kwargs.pop('class', kwargs.pop('class_', None)) or ''
+    def render_helper(field, errors=None, name=None, **kwargs):
+        if kwargs.pop('readonly', False):
+            kwargs['readonly'] = None
+        clss = kwargs.pop('class', kwargs.pop('class_', '')) + ' form-control'
+        placeholder = kwargs.pop('placeholder', '')
         tooltip = kwargs.pop('tooltip', '')
-        clss += ' form-control'
+        if placeholder is True:
+            placeholder = msg[name + '-placeholder']
+        if tooltip is True:
+            tooltip = msg[name + '-tooltip']
+
         if errors or tooltip:
             errorsmsg = ''
             if errors:
@@ -43,7 +50,7 @@ def inject_methods(app):
                            'title': tooltip + errorsmsg
                           })
             clss += ' error'
-        return field(class_=clss, **kwargs)
+        return field(class_=clss, placeholder=placeholder, **kwargs)
 
     def updateLabel(field, label):
         field.label.text = label
@@ -54,7 +61,9 @@ def inject_methods(app):
                                  str=str,
                                  len=len,
                                  c=c,
-                                 updateLabel=updateLabel)
+                                 updateLabel=updateLabel,
+                                 istrue=lambda x: x is True,
+                                 )
 
     # inject tag
     app.jinja_env.add_extension('jinja2.ext.do')

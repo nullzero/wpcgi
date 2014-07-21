@@ -1,16 +1,17 @@
-{% from "macros/_helpers.html" import render_field, header %}
 {% extends "letstranslate/layout.html" %}
 
 {% block subcontent %}
   <form action="dummy" method="post">
     <div class="row">
       <div class="col-lg-4 col-lg-offset-4 form-horizontal">
-        {{ render_field(form.id, disabled=True, labelsize=5, fieldsize=7) }}
+        {{ render_field(form.id,
+                        disabled=True, labelsize=5, fieldsize=7) }}
       </div>
     </div>
     <div class="row">
       <div class="col-lg-4 col-lg-offset-4 form-horizontal">
-        {{ render_field(form.length, disabled=True, labelsize=5, fieldsize=7, after=msg['letstranslate-length-word'], input_group=True) }}
+        {{ render_field(form.length,
+                        disabled=True, labelsize=5, fieldsize=7, after=msg['letstranslate-length-word'], input_group=True) }}
       </div>
     </div>
     <div class="row">

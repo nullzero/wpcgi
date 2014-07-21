@@ -4,6 +4,7 @@
 import os
 import package # patch, must be called first
 import db
+import db_listen
 from mwoauth import mwoauth
 from views.frontend import frontend
 from views.error import error

@@ -1,4 +1,3 @@
-{% from "macros/_helpers.html" import render_field, header %}
 {% extends "layout.html" %}
 
 {% block content %}
@@ -13,7 +12,7 @@
           {{ render_field(form.siteDest,
                           labelsize=5,
                           fieldsize=7,
-                          placeholder=msg['wikitranslator-siteDest-placeholder'],
+                          label=True, placeholder=True,
                           choices=c.FORM_ALLLANGS)
           }}
         </div>
@@ -21,7 +20,7 @@
           {{ render_field(form.siteSource,
                           labelsize=5,
                           fieldsize=7,
-                          placeholder=msg['wikitranslator-siteSource-placeholder'],
+                          label=True, placeholder=True,
                           choices=c.FORM_ALLLANGS)
           }}
         </div>
@@ -40,9 +39,9 @@
               <div class="tab-content">
                   <div class="tab-pane col-lg-offset-3 {{ data.isActivePage }}" id="tab-page">
                       {{ render_field(form.title,
-                                      placeholder=msg['wikitranslator-title-placeholder'],
                                       labelsize=2,
-                                      fieldsize=6)
+                                      fieldsize=6,
+                                      label=True, placeholder=True)
                       }}
                   </div>
                   <div class="tab-pane {{ data.isActiveContent }}" id="tab-content">
@@ -50,7 +49,7 @@
                                       labelsize=12,
                                       fieldsize=12,
                                       rows=10,
-                                      placeholder=msg['wikitranslator-content-placeholder'])
+                                      label=True, placeholder=True)
                       }}
                   </div>
               </div>
