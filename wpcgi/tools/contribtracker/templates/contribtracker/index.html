@@ -18,19 +18,25 @@
               </ul>
               <div class="tab-content">
                   <div class="tab-pane col-lg-offset-3 {{ data.isActivePage }}" id="tab-page">
-                      {{ render_field(form.title,
-                                      placeholder=msg['contribtracker-title-placeholder'],
-                                      labelsize=2,
-                                      fieldsize=6)
-                      }}
+                    {{ render_field(form.title,
+                                    placeholder=msg['contribtracker-title-placeholder'],
+                                    labelsize=2,
+                                    fieldsize=6)
+                    }}
                   </div>
                   <div class="tab-pane {{ data.isActiveContent }}" id="tab-content">
-                      {{ render_field(form.content,
-                                      labelsize=12,
-                                      fieldsize=12,
-                                      rows=10,
-                                      placeholder=msg['contribtracker-content-placeholder'])
-                      }}
+                    <div class="form-group vspace">
+                      {{ form.markup.label(class="control-label col-lg-3") }}
+                      <div class="input-group">
+                        {{ form.markup() }}
+                      </div>
+                    </div>
+                    {{ render_field(form.content,
+                                    labelsize=12,
+                                    fieldsize=12,
+                                    rows=10,
+                                    placeholder=msg['contribtracker-content-placeholder'])
+                    }}
                   </div>
               </div>
           </div>

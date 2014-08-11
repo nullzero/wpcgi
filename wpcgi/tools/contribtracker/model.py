@@ -13,6 +13,7 @@ class Model(Template):
         self.isActiveContent = ''
         if self.tabactive == 'content':
             self.isActivePage, self.isActiveContent = self.isActiveContent, self.isActivePage
+        self.markup = self.form.markup.data and (self.tabactive == 'content')
 
         self.text = None
         self.title = self.form.title.data
@@ -39,7 +40,7 @@ class Model(Template):
     def dorender(self):
         if self.tabactive == 'page':
             self.content = self.page.get()
-        self.textEngine = TextEngine()
+        self.textEngine = TextEngine(markup=self.markup)
         self.text = self.textEngine.remove(self.content)
         self.length, self.swath = self.textEngine.length(self.text)
         self.text = self.textEngine.convert(self.text)

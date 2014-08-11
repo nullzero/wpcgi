@@ -20,6 +20,14 @@ def getarticle():
 """
 
 @langswitch
+@letstranslate.route('/all')
+@in_group(['letstranslate', 'approved'])
+def list_all():
+    data = letstranslate.model.Model(action='all')
+    data.getList()
+    return render('all.html', tool=__name__, data=data)
+
+@langswitch
 def list_meta(action, mode):
     data = letstranslate.model.Model(action=action, mode=mode)
     data.getList()

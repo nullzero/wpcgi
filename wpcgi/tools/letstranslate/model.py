@@ -51,6 +51,7 @@ class Model(Template):
             ('reject', 'formatter'): STATUS.RESERVED,
             ('reject', 'organizer'): STATUS.FORMATTED,
             ('recover', None): STATUS.REJECTED,
+            ('all', None): 0,
         }
         if (action, mode) not in statusMap.keys():
             abort(404)
@@ -65,6 +66,7 @@ class Model(Template):
         self.id = id
         self.mode = mode
         self.action = action
+        self.engine = TextEngine(markup=False)
 
     def dovalidate(self):
         return True
@@ -73,19 +75,25 @@ class Model(Template):
         query = self.list
         if self.action == 'format':
             if self.mode == 'reserve':
-                status = STATUS.TRANSLATED
+                fun = lambda x: x.status == STATUS.TRANSLATED
             else:
                 query = self.user.letstranslates
-                status = STATUS.RESERVED
+                fun = lambda x: x.status == STATUS.RESERVED
         elif self.action == 'organize':
             if self.mode == 'submit':
-                status = STATUS.FORMATTED
+                fun = lambda x: x.status == STATUS.FORMATTED
             elif self.mode == 'rejected':
-                status = STATUS.REJECTED
+                fun = lambda x: x.status == STATUS.REJECTED
             elif self.mode == 'done':
-                status = STATUS.DONE
+                fun = lambda x: x.status == STATUS.DONE
+        elif self.action == 'all':
+            fun = lambda x: x.status != STATUS.REJECTED
 
-        self.results = filter(lambda x: x.status == status, query)
+        self.results = filter(fun, query)
+
+        if self.action == 'all':
+            for res in self.results:
+                res.length = self.engine.length(self.engine.remove(res.content_translated))[0]
 
     def renderEdit(self):
         if (self.action, self.mode) == ('translate', None):
@@ -104,8 +112,7 @@ class Model(Template):
             self.form.summary.data = msg['letstranslate-summary'].format(data['user_translator'], self.data.user_formatter.username)
 
         if hasattr(self.form, 'length'):
-            engine = TextEngine()
-            self.form.length.data = engine.length(self.data.content_translated)[0]
+            self.form.length.data = self.engine.length(self.engine.remove(self.data.content_translated))[0]
 
         if hasattr(self.form, 'user_formatter'):
             self.form.user_formatter.data = self.data.user_formatter.username

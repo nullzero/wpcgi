@@ -64,27 +64,39 @@ def gourl(default='frontend.index'):
             url_for(default))
 
 class TextEngine(object):
-    def __init__(self):
+    def __init__(self, markup=False):
         self.subst = lre.Subst()
         self.op = "~~~#o!"
         self.ed = "~~~#c!"
 
+        self.removeBoth()
+        if markup:
+            self.removeMarkup()
+        else:
+            self.removeNormal()
+
+    def removeBoth(self):
         self.subst.append(r"[ \t]+", " ")
+        self.subst.append(r"[\r]+", "")
 
-        self.removePair("<!--", "-->")
-        self.removePair("{|", "|}")
-        self.removePair("{{", "}}")
+    def removeNormal(self):
+        self.subst.append(r"[\[\]]", " ")
 
-        self.removeTag("gallery")
-        self.removeTag("div")
-        self.removeTag("math")
-        self.removeTag("table")
-        self.removeTag("score")
-        self.removeTag("source")
-        self.removeTag("pre")
-        self.removeTag("syntaxhighlight")
-        self.removeTag("poem")
-        #self.removeTag("ref") # can't do this because of <ref name="manager"/><ref name="nobel">blah blah</ref>
+    def removeMarkup(self):
+        self._removePair("<!--", "-->")
+        self._removePair("{|", "|}")
+        self._removePair("{{", "}}")
+
+        self._removeTag("gallery")
+        self._removeTag("div")
+        self._removeTag("math")
+        self._removeTag("table")
+        self._removeTag("score")
+        self._removeTag("source")
+        self._removeTag("pre")
+        self._removeTag("syntaxhighlight")
+        self._removeTag("poem")
+        #self._removeTag("ref") # can't do this because of <ref name="manager"/><ref name="nobel">blah blah</ref>
 
         self.subst.append(
             r"(\[\[[^\]\|\[]*\|)(.*?)(\]\])", r"{}\1{}\2{}\3{}".format(
@@ -92,34 +104,34 @@ class TextEngine(object):
             )
         )
 
-        self.removePart(r"(< ?/? ?(br|center|sup|sub|nowiki|ref) ?/? ?>)")
-        self.removePart(r"(<ref[^>]*?/ ?>)")
-        self.removePart(r"(?s)(<ref[^>/]*?>.*?</ref>)")
-        self.removePart(r"(?s)(?<!\[)(\[(?!\[) *http://.*?\])")
-        self.removePart(r"(https?://\S*)")
-        self.removePart(r"(?s)(\[\[[^\]\|]*?\:.*?\]\])")
-        self.removePart(r"(\'{2,})")
-        self.removePart(ur"(?ms)^(== ?(อ้างอิง|ดูเพิ่ม|แหล่งข้อมูลอื่น|เชิงอรรถ) ?== ?$.*)$")
-        self.removePart(r"(?m)(^=+ ?|=+ ?$)")
-        self.removePart(r"(?m)^([\:\*\#\;]+)")
+        self._removePart(r"(< ?/? ?(br|center|sup|sub|nowiki|ref) ?/? ?>)")
+        self._removePart(r"(<ref[^>]*?/ ?>)")
+        self._removePart(r"(?s)(<ref[^>/]*?>.*?</ref>)")
+        self._removePart(r"(?s)(?<!\[)(\[(?!\[) *http://.*?\])")
+        self._removePart(r"(https?://\S*)")
+        self._removePart(r"(?s)(\[\[[^\]\|]*?\:.*?\]\])")
+        self._removePart(r"(\'{2,})")
+        self._removePart(ur"(?ms)^(== ?(อ้างอิง|ดูเพิ่ม|แหล่งข้อมูลอื่น|เชิงอรรถ) ?== ?$.*)$")
+        self._removePart(r"(?m)(^=+ ?|=+ ?$)")
+        self._removePart(r"(?m)^([\:\*\#\;]+)")
 
-        self.removePair("[", "[")
-        self.removePair("]", "]")
-        self.removePair("(", "(")
-        self.removePair(")", ")")
-        self.removePair('"', '"')
-        self.removePair(',', ',')
+        self._removePair("[", "[")
+        self._removePair("]", "]")
+        self._removePair("(", "(")
+        self._removePair(")", ")")
+        self._removePair('"', '"')
+        self._removePair(',', ',')
 
         self.subst.append(self.ed + self.op, '')
 
-    def removeTag(self, tag):
-        self.removePair('<{}'.format(tag), '</{}>'.format(tag))
+    def _removeTag(self, tag):
+        self._removePair('<{}'.format(tag), '</{}>'.format(tag))
 
-    def removePair(self, begin, end):
+    def _removePair(self, begin, end):
         self.subst.append(lre.escape(begin), self.op + begin)
         self.subst.append(lre.escape(end), end + self.ed)
 
-    def removePart(self, pat):
+    def _removePart(self, pat):
         self.subst.append(pat, self.op + r"\1" + self.ed)
 
     def remove(self, text):
@@ -132,6 +144,8 @@ class TextEngine(object):
 
     def length(self, text):
         delim = "THISISASECRETKEYYOUWILLNEVERKNOW"
+        text = (text.replace('(', '[')
+                    .replace(')', ']'))
         text = (text.replace(self.op, "(")
                     .replace(self.ed, ")"))
         level = 0
@@ -154,7 +168,7 @@ class TextEngine(object):
                              stdout=subprocess.PIPE)
         output = p.communicate(input=trimtext.encode('utf-8'))[0].decode('utf-8')
         text = []
-        blacklist = [" ", "\n", "(", ")", ""]
+        blacklist = [" ", "\n", "(", ")", "", "\r"]
         for i in output:
             if i in blacklist:
                 text.append(delim)
