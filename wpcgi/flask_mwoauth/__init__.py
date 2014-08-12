@@ -5,7 +5,7 @@ import urllib
 from requests.models import Request
 from flask import request, session, redirect, flash, Blueprint
 from flask_oauth import OAuth, OAuthRemoteApp, OAuthException, parse_response
-from utils import gourl
+from utils import gourl, trycommit
 from messages import msg
 import wpcgi.database.user as model
 from wpcgi.db import db
@@ -169,7 +169,7 @@ class MWOAuth(object):
         if u is None:
             u = model.User(name='#')
             db.session.add(u)
-            db.session.commit()
+            trycommit(db)
 
         name = self.get_current_user()
         if name is not None:
@@ -177,5 +177,5 @@ class MWOAuth(object):
             if not u:
                 u = model.User(name=name)
                 db.session.add(u)
-                db.session.commit()
+                trycommit(db)
         return u

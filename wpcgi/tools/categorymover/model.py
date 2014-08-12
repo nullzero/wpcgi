@@ -6,6 +6,7 @@ from wpcgi.db import db, asDict
 from datetime import datetime
 from flask import abort, url_for, redirect, flash
 from messages import msg
+from utils import trycommit
 
 class STATUS(object):
     QUEUE_WAIT = 0
@@ -112,12 +113,12 @@ class Model(Template):
         if self.data:
             for key in basedata:
                 setattr(self.data, key, basedata[key])
-            db.session.commit()
+            trycommit(db)
             return self.data.id
         else:
             categorymover = CategoryMover(**basedata)
             db.session.add(categorymover)
-            db.session.commit()
+            trycommit(db)
             return categorymover.id
 
     def renderEdit(self):
@@ -141,4 +142,4 @@ class Model(Template):
             self.data.status = STATUS.QUEUE_APPROVED
         else:
             abort(404)
-        db.session.commit()
+        trycommit(db)

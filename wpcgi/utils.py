@@ -191,3 +191,10 @@ class TextEngine(object):
         cnt = max(cnt, charlimit / 10)
         cnt = min(cnt, charlimit / 2)
         return (cnt, " ".join(output))
+
+def trycommit(db):
+    try:
+        db.session.commit()
+    except:
+        db.session.rollback()
+        raise

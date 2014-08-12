@@ -4,7 +4,7 @@
 from model import Template
 from datetime import datetime
 from wpcgi.db import db, asDict
-from utils import TextEngine
+from utils import TextEngine, trycommit
 from messages import msg
 from flask import abort, flash, url_for, redirect
 
@@ -153,21 +153,22 @@ class Model(Template):
         if self.data:
             for key in basedata:
                 setattr(self.data, key, basedata[key])
-            db.session.commit()
+            trycommit(db)
             return self.data.id
         else:
             letstranslate = LetsTranslate(**basedata)
             db.session.add(letstranslate)
-            db.session.commit()
+            trycommit(db)
             return letstranslate.id
 
     def reject(self):
         self.data.status = STATUS.REJECTED
-        db.session.commit()
+        trycommit(db)
+
 
     def recover(self):
         self.data.status = STATUS.TRANSLATED
-        db.session.commit()
+        trycommit(db)
 
     def wikifyUser(self, row, name, wikify=False):
         if name.startswith('[[User:') and name.endswith(']]'):
