@@ -74,6 +74,7 @@ class TextEngine(object):
             self.removeMarkup()
         else:
             self.removeNormal()
+        self.removeBoth()
 
     def removeBoth(self):
         self.subst.append(r"[ \t]+", " ")
