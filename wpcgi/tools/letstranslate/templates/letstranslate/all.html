@@ -33,11 +33,12 @@
         {% endif %}
         {% for row in data.results %}
           <tr>
-            {{ td(row.id) }}
-            {{ td(data.wikifyUser(row, row.user_translator), 1 if row.user_formatter else 2 )|safe }}
+            {{ td(row.pid) }}
+            {{ td(data.wikifyUser(row, row.user_translator))|safe }}
+            {{ td(data.email) }}
             {{ td(row.title_translated) }}
             {{ td(row.title_untranslated) }}
-            {{ td(row.length, 1) }}
+            {{ td(row.length) }}
           </tr>
         {% endfor %}
       </table>
