@@ -7,6 +7,7 @@ from wpcgi.db import db, asDict
 from utils import TextEngine
 from messages import msg
 from flask import abort, flash, url_for, redirect
+from sqlalchemy.dialects.mysql import MEDIUMTEXT
 
 class STATUS(object):
     TRANSLATED = 1
@@ -28,8 +29,8 @@ class LetsTranslate(db.Model):
     user_translator = db.Column(db.String(255), nullable=False)
     user_formatter_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     status = db.Column(db.Integer, nullable=False, default=STATUS.TRANSLATED)
-    content_translated = db.Column(db.Text, nullable=False)
-    content_formatted = db.Column(db.Text, nullable=True)
+    content_translated = db.Column(MEDIUMTEXT, nullable=False)
+    content_formatted = db.Column(MEDIUMTEXT, nullable=True)
 
     user_formatter = db.relationship("User", backref="letstranslates")
 
