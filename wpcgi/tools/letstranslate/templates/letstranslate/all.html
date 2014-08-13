@@ -34,21 +34,10 @@
         {% for row in data.results %}
           <tr>
             {{ td(row.id) }}
-            {{ td(row.date_created) }}
             {{ td(data.wikifyUser(row, row.user_translator), 1 if row.user_formatter else 2 )|safe }}
-            {{ td(row.fam) }}
             {{ td(row.title_translated) }}
-            {{ td(row.length, 1) }}
-          </tr>
-          <tr>
-            {{ td(row.pid) }}
-            {{ td(row.date_edited) }}</td>
-            {% if row.user_formatter %}
-              {{ td(data.wikifyUser(row, row.user_formatter.name, wikify=True))|safe }}
-            {% endif %}
-            {{ td(row.lang) }}
             {{ td(row.title_untranslated) }}
-            {{ td({1: 'translated', 2: 'reserved', 3: 'formatted', 4: 'rejected', 5: 'done'}.get(row.status)) }}
+            {{ td(row.length, 1) }}
           </tr>
         {% endfor %}
       </table>
